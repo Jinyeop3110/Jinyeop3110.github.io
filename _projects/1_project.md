@@ -8,11 +8,8 @@ category: sceince of AI
 related_publications: true
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
-
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+Why some In-context learning(ICL) works and fails depending on tasks? We questioned how this sucess/filaure modes emerge mechanstically and how can we quantify this. 
+To that ends, we defined conecept encoding phenomena -- that representations bui
 
     ---
     layout: page
@@ -21,27 +18,27 @@ To give your project a background in the portfolio page, just add the img tag to
     img: /assets/img/12.jpg
     ---
 
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+
+
+<div class="row justify-content-sm-center">
+    <div class="col-sm-8 mt-3 mt-md-0">
+        {% include figure.liquid path="assets/img/publication_preview/publications/reconcile_paperfig_01.pdf" title="Reconciling Kaplan and Chinchilla scaling laws" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
+    You can also have artistically styled 2/3 + 1/3 images, like these.
 </div>
+
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/rep_umap_keys_Representations at Layer 15 - Part-Of-Speach Tagging.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
-</div>
-<div class="caption">
-    This image can also have a caption. It's like magic.
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/rep_umap_keys_Representations at Layer 13 - Bitwise Operations.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+    <div class="col-sm mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/rep_umap_keys_Representations at Layer 13 - Bitwise Operations.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
 </div>
 
 You can also put regular text between your rows of images, even citations {% cite einstein1950meaning %}.

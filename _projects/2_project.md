@@ -8,9 +8,6 @@ category: sceince of AI
 giscus_comments: true
 ---
 
-To be uploaded
-(updated 10 Oct 2024)
-
 The Neural Scaling Law(NSL) [\cite{kaplan2020scaling}, \cite{hoffmann2022training}] refers to how language models scale with respect to key factors: model size (number of parameters, $N$), training data size ($D$), and computational resources ($C$). This scaling law is important to anlyze since it enable how "perofrmance gain" we can expect by scaling up the AI model and data.
 However, \cite{kaplan2020scaling}, \cite{hoffmann2022training} has empricially measured different scaling coefficients for lage langague model.
 In \cite{Tim et al}, we aim to identify the origin of such discrepancy through analytic methods and small langauge model traning.
@@ -26,7 +23,6 @@ In \cite{Tim et al}, we aim to identify the origin of such discrepancy through a
 
 On the other hand, it is unknown why such law occurs and holds across various tasks including language, visions, and even proteins. Previously.
 In \cite{Tim et al}, we aim to identify the origin of such discrepancy through analytic methods and small langauge model traning.
-{% raw %}
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
@@ -58,6 +54,8 @@ In \cite{Tim et al}, we aim to identify the origin of such discrepancy through a
     You can also have artistically styled 2/3 + 1/3 images, like these.
 </div>
 
+
+{% raw %}
 
 ```html
 hahaha
