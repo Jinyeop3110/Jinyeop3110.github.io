@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>PhD student in MIT Physics</a>. USA
+subtitle: <a href='#'>PhD student in MIT Physics</a>.
 
 profile:
   align: right
