@@ -1,8 +1,8 @@
 ---
 layout: page
-title: project 6
-description: a project with no image
-img:
+title: DeepIS
+description: 4D Automatic segmentation for cellular imaging
+img: assets/img/1.jpg
 importance: 4
 category:  AI for science
 ---

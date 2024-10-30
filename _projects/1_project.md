@@ -1,8 +1,8 @@
 ---
 layout: page
-title: project 1
-description: origin
-img: assets/img/12.jpg
+title: Concept encoding in ICL
+description: Study about concept encoding phenomena in ICL and how to interpret ICL sucess and failure modes.
+img: assets/img/publication_preview/concept_encoding.png
 importance: 1
 category: sceince of AI
 related_publications: true
@@ -10,14 +10,6 @@ related_publications: true
 
 Why some In-context learning(ICL) works and fails depending on tasks? We questioned how this sucess/filaure modes emerge mechanstically and how can we quantify this. 
 To that ends, we defined conecept encoding phenomena -- that representations bui
-
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
-
 
 
 <div class="row justify-content-sm-center">

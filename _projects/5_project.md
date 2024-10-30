@@ -1,24 +1,27 @@
 ---
 layout: page
-title: project 5
+title: MethylGPT
 description: a project with a background image
 img: assets/img/1.jpg
 importance: 3
 category: AI for science
 ---
 
-Every project has a beautiful feature showcase page.
-It's easy to include images in a flexible 3-column grid format.
-Make your photos 1/3, 2/3, or full width.
+{% raw %}
 
-To give your project a background in the portfolio page, just add the img tag to the front matter like so:
+```html
 
-    ---
-    layout: page
-    title: project
-    description: a project with a background image
-    img: /assets/img/12.jpg
-    ---
+MethylGPT: a foundation model for the DNA methylome
+Kejun Ying1,2,†,*,, Jinyeop Song3,†, Haotian Cui4,5,6,†, Yikun Zhang1,†, Siyuan Li1, Xingyu Chen5,6, Hanna Liu1, Alec Eames1, Daniel L McCartney7, Riccardo E. Marioni7, Jesse R. Poganik1, Mahdi Moqri1,*, Bo Wang5,6,*, Vadim N. Gladyshev1,*
+```html
+
+{% endraw %}
+
+**TLDR:** We are building a foundation model for processing natural language representations of human methylation profiles, advancing research in biological aging and medicine.
+
+Human DNA methylation data (methylome) is an important biomarker for aging and chronic diseases. Despite its significance, a unified and adaptable framework has yet to emerge, largely due to the absence of a "foundation model." Foundation models have already proven essential for understanding the complexities of biology. For instance, in proteomics, models like ESM-2/ESM-3 and AlphaFold2/AlphaFold3 have achieved unprecedented accuracy in structure prediction and function annotation. In genomics, Enformer and Evo have demonstrated their ability to predict gene regulation and variant effects. Similarly, in single-cell biology, models such as Geneformer, scGPT, and scFoundation have enabled zero-shot cell-type classification and in-silico perturbation.
+
+Therefore, our goal is to develop a foundation model specifically for human methylation data, paving the way for future research. We curated fro
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
