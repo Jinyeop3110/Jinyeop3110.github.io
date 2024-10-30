@@ -9,11 +9,8 @@ category: AI for science
 
 {% raw %}
 
-```html
-
-MethylGPT: a foundation model for the DNA methylome
-Kejun Ying1,2,†,*,, Jinyeop Song3,†, Haotian Cui4,5,6,†, Yikun Zhang1,†, Siyuan Li1, Xingyu Chen5,6, Hanna Liu1, Alec Eames1, Daniel L McCartney7, Riccardo E. Marioni7, Jesse R. Poganik1, Mahdi Moqri1,*, Bo Wang5,6,*, Vadim N. Gladyshev1,*
-```html
+    MethylGPT: a foundation model for the DNA methylome
+    Kejun Ying1,2,†,*,, Jinyeop Song3,†, Haotian Cui4,5,6,†, Yikun Zhang1,†, Siyuan Li1, Xingyu Chen5,6, Hanna Liu1, Alec Eames1, Daniel L McCartney7, Riccardo E. Marioni7, Jesse R. Poganik1, Mahdi Moqri1,*, Bo Wang5,6,*, Vadim N. Gladyshev1,*
 
 {% endraw %}
 
