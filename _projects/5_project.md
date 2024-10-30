@@ -1,8 +1,8 @@
 ---
 layout: page
 title: MethylGPT
-description: a project with a background image
-img: assets/img/1.jpg
+description: Foundation model for the human DNA methylome
+img: assets/img/publication_preview/methylgpt.png
 importance: 3
 category: AI for science
 ---
@@ -45,11 +45,9 @@ Human DNA methylation data (methylome) is an important biomarker for aging and c
     This image can also have a caption. It's like magic.
 </div>
 
-Therefore, our goal is to develop a foundation model(MethylGPT) specifically for human methylation data(DNAm), paving the way for future research. We curated about 300,000 DNAm data from public, deduplicate and curated them into 154,063 human DNAm. DNA methylation data have varying numbers of CpG entries depending on the array platform (Il-lumina 27k, Illumina 450k, and EPIC). To address these differences and ensure biological rele-vance, we focused on 49,156 CpG sites. So In total, 7.6 billion training tokens are used for pretraining.
+Therefore, our goal is to develop a foundational model, MethylGPT, specifically for human DNA methylation (DNAm) data, paving the way for future research. We curated approximately 300,000 DNAm samples from public sources, deduplicated them, and consolidated them into 154,063 unique human DNAm datasets. DNA methylation data vary in the number of CpG entries depending on the array platform used (e.g., Illumina 27k, Illumina 450k, and EPIC). To address these differences and ensure biological relevance, we focused on 49,156 CpG sites. In total, **7.6 billion training tokens** were used for pretraining.
 
-Our model architecture and training is specialized for DNAm data. First, training loss : pretraining process includes the Masked Language modeling(MLM)-style approach and Autoregressive Generative -style approach. Both optimize the correct prediction of methylation value close to the original value under the information is blocked. Second, 
-
-
+Our model architecture and training is specialized for DNAm data. First, we use the element-wise sum of the CpG value embedding and the CpG ID embedding. This allows information to be selectively masked without compromising the integrity of the sequence structure. Second, the training loss during the pretraining process includes both a Masked Language Modeling (MLM)-style approach and an Autoregressive Generative approach. Both approaches aim to optimize the prediction of methylation values to closely match the original values, even when some information is masked.
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
@@ -61,14 +59,18 @@ Our model architecture and training is specialized for DNAm data. First, trainin
 </div>
 
 
+MethylGPT captures biologically meaningful sample-level features, such as tissue information, sex and disease tpyes compared than raw methylation data directly generated UMAP embeddings (Fig. 3d-f)
+
+
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
         {% include figure.liquid path="assets/img/publication_preview/publications/methylGPT/Picture2.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
+    MethylGPT learns tissue-specific and sex-specific methylation patterns
 </div>
+
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
@@ -76,8 +78,12 @@ Our model architecture and training is specialized for DNAm data. First, trainin
     </div>
 </div>
 <div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
+    MethylGPT enables accurate age prediction across diverse tissue types
 </div>
+
+
+MethylGPT achieved superior accuracy( median absolute error (MedAE) of 4.45 ) in predicting biological age than other SOTA methods(ElasticNet [@zou2005], MLP (AltumAge) [@delimacamillo2022]).
+
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
@@ -85,8 +91,9 @@ Our model architecture and training is specialized for DNAm data. First, trainin
     </div>
 </div>
 <div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
+   Age-specific attention patterns reveal distinct methylation signatures by age groups(younger - elder).
 </div>
+
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
@@ -94,36 +101,8 @@ Our model architecture and training is specialized for DNAm data. First, trainin
     </div>
 </div>
 <div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
+    Disease risk prediction and intervention analysis
 </div>
 
-MethylGPT captures biologically meaningful sample-level features, such as tissue information, sex and disease tpyes compared than raw methylation data directly generated UMAP embeddings (Fig. 3d-f)
 
 
-MethylGPT learns tissue-specific and sex-specific methylation patterns
-
-
-. MethylGPT achieved superior accuracy( median absolute error (MedAE) of 4.45 ) in predicting biological age than other SOTA methods(ElasticNet [@zou2005], MLP (AltumAge) [@delimacamillo2022]).
-
-
-
-Age-specific attention patterns reveal distinct methylation signatures by age groups(younger - elder).
-
-
-Disease risk prediction and intervention analysis
-
-
-{% raw %}
-
-```html
-<div class="row justify-content-sm-center">
-  <div class="col-sm-8 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-  <div class="col-sm-4 mt-3 mt-md-0">
-    {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-  </div>
-</div>
-```
-
-{% endraw %}

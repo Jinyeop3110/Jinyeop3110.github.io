@@ -8,6 +8,19 @@ category: sceince of AI
 related_publications: true
 ---
 
+{% raw %}
+
+```html
+
+MethylGPT: a foundation model for the DNA methylome
+
+```html
+
+{% endraw %}
+
+**TLDR:** We are building a foundation model for processing natural language representations of human methylation profiles, advancing research in biological aging and medicine.
+
+
 Why some In-context learning(ICL) works and fails depending on tasks? We questioned how this sucess/filaure modes emerge mechanstically and how can we quantify this. 
 To that ends, we defined conecept encoding phenomena -- that representations bui
 
