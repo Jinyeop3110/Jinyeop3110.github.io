@@ -21,7 +21,6 @@ Kejun Ying1,2,†,*,, Jinyeop Song3,†, Haotian Cui4,5,6,†, Yikun Zhang1,†,
 
 Human DNA methylation data (methylome) is an important biomarker for aging and chronic diseases. Despite its significance, a unified and adaptable framework has yet to emerge, largely due to the absence of a "foundation model." Foundation models have already proven essential for understanding the complexities of biology. For instance, in proteomics, models like ESM-2/ESM-3 and AlphaFold2/AlphaFold3 have achieved unprecedented accuracy in structure prediction and function annotation. In genomics, Enformer and Evo have demonstrated their ability to predict gene regulation and variant effects. Similarly, in single-cell biology, models such as Geneformer, scGPT, and scFoundation have enabled zero-shot cell-type classification and in-silico perturbation.
 
-Therefore, our goal is to develop a foundation model specifically for human methylation data, paving the way for future research. We curated fro
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
@@ -46,26 +45,73 @@ Therefore, our goal is to develop a foundation model specifically for human meth
     This image can also have a caption. It's like magic.
 </div>
 
-You can also put regular text between your rows of images.
-Say you wanted to write a little bit about your project before you posted the rest of the images.
-You describe how you toiled, sweated, _bled_ for your project, and then... you reveal its glory in the next row of images.
+Therefore, our goal is to develop a foundation model(MethylGPT) specifically for human methylation data(DNAm), paving the way for future research. We curated about 300,000 DNAm data from public, deduplicate and curated them into 154,063 human DNAm. DNA methylation data have varying numbers of CpG entries depending on the array platform (Il-lumina 27k, Illumina 450k, and EPIC). To address these differences and ensure biological rele-vance, we focused on 49,156 CpG sites. So In total, 7.6 billion training tokens are used for pretraining.
+
+Our model architecture and training is specialized for DNAm data. First, training loss : pretraining process includes the Masked Language modeling(MLM)-style approach and Autoregressive Generative -style approach. Both optimize the correct prediction of methylation value close to the original value under the information is blocked. Second, 
+
+
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/6.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-4 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/11.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid path="assets/img/publication_preview/publications/methylGPT/Picture1.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
     You can also have artistically styled 2/3 + 1/3 images, like these.
 </div>
 
-The code is simple.
-Just wrap your images with `<div class="col-sm">` and place them inside `<div class="row">` (read more about the <a href="https://getbootstrap.com/docs/4.4/layout/grid/">Bootstrap Grid</a> system).
-To make images responsive, add `img-fluid` class to each; for rounded corners and shadows use `rounded` and `z-depth-1` classes.
-Here's the code for the last row of images above:
+
+<div class="row justify-content-sm-center">
+    <div class="col-sm-8 mt-3 mt-md-0">
+        {% include figure.liquid path="assets/img/publication_preview/publications/methylGPT/Picture2.png" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    You can also have artistically styled 2/3 + 1/3 images, like these.
+</div>
+
+<div class="row justify-content-sm-center">
+    <div class="col-sm-8 mt-3 mt-md-0">
+        {% include figure.liquid path="assets/img/publication_preview/publications/methylGPT/Picture3.png" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    You can also have artistically styled 2/3 + 1/3 images, like these.
+</div>
+
+<div class="row justify-content-sm-center">
+    <div class="col-sm-8 mt-3 mt-md-0">
+        {% include figure.liquid path="assets/img/publication_preview/publications/methylGPT/Picture4.png" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    You can also have artistically styled 2/3 + 1/3 images, like these.
+</div>
+
+<div class="row justify-content-sm-center">
+    <div class="col-sm-8 mt-3 mt-md-0">
+        {% include figure.liquid path="assets/img/publication_preview/publications/methylGPT/Picture5.png" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    You can also have artistically styled 2/3 + 1/3 images, like these.
+</div>
+
+MethylGPT captures biologically meaningful sample-level features, such as tissue information, sex and disease tpyes compared than raw methylation data directly generated UMAP embeddings (Fig. 3d-f)
+
+
+MethylGPT learns tissue-specific and sex-specific methylation patterns
+
+
+. MethylGPT achieved superior accuracy( median absolute error (MedAE) of 4.45 ) in predicting biological age than other SOTA methods(ElasticNet [@zou2005], MLP (AltumAge) [@delimacamillo2022]).
+
+
+
+Age-specific attention patterns reveal distinct methylation signatures by age groups(younger - elder).
+
+
+Disease risk prediction and intervention analysis
+
 
 {% raw %}
 
