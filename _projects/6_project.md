@@ -4,7 +4,7 @@ title: DeepIS
 description: 4D Automatic segmentation for cellular imaging
 img: assets/img/publication_preview/deep_IS.gif
 importance: 4
-category:  AI for science
+category:  AI for Science
 ---
 
 

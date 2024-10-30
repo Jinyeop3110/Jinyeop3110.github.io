@@ -4,7 +4,7 @@ title: Concept encoding in in-context learning of LLMs
 description: Study about concept encoding phenomena in in-context learning of LLMs and how to interpret ICL sucess and failure modes.
 img: assets/img/publication_preview/concept_encoding.png
 importance: 1
-category: sceince of AI
+category: Sceince of AI
 related_publications: true
 ---
 

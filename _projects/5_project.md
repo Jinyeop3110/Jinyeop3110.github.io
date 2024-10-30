@@ -4,15 +4,13 @@ title: MethylGPT
 description: Foundation model for the human DNA methylome
 img: assets/img/publication_preview/methylgpt.png
 importance: 3
-category: AI for science
+category: AI for Science
 ---
 
-{% raw %}
 
-    MethylGPT: a foundation model for the DNA methylome
-    Kejun Ying1,2,†,*,, Jinyeop Song3,†, Haotian Cui4,5,6,†, Yikun Zhang1,†, Siyuan Li1, Xingyu Chen5,6, Hanna Liu1, Alec Eames1, Daniel L McCartney7, Riccardo E. Marioni7, Jesse R. Poganik1, Mahdi Moqri1,*, Bo Wang5,6,*, Vadim N. Gladyshev1,*
+MethylGPT: a foundation model for the DNA methylome
+Kejun Ying1,2,†,*,, Jinyeop Song3,†, Haotian Cui4,5,6,†, Yikun Zhang1,†, Siyuan Li1, Xingyu Chen5,6, Hanna Liu1, Alec Eames1, Daniel L McCartney7, Riccardo E. Marioni7, Jesse R. Poganik1, Mahdi Moqri1,*, Bo Wang5,6,*, Vadim N. Gladyshev1,*
 
-{% endraw %}
 
 **TLDR:** We are building a foundation model for processing natural language representations of human methylation profiles, advancing research in biological aging and medicine.
 

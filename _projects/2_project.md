@@ -4,7 +4,7 @@ title: Neural Scaling Laws(NSL)
 description: Diverse studies on emergent Neural Scaling Laws(NSL) of AI
 img: assets/img/publication_preview/reconcile_nsl.png
 importance: 2
-category: sceince of AI
+category: Sceince of AI
 giscus_comments: true
 ---
 
