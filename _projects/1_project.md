@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Concept encoding in ICL
-description: Study about concept encoding phenomena in ICL and how to interpret ICL sucess and failure modes.
+title: Concept encoding in in-context learning of LLMs
+description: Study about concept encoding phenomena in in-context learning of LLMs and how to interpret ICL sucess and failure modes.
 img: assets/img/publication_preview/concept_encoding.png
 importance: 1
 category: sceince of AI
@@ -10,19 +10,15 @@ related_publications: true
 
 {% raw %}
 
-```html
-
 MethylGPT: a foundation model for the DNA methylome
 
-```html
 
 {% endraw %}
 
-**TLDR:** We are building a foundation model for processing natural language representations of human methylation profiles, advancing research in biological aging and medicine.
+**TLDR:** We explored the mechanistic understanding of ICL success/failure modes through how well certain concepts are encoded in intermediate reprsentatoions
 
 
-Why some In-context learning(ICL) works and fails depending on tasks? We questioned how this sucess/filaure modes emerge mechanstically and how can we quantify this. 
-To that ends, we defined conecept encoding phenomena -- that representations bui
+Why some In-context learning(ICL) works and fails depending on tasks? We questioned how this sucess/filaure modes emerge mechanstically and how can we quantify this. To that ends, we defined conecept encoding phenomena -- that representations are aligned 
 
 
 <div class="row justify-content-sm-center">

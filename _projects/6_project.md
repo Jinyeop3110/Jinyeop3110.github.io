@@ -8,8 +8,6 @@ category:  AI for science
 ---
 
 
-```html
-
 @article{lee2020deep,
   title={Deep-learning-based three-dimensional label-free tracking and analysis of immunological synapses of CAR-T cells},
   author={Lee, Moosung and Lee, Young-Ho and Song, Jinyeop and Kim, Geon and Jo, YoungJu and Min, HyunSeok and Kim, Chan Hyuk and Park, YongKeun},
@@ -20,8 +18,5 @@ category:  AI for science
   publisher={eLife Sciences Publications, Ltd}
 }
 
-```html
-
-{% endraw %}
 
 TO be updated
