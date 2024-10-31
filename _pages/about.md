@@ -22,6 +22,6 @@ Hi, I'm **Jinyeop Song**, a 5th-year PhD student in the MIT Physics Department.
 
 My research focuses on understanding the **Science of AI**, particularly on **large language models (LLMs)**. Over the past few months, I’ve been exploring **Neural Scaling Laws(ICL)** and **In-Context Learning(ICL)**, uncovering how these models adapt and grow in capability.
 
-Another key interest of mine is building **AI for science**. I’m currently involved in projects developing **scalable foundational models** for multiomics and proteins, helping advance scientific discovery through machine learning.  
+Another key interest of mine is building **AI for Science**. I’m currently involved in projects developing **Scalable Foundational Models** for multiomics and proteins, helping advance scientific discovery through machine learning.  
 
 I'm always open to discussions and collaborations—feel free to reach out to me!  
