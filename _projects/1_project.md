@@ -17,7 +17,7 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/publication_preview/publications/ConceptEncoding/overview.pdf" title="Reconciling Kaplan and Chinchilla scaling laws" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid path="assets/img/publication_preview/publications/ConceptEncoding/overview.png" title="Reconciling Kaplan and Chinchilla scaling laws" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
@@ -25,11 +25,8 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
 </div>
 
 <div class="row">
-    <div class="col-sm-6 mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/rep_umap_keys_Representations at Layer 15 - Part-Of-Speach Tagging.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm-6 mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/rep_umap_keys_Representations at Layer 13 - Bitwise Operations.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    <div class="col-sm-6 mt-6 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/reps.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
