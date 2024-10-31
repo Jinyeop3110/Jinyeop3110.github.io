@@ -20,7 +20,7 @@ However, [kaplan2020scaling, hoffmann2022training] has empricially measured diff
     You can also have artistically styled 2/3 + 1/3 images, like these.
 </div>
 
-On the other hand, it is unknown why such a law occurs and holds across various tasks, including language, vision, and even proteins. Previously, in our workshop paper at ICLR 2024, <a href="https://arxiv.org/pdf/2402.05164">"A RESOURCE MODEL FOR NEURAL SCALING LAWS"</a>, we propose the **"resource model"** as a **phenomenological model** to explain the scaling laws of large language models (LLMs). Resource model hypotheses are as follows.
+On the other hand, it is unknown why such a law occurs and holds across various tasks, including language, vision, and even proteins. Previously, in our workshop paper at ICLR 2024, <a href="https://arxiv.org/pdf/2402.05164">"A RESOURCE MODEL FOR NEURAL SCALING LAWS"</a>, we propose the **"resource model"** as a phenomenological model to explain the scaling laws of large language models (LLMs). Resource model hypotheses are as follows.
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
@@ -38,7 +38,7 @@ On the other hand, it is unknown why such a law occurs and holds across various 
     </div>
 </div>
 
-Based on the hypotheses of the Resource Model, we derive a \(-1\) scaling law for general composite tasks.
+Based on the hypotheses of the Resource Model, we derive a **\(-1\) scaling law** for general composite tasks.
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-6 mt-3 mt-md-0">
@@ -55,7 +55,7 @@ Belows are main figures for experiments(To be updated).
     </div>
 </div>
 <div class="caption">
---
+    fig1
 </div>
 
 <div class="row justify-content-sm-center">
@@ -64,7 +64,7 @@ Belows are main figures for experiments(To be updated).
     </div>
 </div>
 <div class="caption">
---
+    fig2
 </div>
 
 <div class="row justify-content-sm-center">
@@ -73,7 +73,7 @@ Belows are main figures for experiments(To be updated).
     </div>
 </div>
 <div class="caption">
---
+    fig3
 </div>
 
 <div class="row justify-content-sm-center">
@@ -82,7 +82,7 @@ Belows are main figures for experiments(To be updated).
     </div>
 </div>
 <div class="caption">
---
+    fig4
 </div>
 
 
