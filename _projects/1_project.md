@@ -25,7 +25,7 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
 </div>
 
 <div class="row justify-content-sm-center">
-    <div class="col-sm-6 mt-6 mt-md-0">
+    <div class="col-sm-6 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/reps.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
@@ -37,10 +37,10 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
 We conjecture that concept decodability—specifically, how well a given concept is separated in intermediate representations—can predict in-context learning (ICL) performance. Our observations indicate that this holds true for both the part-of-speech (POS) task and bitwise operation tasks.
 
 <div class="row justify-content-sm-center">
-    <div class="col-sm-6 mt-6 mt-md-0">
+    <div class="col-sm-6 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Score_vs_Accuracy_pos_operations_plot.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
-    <div class="col-sm-6 mt-6 mt-md-0">
+    <div class="col-sm-6 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Score_vs_Accuracy_bitwise_operations_plot.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
@@ -54,10 +54,10 @@ We do various interventions and causual relaitons experimetns supporting that co
 
 
 <div class="row justify-content-sm-center">
-    <div class="col-sm-4 mt-2 mt-md-0">
+    <div class="col-sm-4 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/perturbation_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
-    <div class="col-sm-4 mt-2 mt-md-0">
+    <div class="col-sm-4 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/perturbation_BITWISE.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
