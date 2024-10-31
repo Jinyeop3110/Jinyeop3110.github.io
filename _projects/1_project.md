@@ -10,7 +10,6 @@ related_publications: true
 
 Paper (soon to be archived) : <a href="https://drive.google.com/file/d/14e3DBsKpuRdav9lA_Wkfg8FI1mi5iMZn/view?usp=sharing">"Concept to Context : Concept Encoding in In-Context Learning of LLMs"</a>
 
-
 **TLDR:** We explored the mechanistic understanding of ICL success/failure modes through how well certain concepts are encoded in intermediate reprsentatoions
 
 
@@ -18,21 +17,78 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/publication_preview/publications/reconcile_paperfig_01.pdf" title="Reconciling Kaplan and Chinchilla scaling laws" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid path="assets/img/publication_preview/publications/ConceptEncoding/overview.pdf" title="Reconciling Kaplan and Chinchilla scaling laws" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Overview of Concept Encoding phenomena and Concept Decodability(CD)
+</div>
+
+<div class="row">
+    <div class="col-sm-6 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/rep_umap_keys_Representations at Layer 15 - Part-Of-Speach Tagging.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+    <div class="col-sm-6 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/rep_umap_keys_Representations at Layer 13 - Bitwise Operations.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
     Concept Encoding phenomena and Concept Decodability(CD) as predictive of ICL performance
 </div>
 
+
+We conjecture that concept decodability—specifically, how well a given concept is separated in intermediate representations—can predict in-context learning (ICL) performance. Our observations indicate that this holds true for both the part-of-speech (POS) task and bitwise operation tasks.
+
 <div class="row">
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/rep_umap_keys_Representations at Layer 15 - Part-Of-Speach Tagging.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    <div class="col-sm-6 mt-6 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Score_vs_Accuracy_pos_operations_plot.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
-    <div class="col-sm-8 mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/rep_umap_keys_Representations at Layer 13 - Bitwise Operations.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    <div class="col-sm-6 mt-6 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Score_vs_Accuracy_bitwise_operations_plot.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
+</div>
+<div class="caption">
+    Concept Decodability(CD) as predictive of ICL performance
 </div>
 
 
-TO be updated
+
+We do various interventions and causual relaitons experimetns supporting that concept encoding phenomena is indeed causually related with the ICL performance . cHeck the paper! : Paper (soon to be archived) : <a href="https://drive.google.com/file/d/14e3DBsKpuRdav9lA_Wkfg8FI1mi5iMZn/view?usp=sharing">"Concept to Context : Concept Encoding in In-Context Learning of LLMs"</a>
+
+
+<div class="row">
+    <div class="col-sm-6 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/perturbation_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+    <div class="col-sm-6 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/perturbation_BITWISE.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Perturbation analysis 
+</div>
+
+<div class="row">
+    <div class="col-sm-6 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Finetuning_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+    <div class="col-sm-6 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Finetuning_BITWISE.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+    Finetuning
+</div>
+
+
+<div class="row">
+    <div class="col-sm-6 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Prompting_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+    <div class="col-sm-6 mt-3 mt-md-0">
+        {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Prompting_BITWISE.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
+    </div>
+</div>
+<div class="caption">
+     Prompting
+</div>
