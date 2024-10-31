@@ -54,10 +54,10 @@ We do various interventions and causual relaitons experimetns supporting that co
 
 
 <div class="row">
-    <div class="col-sm-6 mt-3 mt-md-0">
+    <div class="col-sm-4 mt-2 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/perturbation_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
-    <div class="col-sm-6 mt-3 mt-md-0">
+    <div class="col-sm-4 mt-2 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/perturbation_BITWISE.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
@@ -66,10 +66,10 @@ We do various interventions and causual relaitons experimetns supporting that co
 </div>
 
 <div class="row">
-    <div class="col-sm-6 mt-3 mt-md-0">
+    <div class="col-sm-4 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Finetuning_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
-    <div class="col-sm-6 mt-3 mt-md-0">
+    <div class="col-sm-4 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Finetuning_BITWISE.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
@@ -79,10 +79,10 @@ We do various interventions and causual relaitons experimetns supporting that co
 
 
 <div class="row">
-    <div class="col-sm-6 mt-3 mt-md-0">
+    <div class="col-sm-4 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Prompting_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
-    <div class="col-sm-6 mt-3 mt-md-0">
+    <div class="col-sm-4 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Prompting_BITWISE.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>

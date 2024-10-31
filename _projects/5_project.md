@@ -20,34 +20,6 @@ category: AI for Science
 
 Human DNA methylation data (methylome) is an important biomarker for aging and chronic diseases. Despite its significance, a unified and adaptable framework has yet to emerge, largely due to the absence of a "foundation model." Foundation models have already proven essential for understanding the complexities of biology. For instance, in proteomics, models like ESM-2/ESM-3 and AlphaFold2/AlphaFold3 have achieved unprecedented accuracy in structure prediction and function annotation. In genomics, Enformer and Evo have demonstrated their ability to predict gene regulation and variant effects. Similarly, in single-cell biology, models such as Geneformer, scGPT, and scFoundation have enabled zero-shot cell-type classification and in-silico perturbation.
 
-
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/1.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/3.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
-</div>
-<div class="row">
-    <div class="col-sm mt-3 mt-md-0">
-        {% include figure.liquid loading="eager" path="assets/img/5.jpg" title="example image" class="img-fluid rounded z-depth-1" %}
-    </div>
-</div>
-<div class="caption">
-    This image can also have a caption. It's like magic.
-</div>
-
-Therefore, our goal is to develop a foundational model, MethylGPT, specifically for human DNA methylation (DNAm) data, paving the way for future research. We curated approximately 300,000 DNAm samples from public sources, deduplicated them, and consolidated them into 154,063 unique human DNAm datasets. DNA methylation data vary in the number of CpG entries depending on the array platform used (e.g., Illumina 27k, Illumina 450k, and EPIC). To address these differences and ensure biological relevance, we focused on 49,156 CpG sites. In total, **7.6 billion training tokens** were used for pretraining.
-
-Our model architecture and training is specialized for DNAm data. First, we use the element-wise sum of the CpG value embedding and the CpG ID embedding. This allows information to be selectively masked without compromising the integrity of the sequence structure. Second, the training loss during the pretraining process includes both a Masked Language Modeling (MLM)-style approach and an Autoregressive Generative approach. Both approaches aim to optimize the prediction of methylation values to closely match the original values, even when some information is masked.
-
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
         {% include figure.liquid path="assets/img/publication_preview/publications/methylGPT/Picture1.png" title="example image" class="img-fluid rounded z-depth-1" %}
@@ -58,7 +30,12 @@ Our model architecture and training is specialized for DNAm data. First, we use 
 </div>
 
 
-MethylGPT captures biologically meaningful sample-level features, such as tissue information, sex and disease tpyes compared than raw methylation data directly generated UMAP embeddings (Fig. 3d-f)
+
+Therefore, our goal is to develop a foundational model, MethylGPT, specifically for human DNA methylation (DNAm) data, paving the way for future research. We curated approximately 300,000 DNAm samples from public sources, deduplicated them, and consolidated them into 154,063 unique human DNAm datasets. DNA methylation data vary in the number of CpG entries depending on the array platform used (e.g., Illumina 27k, Illumina 450k, and EPIC). To address these differences and ensure biological relevance, we focused on 49,156 CpG sites. In total, **7.6 billion training tokens** were used for pretraining.
+
+Our model architecture and training is specialized for DNAm data. First, we use the element-wise sum of the CpG value embedding and the CpG ID embedding. This allows information to be selectively masked without compromising the integrity of the sequence structure. Second, the training loss during the pretraining process includes both a Masked Language Modeling (MLM)-style approach and an Autoregressive Generative approach. Both approaches aim to optimize the prediction of methylation values to closely match the original values, even when some information is masked.
+
+
 
 
 <div class="row justify-content-sm-center">
@@ -70,6 +47,9 @@ MethylGPT captures biologically meaningful sample-level features, such as tissue
     MethylGPT learns tissue-specific and sex-specific methylation patterns
 </div>
 
+
+
+MethylGPT captures biologically meaningful sample-level features, such as tissue information, sex and disease tpyes compared than raw methylation data directly generated UMAP embeddings (Fig. 3d-f)
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
