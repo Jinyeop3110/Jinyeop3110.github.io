@@ -8,15 +8,11 @@ category:  AI for Science
 ---
 
 
-@article{lee2020deep,
-  title={Deep-learning-based three-dimensional label-free tracking and analysis of immunological synapses of CAR-T cells},
-  author={Lee, Moosung and Lee, Young-Ho and Song, Jinyeop and Kim, Geon and Jo, YoungJu and Min, HyunSeok and Kim, Chan Hyuk and Park, YongKeun},
-  journal={Elife},
-  volume={9},
-  pages={e49023},
-  year={2020},
-  publisher={eLife Sciences Publications, Ltd}
-}
+
+Paper : <a href="https://elifesciences.org/articles/49023">"Deep-learning-based three-dimensional label-free tracking and analysis of immunological synapses of CAR-T cells"</a>
+
+We propose and experimentally validate a label-free, volumetric, and automated assessment method for IS dynamics using a combinational approach of optical diffraction tomography and deep learning-based segmentation.
+
+(TO be updated)
 
 
-TO be updated

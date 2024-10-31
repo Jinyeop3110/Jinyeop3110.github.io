@@ -20,7 +20,7 @@ However, [kaplan2020scaling, hoffmann2022training] has empricially measured diff
     You can also have artistically styled 2/3 + 1/3 images, like these.
 </div>
 
-On the other hand, it is unknown why such a law occurs and holds across various tasks, including language, vision, and even proteins. Previously, in our workshop paper at ICLR 2024, <a href="https://arxiv.org/pdf/2402.05164">**"A RESOURCE MODEL FOR NEURAL SCALING LAWS"**</a>, we propose the **"resource model"** as a **phenomenological model** to explain the scaling laws of large language models (LLMs). Resource model hypotheses are as follows.
+On the other hand, it is unknown why such a law occurs and holds across various tasks, including language, vision, and even proteins. Previously, in our workshop paper at ICLR 2024, <a href="https://arxiv.org/pdf/2402.05164">"A RESOURCE MODEL FOR NEURAL SCALING LAWS"</a>, we propose the **"resource model"** as a **phenomenological model** to explain the scaling laws of large language models (LLMs). Resource model hypotheses are as follows.
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
@@ -47,6 +47,8 @@ Based on the hypotheses of the Resource Model, we derive a \(-1\) scaling law fo
 </div>
 
 
+Belows are main figures for experiments(To be updated).
+
 <div class="row justify-content-sm-center">
     <div class="col-sm-6 mt-3 mt-md-0">
         {% include figure.liquid path="assets/img/publication_preview/publications/ResourceModel/fig1.png" title="fig1" class="img-fluid rounded z-depth-1" %}
@@ -69,6 +71,12 @@ Based on the hypotheses of the Resource Model, we derive a \(-1\) scaling law fo
     <div class="col-sm-6 mt-3 mt-md-0">
         {% include figure.liquid path="assets/img/publication_preview/publications/ResourceModel/fig3.png" title="fig3" class="img-fluid rounded z-depth-1" %}
     </div>
+</div>
+<div class="caption">
+--
+</div>
+
+<div class="row justify-content-sm-center">
     <div class="col-sm-6 mt-3 mt-md-0">
         {% include figure.liquid path="assets/img/publication_preview/publications/ResourceModel/fig4.png" title="fig4" class="img-fluid rounded z-depth-1" %}
     </div>
@@ -76,5 +84,7 @@ Based on the hypotheses of the Resource Model, we derive a \(-1\) scaling law fo
 <div class="caption">
 --
 </div>
+
+
 
 

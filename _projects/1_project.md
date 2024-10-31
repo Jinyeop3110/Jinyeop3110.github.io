@@ -24,7 +24,7 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
     Overview of Concept Encoding phenomena and Concept Decodability(CD)
 </div>
 
-<div class="row">
+<div class="row justify-content-sm-center">
     <div class="col-sm-6 mt-6 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/reps.png" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
@@ -36,7 +36,7 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
 
 We conjecture that concept decodability—specifically, how well a given concept is separated in intermediate representations—can predict in-context learning (ICL) performance. Our observations indicate that this holds true for both the part-of-speech (POS) task and bitwise operation tasks.
 
-<div class="row">
+<div class="row justify-content-sm-center">
     <div class="col-sm-6 mt-6 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Score_vs_Accuracy_pos_operations_plot.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
@@ -53,7 +53,7 @@ We conjecture that concept decodability—specifically, how well a given concept
 We do various interventions and causual relaitons experimetns supporting that concept encoding phenomena is indeed causually related with the ICL performance . cHeck the paper! : Paper (soon to be archived) : <a href="https://drive.google.com/file/d/14e3DBsKpuRdav9lA_Wkfg8FI1mi5iMZn/view?usp=sharing">"Concept to Context : Concept Encoding in In-Context Learning of LLMs"</a>
 
 
-<div class="row">
+<div class="row justify-content-sm-center">
     <div class="col-sm-4 mt-2 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/perturbation_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
@@ -65,7 +65,7 @@ We do various interventions and causual relaitons experimetns supporting that co
     Perturbation analysis 
 </div>
 
-<div class="row">
+<div class="row justify-content-sm-center">
     <div class="col-sm-4 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Finetuning_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
@@ -78,7 +78,7 @@ We do various interventions and causual relaitons experimetns supporting that co
 </div>
 
 
-<div class="row">
+<div class="row justify-content-sm-center">
     <div class="col-sm-4 mt-3 mt-md-0">
         {% include figure.liquid loading="eager" path="assets/img/publication_preview/publications/ConceptEncoding/Prompting_POS.pdf" title="example image" class="img-fluid rounded z-depth-1" %}
     </div>
