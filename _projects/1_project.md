@@ -8,7 +8,8 @@ category: Sceince of AI
 related_publications: true
 ---
 
-Paper (soon to be archived) : href="https://drive.google.com/file/d/14e3DBsKpuRdav9lA_Wkfg8FI1mi5iMZn/view?usp=sharing"> "Concept to Context : Concept Encoding in In-Context Learning of LLMs" </a> system).
+Paper (soon to be archived) : <a href="https://drive.google.com/file/d/14e3DBsKpuRdav9lA_Wkfg8FI1mi5iMZn/view?usp=sharing">"Concept to Context : Concept Encoding in In-Context Learning of LLMs"</a>
+
 
 **TLDR:** We explored the mechanistic understanding of ICL success/failure modes through how well certain concepts are encoded in intermediate reprsentatoions
 
