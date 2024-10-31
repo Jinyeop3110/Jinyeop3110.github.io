@@ -8,8 +8,8 @@ category: Sceince of AI
 giscus_comments: true
 ---
 
-The Neural Scaling Law(NSL) [\cite{kaplan2020scaling}, \cite{hoffmann2022training}] refers to how language models scale with respect to key factors: model size (number of parameters, $N$), training data size ($D$), and computational resources ($C$). This scaling law is important to anlyze since it enable how "perofrmance gain" we can expect by scaling up the AI model and data.
-However, \cite{kaplan2020scaling}, \cite{hoffmann2022training} has empricially measured different scaling coefficients for lage langague model. In paper (Under review in TMLR) <a href="https://arxiv.org/pdf/2406.12907">"Reconciling Kaplan and Chinchilla Scaling Laws"</a> , we aim to identify the origin of such discrepancy through analytic methods and small langauge model traning.
+The Neural Scaling Law(NSL) [kaplan2020scaling, hoffmann2022training] refers to how language models scale with respect to key factors: model size, training data size, and computational resources. This scaling law is important to anlyze since it enable how "perofrmance gain" we can expect by scaling up the AI model and data.
+However, [kaplan2020scaling, hoffmann2022training] has empricially measured different scaling coefficients for lage langague model. In paper (Under review in TMLR) <a href="https://arxiv.org/pdf/2406.12907">"Reconciling Kaplan and Chinchilla Scaling Laws"</a> , we aim to identify the origin of such discrepancy through analytic methods and small langauge model traning.
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-8 mt-3 mt-md-0">
