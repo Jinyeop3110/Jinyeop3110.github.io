@@ -13,8 +13,10 @@ category: AI for Science
     </div>
 </div>
 <div class="caption">
-    You can also have artistically styled 2/3 + 1/3 images, like these.
 </div>
+Paper : <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v1">"MethylGPT: a foundation model for the DNA methylome"</a>
+
+
 
 
 @article{ying2022methylgpt,
