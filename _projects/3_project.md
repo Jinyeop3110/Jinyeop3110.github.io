@@ -8,7 +8,7 @@ importance: 3
 category: AI safety
 ---
 ## <mark>Summary</mark>  
-We will propose a scalable method for quantifying the empowerment (i.e., one's control over the future state) of a Language Model agent.
+We will propose a scalable method for quantifying the empowerment (i.e., one's control over the future state) of a Language Model agent. haha
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-12 mt-3 mt-md-0">
