@@ -2,8 +2,7 @@
 layout: page
 title: Scaling Empowerment Estimation of a Language Model Agent
 description: MATS Program - Winter 2024-25 Cohort
-img: assets/img/7.jpg
-redirect: https://unsplash.com
+img: assets/img/3.jpg
 importance: 3
 category: AI safety
 ---
