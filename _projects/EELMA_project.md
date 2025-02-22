@@ -11,7 +11,7 @@ We will propose a scalable method for quantifying the empowerment (i.e., one's c
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-12 mt-3 mt-md-0">
-        {% include figure.liquid path="assets/img/eelma_fig1.png" title="EELMA Figure 1" class="img-fluid rounded z-depth-1" %}
+        {% include figure.liquid path="assets/img/publication_preview/publications/EELMA/Fig1.png" title="EELMA Figure 1" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 
