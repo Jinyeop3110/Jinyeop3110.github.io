@@ -58,12 +58,7 @@
       "startDate": "2020-01-01",
       "endDate": "",
       "score": "",
-      "courses": [
-        "Science of AI",
-        "Large Language Models",
-        "Statistical Physics",
-        "Computational Biology"
-      ]
+      "courses": ["Science of AI", "Large Language Models", "Statistical Physics", "Computational Biology"]
     }
   ],
   "awards": [
@@ -117,40 +112,19 @@
       "name": "Machine Learning",
       "level": "Expert",
       "icon": "fa-solid fa-brain",
-      "keywords": [
-        "Large Language Models",
-        "Neural Scaling Laws",
-        "In-Context Learning",
-        "Deep Learning",
-        "PyTorch",
-        "TensorFlow",
-        "JAX"
-      ]
+      "keywords": ["Large Language Models", "Neural Scaling Laws", "In-Context Learning", "Deep Learning", "PyTorch", "TensorFlow", "JAX"]
     },
     {
       "name": "Programming",
       "level": "Expert",
       "icon": "fa-solid fa-code",
-      "keywords": [
-        "Python",
-        "R",
-        "MATLAB",
-        "Git",
-        "Linux",
-        "High-Performance Computing"
-      ]
+      "keywords": ["Python", "R", "MATLAB", "Git", "Linux", "High-Performance Computing"]
     },
     {
       "name": "Computational Biology",
       "level": "Advanced",
       "icon": "fa-solid fa-dna",
-      "keywords": [
-        "Multiomics analysis",
-        "Protein foundation models",
-        "Genomics",
-        "Biological data preprocessing",
-        "Statistical modeling"
-      ]
+      "keywords": ["Multiomics analysis", "Protein foundation models", "Genomics", "Biological data preprocessing", "Statistical modeling"]
     }
   ],
   "languages": [
@@ -169,33 +143,19 @@
     {
       "name": "Science of AI",
       "icon": "fa-solid fa-robot",
-      "keywords": [
-        "Neural Scaling Laws",
-        "In-Context Learning",
-        "Large Language Model interpretability",
-        "Foundational model development"
-      ]
+      "keywords": ["Neural Scaling Laws", "In-Context Learning", "Large Language Model interpretability", "Foundational model development"]
     },
     {
       "name": "AI for Science",
       "icon": "fa-solid fa-microscope",
-      "keywords": [
-        "Multiomics data analysis",
-        "Protein foundation models",
-        "Scientific discovery through ML",
-        "Scalable biological data modeling"
-      ]
+      "keywords": ["Multiomics data analysis", "Protein foundation models", "Scientific discovery through ML", "Scalable biological data modeling"]
     }
   ],
   "projects": [
     {
       "name": "Concept Encoding in In-Context Learning",
       "summary": "Research on mechanistic understanding of ICL success/failure modes through concept encoding phenomena in intermediate representations of LLMs.",
-      "highlights": [
-        "ICML 2025 Spotlight",
-        "Concept Decodability framework",
-        "LLaMA3 analysis"
-      ],
+      "highlights": ["ICML 2025 Spotlight", "Concept Decodability framework", "LLaMA3 analysis"],
       "startDate": "2023-01-01",
       "endDate": "2024-01-01",
       "url": ""
@@ -203,11 +163,7 @@
     {
       "name": "EELMA: Scaling Empowerment Estimation",
       "summary": "Developing scalable methods for quantifying empowerment of Language Model agents for AI safety research.",
-      "highlights": [
-        "MATS Program project",
-        "AI safety and alignment",
-        "Information theory application"
-      ],
+      "highlights": ["MATS Program project", "AI safety and alignment", "Information theory application"],
       "startDate": "2024-01-01",
       "endDate": "2025-01-01",
       "url": ""
