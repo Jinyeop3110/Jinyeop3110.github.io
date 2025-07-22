@@ -4,7 +4,7 @@ title: "KG-r1: Efficient and Adaptive Knowledge Graph Retrieval using Reinforcem
 description: To be written
 img: assets/img/6.jpg
 importance: 2
-category: Science of AI
+category: AI
 ---
 
 ## Summary
