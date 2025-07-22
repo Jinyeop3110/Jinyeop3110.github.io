@@ -5,7 +5,7 @@ permalink: /projects/
 description: --
 nav: true
 nav_order: 2
-display_categories: [AI safety, Sceince of AI, AI for Science]
+display_categories: [AI, AI safety, Sceince of AI, AI for Science]
 horizontal: false
 ---
 
