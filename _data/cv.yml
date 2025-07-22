@@ -2,96 +2,148 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
-    - name: Date of Birth
-      value: 14th March 1879
+      value: Jinyeop Song
+    - name: Email
+      value: sjinyeop@gmail.com
+    - name: Phone
+      value: 617-949-1042
+    - name: Location
+      value: Cambridge, MA, 02142
     - name: Languages
-      value: English, German
+      value: English, Korean
 
 - title: Education
   type: time_table
   contents:
-    - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1905
+    - title: PhD in Physics
+      institution: Massachusetts Institute of Technology (MIT), Cambridge, MA
+      year: 2020 - Present
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Federal teaching diploma
-      institution: Eidgenössische Technische Hochschule, Zurich, Switzerland
-      year: 1900
-      description:
-        - Description 1.
-        - Description 2.
+        - 5th-year PhD student in the MIT Physics Department
+        - Research focus on Science of AI and Large Language Models
+        - Advisor: Prof. Jeff Gore
 
-- title: Experience
+- title: Research Experience
   type: time_table
   contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
+    - title: Graduate Research Assistant
+      institution: MIT Physics Department
+      year: 2020 - Present
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
+        - Research on Neural Scaling Laws and In-Context Learning (ICL)
+        - Developing AI for Science applications in multiomics and proteins
+        - Building scalable foundational models for biological data
+    
+    - title: Research Intern
+      institution: Various Academic Collaborations
+      year: 2019 - 2020
       description:
-        - Description 1.
-        - Description 2.
+        - Protein foundation models and embedding analysis
+        - Bacterial pathogen identification using deep learning
+        - Immunological synapse analysis of CAR-T cells
 
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
-
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
-      description:
-
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
-
-- title: Open Source Projects
+- title: Publications
   type: time_table
   contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
+    - title: "Context to Concept: Concept Encoding in In-context Learning"
+      institution: ICML 2025 (Spotlight)
+      year: 2024
+      description:
+        - First author publication on mechanistic understanding of ICL
+        - Co-authors: Sumin Han, P. Argawal, Jeffrey Gore
+    
+    - title: "MethylGPT: Foundational GPT-like Model for Human Methylation Data"
+      institution: Under review in Nature Methods
+      year: 2024
+      description:
+        - Co-author on foundational model for methylation data
+        - Lead authors: Alex Ying, Jinyeop Song, Haoran Cui
+    
+    - title: "Reconciling Kaplan and Chinchilla Scaling Laws"
+      institution: TMLR
+      year: 2024
+      description:
+        - Co-author with Tim Pearce
+        - arXiv:2406.12907
+    
+    - title: "A resource model for neural scaling law"
+      institution: ICLR BGPT workshop
+      year: 2024
+      description:
+        - First author publication
+        - Co-authors: Ziming Liu, Max Tegmark, Jeff Gore
+        - arXiv:2402.05164
 
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 1921
-      items:
-        - Nobel Prize in Physics
-        - Matteucci Medal
-    - year: 2029
-      items:
-        - Max Planck Medal
-
-- title: Academic Interests
+- title: Research Interests
   type: nested_list
   contents:
-    - title: Topic 1.
+    - title: Science of AI
       items:
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
+        - Neural Scaling Laws
+        - In-Context Learning (ICL) mechanisms
+        - Large Language Model interpretability
+        - Foundational model development
+    - title: AI for Science
       items:
-        - Description 1.
-        - Description 2.
+        - Multiomics data analysis
+        - Protein foundation models
+        - Scalable biological data modeling
+        - Scientific discovery through ML
 
-- title: Other Interests
-  type: list
+- title: Technical Skills
+  type: nested_list
   contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+    - title: Programming Languages
+      items:
+        - Python (PyTorch, TensorFlow, JAX)
+        - R for statistical analysis
+        - MATLAB for scientific computing
+    - title: Machine Learning
+      items:
+        - Deep learning and neural networks
+        - Natural language processing
+        - Computer vision applications
+        - Statistical modeling and analysis
+    - title: Computational Biology
+      items:
+        - Genomics and multiomics analysis
+        - Protein structure prediction
+        - Biological data preprocessing
+
+- title: Awards and Honors
+  type: time_table
+  contents:
+    - year: 2025
+      items:
+        - ICML 2025 Spotlight Paper
+    - year: 2024
+      items:
+        - MATS Program - Winter 2024-25 Cohort
+        - Multiple first-author publications
+
+- title: Professional Activities
+  type: time_table
+  contents:
+    - title: Peer Review
+      year: 2024 - Present
+      description:
+        - Reviewer for top-tier ML conferences and journals
+    
+    - title: MATS Program Participant
+      year: 2024 - 2025
+      description:
+        - Winter 2024-25 Cohort
+        - Project: Scaling Empowerment Estimation of Language Model Agents
+        - Focus: AI safety and alignment research
+
+- title: Contact Information
+  type: map
+  contents:
+    - name: Website
+      value: https://Jinyeop3110.github.io
+    - name: Google Scholar
+      value: CIfZvqcAAAAJ
+    - name: GitHub
+      value: jinyeop3110
+    - name: LinkedIn
+      value: jinyeopsong3110
