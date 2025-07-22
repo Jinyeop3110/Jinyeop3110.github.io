@@ -33,7 +33,7 @@
         - Research on Neural Scaling Laws and In-Context Learning (ICL)
         - Developing AI for Science applications in multiomics and proteins
         - Building scalable foundational models for biological data
-    
+
     - title: Research Intern
       institution: Various Academic Collaborations
       year: 2019 - 2020
@@ -51,21 +51,21 @@
       description:
         - First author publication on mechanistic understanding of ICL
         - Co-authors: Sumin Han, P. Argawal, Jeffrey Gore
-    
+
     - title: "MethylGPT: Foundational GPT-like Model for Human Methylation Data"
       institution: Under review in Nature Methods
       year: 2024
       description:
         - Co-author on foundational model for methylation data
         - Lead authors: Alex Ying, Jinyeop Song, Haoran Cui
-    
+
     - title: "Reconciling Kaplan and Chinchilla Scaling Laws"
       institution: TMLR
       year: 2024
       description:
         - Co-author with Tim Pearce
         - arXiv:2406.12907
-    
+
     - title: "A resource model for neural scaling law"
       institution: ICLR BGPT workshop
       year: 2024
@@ -128,7 +128,7 @@
       year: 2024 - Present
       description:
         - Reviewer for top-tier ML conferences and journals
-    
+
     - title: MATS Program Participant
       year: 2024 - 2025
       description:
