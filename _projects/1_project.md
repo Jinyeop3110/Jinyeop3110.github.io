@@ -21,10 +21,7 @@ Paper (soon to be archived) : <a href="https://drive.google.com/file/d/14e3DBsKp
 
 **TLDR:** We explored the mechanistic understanding of ICL success/failure modes through how well certain concepts are encoded in intermediate reprsentatoions
 
-
 Why does in-context learning (ICL) succeed or fail depending on the task? We explored the mechanisms behind these success and failure modes and sought to quantify them. To this end, we introduced the concept of **Concept Encoding** phenomena, which posits that representations are effectively distinguished by latent concepts. Our findings demonstrate that concept encoding occurs in the LLAMA3 8B model, as evidenced by realistic latent concepts such as verbs and nouns in part-of-speech tagging, as well as logical operators like AND and OR in bitwise operations.
-
-
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-6 mt-3 mt-md-0">
@@ -34,7 +31,6 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
 <div class="caption">
     Concept Encoding phenomena and Concept Decodability(CD) as predictive of ICL performance
 </div>
-
 
 We conjecture that concept decodability—specifically, how well a given concept is separated in intermediate representations—can predict in-context learning (ICL) performance. Our observations indicate that this holds true for both the part-of-speech (POS) task and bitwise operation tasks.
 
@@ -50,10 +46,7 @@ We conjecture that concept decodability—specifically, how well a given concept
     Concept Decodability(CD) as predictive of ICL performance
 </div>
 
-
-
 We do various interventions and causual relaitons experimetns supporting that concept encoding phenomena is indeed causually related with the ICL performance . cHeck the paper! : Paper (soon to be archived) : <a href="https://drive.google.com/file/d/14e3DBsKpuRdav9lA_Wkfg8FI1mi5iMZn/view?usp=sharing">"Concept to Context : Concept Encoding in In-Context Learning of LLMs"</a>
-
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-4 mt-3 mt-md-0">
@@ -78,7 +71,6 @@ We do various interventions and causual relaitons experimetns supporting that co
 <div class="caption">
     Finetuning
 </div>
-
 
 <div class="row justify-content-sm-center">
     <div class="col-sm-4 mt-3 mt-md-0">
