@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Joined the <a href="https://mitibmwatsonailab.mit.edu">MIT-IBM Watson AI Lab</a> as a summer research intern, working on improving language model interactions with knowledge bases.
+Summer research intern at <a href="https://mitibmwatsonailab.mit.edu">MIT-IBM Watson AI Lab</a>.
