@@ -22,7 +22,7 @@ Before pushing changes to this Jekyll website, verify:
 
 - Front matter YAML must be valid (check colons, indentation)
 - Boolean values: `true`/`false` (not quoted)
-- Liquid templates must have matching `{% %}` tags
+- Liquid templates must have matching {% raw %}`{% %}`{% endraw %} tags
 
 ### 4. Config (\_config.yml)
 
