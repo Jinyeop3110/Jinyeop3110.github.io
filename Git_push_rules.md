@@ -64,7 +64,7 @@ Check for:
 3. If deploy fails, check the build logs for specific error messages
 4. Common fixes:
    - Validate YAML: https://www.yamllint.com/
-   - Validate BibTeX: https://biblatex-check.herokuapp.com/
+   - Validate BibTeX: https://flamingtempura.github.io/bibtex-tidy/
    - Check Liquid syntax in templates
 
 ## GitHub Actions Workflows
