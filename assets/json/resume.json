@@ -1,1 +1,172 @@
-{"basics":{"name":"Jinyeop Song","label":"PhD Student in Physics","image":"","email":"sjinyeop@gmail.com","phone":"617-949-1042","url":"https://Jinyeop3110.github.io","summary":"5th-year PhD student in the MIT Physics Department focusing on the Science of AI, particularly on large language models (LLMs), Neural Scaling Laws, and In-Context Learning.","location":{"address":"","postalCode":"02142","city":"Cambridge","countryCode":"US","region":"Massachusetts"},"profiles":[{"network":"GitHub","username":"jinyeop3110","url":"https://github.com/jinyeop3110"},{"network":"LinkedIn","username":"jinyeopsong3110","url":"https://linkedin.com/in/jinyeopsong3110"},{"network":"Google Scholar","username":"CIfZvqcAAAAJ","url":"https://scholar.google.com/citations?user=CIfZvqcAAAAJ"}]},"work":[{"name":"MIT Physics Department","position":"Graduate Research Assistant","url":"https://physics.mit.edu","startDate":"2020-01-01","endDate":"","summary":"Research on Neural Scaling Laws and In-Context Learning (ICL). Developing AI for Science applications in multiomics and proteins. Building scalable foundational models for biological data.","highlights":["Neural Scaling Laws research","In-Context Learning mechanisms","AI for Science applications","Multiomics and protein modeling"]}],"education":[{"institution":"Massachusetts Institute of Technology","location":"Cambridge, MA","url":"https://mit.edu","area":"Physics","studyType":"PhD","startDate":"2020-01-01","endDate":"","score":"","courses":["Science of AI","Large Language Models","Statistical Physics","Computational Biology"]}],"awards":[{"title":"ICML 2025 Spotlight Paper","date":"2025-01-01","awarder":"International Conference on Machine Learning","url":"","summary":"Spotlight paper acceptance for 'Context to Concept: Concept Encoding in In-context Learning'"},{"title":"MATS Program Participant","date":"2024-01-01","awarder":"Machine Learning Alignment & Theory Scholars","url":"","summary":"Winter 2024-25 Cohort - Scaling Empowerment Estimation of Language Model Agents"}],"publications":[{"name":"Context to Concept: Concept Encoding in In-context Learning","publisher":"ICML 2025 (Spotlight)","releaseDate":"2024-01-01","url":"","summary":"First author publication on mechanistic understanding of ICL success/failure modes through concept encoding phenomena in intermediate representations."},{"name":"MethylGPT: Foundational GPT-like Model for Human Methylation Data","publisher":"Under review in Nature Methods","releaseDate":"2024-01-01","url":"","summary":"Co-author on foundational model for methylation data analysis and interpretation."},{"name":"Reconciling Kaplan and Chinchilla Scaling Laws","publisher":"TMLR","releaseDate":"2024-01-01","url":"https://arxiv.org/abs/2406.12907","summary":"Co-author work reconciling different neural scaling law formulations."},{"name":"A resource model for neural scaling law","publisher":"ICLR BGPT workshop","releaseDate":"2024-01-01","url":"https://arxiv.org/abs/2402.05164","summary":"First author publication on resource-based models for understanding neural scaling laws."}],"skills":[{"name":"Machine Learning","level":"Expert","icon":"fa-solid fa-brain","keywords":["Large Language Models","Neural Scaling Laws","In-Context Learning","Deep Learning","PyTorch","TensorFlow","JAX"]},{"name":"Programming","level":"Expert","icon":"fa-solid fa-code","keywords":["Python","R","MATLAB","Git","Linux","High-Performance Computing"]},{"name":"Computational Biology","level":"Advanced","icon":"fa-solid fa-dna","keywords":["Multiomics analysis","Protein foundation models","Genomics","Biological data preprocessing","Statistical modeling"]}],"languages":[{"language":"English","fluency":"Fluent","icon":""},{"language":"Korean","fluency":"Native speaker","icon":""}],"interests":[{"name":"Science of AI","icon":"fa-solid fa-robot","keywords":["Neural Scaling Laws","In-Context Learning","Large Language Model interpretability","Foundational model development"]},{"name":"AI for Science","icon":"fa-solid fa-microscope","keywords":["Multiomics data analysis","Protein foundation models","Scientific discovery through ML","Scalable biological data modeling"]}],"projects":[{"name":"Concept Encoding in In-Context Learning","summary":"Research on mechanistic understanding of ICL success/failure modes through concept encoding phenomena in intermediate representations of LLMs.","highlights":["ICML 2025 Spotlight","Concept Decodability framework","LLaMA3 analysis"],"startDate":"2023-01-01","endDate":"2024-01-01","url":""},{"name":"EELMA: Scaling Empowerment Estimation","summary":"Developing scalable methods for quantifying empowerment of Language Model agents for AI safety research.","highlights":["MATS Program project","AI safety and alignment","Information theory application"],"startDate":"2024-01-01","endDate":"2025-01-01","url":""}]}
+{
+  "basics": {
+    "name": "Jinyeop Song",
+    "label": "PhD Student in Physics",
+    "image": "",
+    "email": "sjinyeop@gmail.com",
+    "phone": "617-949-1042",
+    "url": "https://Jinyeop3110.github.io",
+    "summary": "5th-year PhD student in the MIT Physics Department focusing on the Science of AI, particularly on large language models (LLMs), Neural Scaling Laws, and In-Context Learning.",
+    "location": {
+      "address": "",
+      "postalCode": "02142",
+      "city": "Cambridge",
+      "countryCode": "US",
+      "region": "Massachusetts"
+    },
+    "profiles": [
+      {
+        "network": "GitHub",
+        "username": "jinyeop3110",
+        "url": "https://github.com/jinyeop3110"
+      },
+      {
+        "network": "LinkedIn",
+        "username": "jinyeopsong3110",
+        "url": "https://linkedin.com/in/jinyeopsong3110"
+      },
+      {
+        "network": "Google Scholar",
+        "username": "CIfZvqcAAAAJ",
+        "url": "https://scholar.google.com/citations?user=CIfZvqcAAAAJ"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "MIT Physics Department",
+      "position": "Graduate Research Assistant",
+      "url": "https://physics.mit.edu",
+      "startDate": "2020-01-01",
+      "endDate": "",
+      "summary": "Research on Neural Scaling Laws and In-Context Learning (ICL). Developing AI for Science applications in multiomics and proteins. Building scalable foundational models for biological data.",
+      "highlights": [
+        "Neural Scaling Laws research",
+        "In-Context Learning mechanisms",
+        "AI for Science applications",
+        "Multiomics and protein modeling"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Massachusetts Institute of Technology",
+      "location": "Cambridge, MA",
+      "url": "https://mit.edu",
+      "area": "Physics",
+      "studyType": "PhD",
+      "startDate": "2020-01-01",
+      "endDate": "",
+      "score": "",
+      "courses": ["Science of AI", "Large Language Models", "Statistical Physics", "Computational Biology"]
+    }
+  ],
+  "awards": [
+    {
+      "title": "ICML 2025 Spotlight Paper",
+      "date": "2025-01-01",
+      "awarder": "International Conference on Machine Learning",
+      "url": "",
+      "summary": "Spotlight paper acceptance for 'Context to Concept: Concept Encoding in In-context Learning'"
+    },
+    {
+      "title": "MATS Program Participant",
+      "date": "2024-01-01",
+      "awarder": "Machine Learning Alignment & Theory Scholars",
+      "url": "",
+      "summary": "Winter 2024-25 Cohort - Scaling Empowerment Estimation of Language Model Agents"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Context to Concept: Concept Encoding in In-context Learning",
+      "publisher": "ICML 2025 (Spotlight)",
+      "releaseDate": "2024-01-01",
+      "url": "",
+      "summary": "First author publication on mechanistic understanding of ICL success/failure modes through concept encoding phenomena in intermediate representations."
+    },
+    {
+      "name": "MethylGPT: Foundational GPT-like Model for Human Methylation Data",
+      "publisher": "Under review in Nature Methods",
+      "releaseDate": "2024-01-01",
+      "url": "",
+      "summary": "Co-author on foundational model for methylation data analysis and interpretation."
+    },
+    {
+      "name": "Reconciling Kaplan and Chinchilla Scaling Laws",
+      "publisher": "TMLR",
+      "releaseDate": "2024-01-01",
+      "url": "https://arxiv.org/abs/2406.12907",
+      "summary": "Co-author work reconciling different neural scaling law formulations."
+    },
+    {
+      "name": "A resource model for neural scaling law",
+      "publisher": "ICLR BGPT workshop",
+      "releaseDate": "2024-01-01",
+      "url": "https://arxiv.org/abs/2402.05164",
+      "summary": "First author publication on resource-based models for understanding neural scaling laws."
+    }
+  ],
+  "skills": [
+    {
+      "name": "Machine Learning",
+      "level": "Expert",
+      "icon": "fa-solid fa-brain",
+      "keywords": ["Large Language Models", "Neural Scaling Laws", "In-Context Learning", "Deep Learning", "PyTorch", "TensorFlow", "JAX"]
+    },
+    {
+      "name": "Programming",
+      "level": "Expert",
+      "icon": "fa-solid fa-code",
+      "keywords": ["Python", "R", "MATLAB", "Git", "Linux", "High-Performance Computing"]
+    },
+    {
+      "name": "Computational Biology",
+      "level": "Advanced",
+      "icon": "fa-solid fa-dna",
+      "keywords": ["Multiomics analysis", "Protein foundation models", "Genomics", "Biological data preprocessing", "Statistical modeling"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Fluent",
+      "icon": ""
+    },
+    {
+      "language": "Korean",
+      "fluency": "Native speaker",
+      "icon": ""
+    }
+  ],
+  "interests": [
+    {
+      "name": "Science of AI",
+      "icon": "fa-solid fa-robot",
+      "keywords": ["Neural Scaling Laws", "In-Context Learning", "Large Language Model interpretability", "Foundational model development"]
+    },
+    {
+      "name": "AI for Science",
+      "icon": "fa-solid fa-microscope",
+      "keywords": ["Multiomics data analysis", "Protein foundation models", "Scientific discovery through ML", "Scalable biological data modeling"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Concept Encoding in In-Context Learning",
+      "summary": "Research on mechanistic understanding of ICL success/failure modes through concept encoding phenomena in intermediate representations of LLMs.",
+      "highlights": ["ICML 2025 Spotlight", "Concept Decodability framework", "LLaMA3 analysis"],
+      "startDate": "2023-01-01",
+      "endDate": "2024-01-01",
+      "url": ""
+    },
+    {
+      "name": "EELMA: Scaling Empowerment Estimation",
+      "summary": "Developing scalable methods for quantifying empowerment of Language Model agents for AI safety research.",
+      "highlights": ["MATS Program project", "AI safety and alignment", "Information theory application"],
+      "startDate": "2024-01-01",
+      "endDate": "2025-01-01",
+      "url": ""
+    }
+  ]
+}

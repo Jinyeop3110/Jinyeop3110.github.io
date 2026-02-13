@@ -1,1 +1,220 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="https://jinyeop3110.github.io/feed.xml" rel="self" type="application/atom+xml"/><link href="https://jinyeop3110.github.io/" rel="alternate" type="text/html" hreflang="en"/><updated>2026-02-13T04:15:46+00:00</updated><id>https://jinyeop3110.github.io/feed.xml</id><title type="html">blank</title><subtitle>PhD candidate at MIT researching the Science of AI (scaling laws, in-context learning, LLM agents) and AI for Science (foundation models for biology). </subtitle><entry><title type="html">ICML Spotlight Paper Accepted</title><link href="https://jinyeop3110.github.io/blog/2025/icml-spotlight/" rel="alternate" type="text/html" title="ICML Spotlight Paper Accepted"/><published>2025-05-01T00:00:00+00:00</published><updated>2025-05-01T00:00:00+00:00</updated><id>https://jinyeop3110.github.io/blog/2025/icml-spotlight</id><content type="html" xml:base="https://jinyeop3110.github.io/blog/2025/icml-spotlight/"><![CDATA[<p>Our paper was accepted to ICML (Spotlight, Top 2.5%)! <a href="https://arxiv.org/abs/2412.12276">arXiv:2412.12276</a></p>]]></content><author><name></name></author><category term="news"/><summary type="html"><![CDATA[Our paper was accepted to ICML (Spotlight, Top 2.5%)! arXiv:2412.12276]]></summary></entry><entry><title type="html">Started MATS 7.0 Cohort</title><link href="https://jinyeop3110.github.io/blog/2025/mats-cohort/" rel="alternate" type="text/html" title="Started MATS 7.0 Cohort"/><published>2025-01-01T00:00:00+00:00</published><updated>2025-01-01T00:00:00+00:00</updated><id>https://jinyeop3110.github.io/blog/2025/mats-cohort</id><content type="html" xml:base="https://jinyeop3110.github.io/blog/2025/mats-cohort/"><![CDATA[<p>Started the ML Alignment Theory and Scholar (MATS) 7.0 cohort with mentor Max Klieman (UW).</p>]]></content><author><name></name></author><category term="news"/><summary type="html"><![CDATA[Started the ML Alignment Theory and Scholar (MATS) 7.0 cohort with mentor Max Klieman (UW).]]></summary></entry><entry><title type="html">MethylGPT Paper Archived and Under Review at Nature Method</title><link href="https://jinyeop3110.github.io/blog/2024/methylgpt-nature-method/" rel="alternate" type="text/html" title="MethylGPT Paper Archived and Under Review at Nature Method"/><published>2024-09-01T00:00:00+00:00</published><updated>2024-09-01T00:00:00+00:00</updated><id>https://jinyeop3110.github.io/blog/2024/methylgpt-nature-method</id><content type="html" xml:base="https://jinyeop3110.github.io/blog/2024/methylgpt-nature-method/"><![CDATA[<p>Our MethylGPT paper was archived and is under review at Nature Method! <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv link</a></p>]]></content><author><name></name></author><category term="news"/><summary type="html"><![CDATA[Our MethylGPT paper was archived and is under review at Nature Method! bioRxiv link]]></summary></entry><entry><title type="html">Scaling Law Paper Accepted to TMLR</title><link href="https://jinyeop3110.github.io/blog/2024/scaling-law-tmlr/" rel="alternate" type="text/html" title="Scaling Law Paper Accepted to TMLR"/><published>2024-08-01T00:00:00+00:00</published><updated>2024-08-01T00:00:00+00:00</updated><id>https://jinyeop3110.github.io/blog/2024/scaling-law-tmlr</id><content type="html" xml:base="https://jinyeop3110.github.io/blog/2024/scaling-law-tmlr/"><![CDATA[<p>Our scaling law paper was accepted to TMLR! Read it here: <a href="https://arxiv.org/abs/2406.12907">arXiv:2406.12907</a></p>]]></content><author><name></name></author><category term="news"/><summary type="html"><![CDATA[Our scaling law paper was accepted to TMLR! Read it here: arXiv:2406.12907]]></summary></entry></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://jinyeop3110.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jinyeop3110.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-02-13T22:22:11+00:00</updated><id>https://jinyeop3110.github.io/feed.xml</id><title type="html">Jinyeop Song</title><subtitle>PhD candidate at MIT researching the Science of AI (scaling laws, in-context learning, LLM agents) and AI for Science (foundation models for biology).
+</subtitle><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><entry><title type="html">KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning</title><link href="https://jinyeop3110.github.io/research/2025-11-01-kg-rag/" rel="alternate" type="text/html" title="KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning" /><published>2025-11-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/research/kg-rag</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2025-11-01-kg-rag/"><![CDATA[<p><img src="/assets/img/projects/kgrag.png" alt="KG-R1 Overview" class="lead" width="800" loading="lazy" /></p>
+
+<h2 id="summary">Summary</h2>
+
+<p>Efficient and Transferable Agentic Knowledge Graph RAG via Reinforcement Learning.</p>
+
+<h2 id="paper">Paper</h2>
+
+<p><a href="/assets/pdf/KG_R1_2026.pdf">Download Paper (PDF)</a></p>
+
+<p><em>Featured in MIT News, November 2025</em></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="rag" /><category term="knowledge-graph" /><category term="reinforcement-learning" /><summary type="html"><![CDATA[Multi-turn RL approach for knowledge-graph augmented LLMs.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">ICML Spotlight Paper Accepted</title><link href="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/" rel="alternate" type="text/html" title="ICML Spotlight Paper Accepted" /><published>2025-05-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/news/icml-spotlight</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/"><![CDATA[<p>Our paper was accepted to ICML (Spotlight, Top 2.5%)! <a href="https://arxiv.org/abs/2412.12276">arXiv:2412.12276</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our paper was accepted to ICML as a Spotlight presentation]]></summary></entry><entry><title type="html">EELMA: Estimating Empowerment of Language Model Agents</title><link href="https://jinyeop3110.github.io/research/2025-01-01-eelma/" rel="alternate" type="text/html" title="EELMA: Estimating Empowerment of Language Model Agents" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/research/eelma</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2025-01-01-eelma/"><![CDATA[<p><img src="/assets/img/projects/empowerment.png" alt="EELMA Overview" class="lead" width="800" loading="lazy" /></p>
+
+<p class="figcaption">EELMA - Estimating Empowerment of Language Model Agent, provides a scalable method for quantifying POWER of LM agents.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>We propose a scalable method for quantifying the empowerment (i.e., one’s control over the future state) of a Language Model agent.</p>
+
+<h2 id="abstract">Abstract</h2>
+
+<p>As LLM agents become more intelligent and gain wider access to real-world tools, there is growing concern about them potentially developing power-seeking behavior. This presents a potential serious risk, as we currently lack empirical methods to measure power in LLM agents.</p>
+
+<p>In this project, we address this problem for the first time by proposing a scalable method for quantifying the power of a LLM agent. Our method, named <strong>EELMA - Estimating Empowerment of Language Model Agents</strong>, builds on information theory and contrastive learning to enable efficient estimation of empowerment from text-based interactions in a given environment or agentic task.</p>
+
+<h2 id="threat-model-power-seeking-llm-agents">Threat Model: Power-Seeking LLM Agents</h2>
+
+<p><strong>Power-seeking AIs are a significant threat.</strong> Power is vaguely defined as the ability to achieve a wide range of goals. For example, “money is power,” as money is instrumentally useful for many goals. Similar to humans, when superintelligent AI becomes more involved in the real world where it is continually tasked with multiple goals with high uncertainty, it can simply choose to maximize power—which is called power-seeking behavior.</p>
+
+<p>The emergence of power-seeking AI is likely to be a significant threat because:</p>
+<ol>
+  <li>Power-seeking agents are likely to be adversarial to human control</li>
+  <li>AI with great computing power enables more sophisticated power-seeking behavior</li>
+</ol>
+
+<h2 id="method-empowerment-estimation">Method: Empowerment Estimation</h2>
+
+<p>EELMA quantifies power through <strong>Empowerment</strong>—a measure of an agent’s ability to control its environment through its actions. Empowerment shows how much influence an agent has over its future states, making it a useful metric for spotting when an agent is gaining unintended power or capabilities.</p>
+
+<h3 id="technical-approach">Technical Approach</h3>
+
+<p>To tackle computational challenges in high-dimensional language spaces, we:</p>
+
+<ol>
+  <li><strong>State Embedding Models</strong>: Fine-tune language embedding models to reduce dimensionality of agent states while preserving power-relevant information</li>
+  <li><strong>Contrastive Mutual Information Estimation</strong>: Implement a critic model using noise-contrastive estimation to approximate mutual information between agent actions and future states</li>
+</ol>
+
+<h2 id="expected-impact">Expected Impact</h2>
+
+<ul>
+  <li><strong>Foundational methodology</strong> for studying the power of LM agents</li>
+  <li><strong>Practical control system</strong> for monitoring power-seeking behavior</li>
+  <li><strong>Integration with RL</strong> as an alignment objective</li>
+</ul>
+
+<h2 id="research-context">Research Context</h2>
+
+<p>This work was conducted as part of the <strong>MATS 7.0 cohort</strong> (Model Alignment Theory Scholars) with mentor Max Kleiman-Weiner (University of Washington).</p>
+
+<h2 id="citation">Citation</h2>
+
+<div class="language-bibtex highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">@article</span><span class="p">{</span><span class="nl">song2025empowerment</span><span class="p">,</span>
+  <span class="na">title</span><span class="p">=</span><span class="s">{Estimating Empowerment of Language Model Agents}</span><span class="p">,</span>
+  <span class="na">author</span><span class="p">=</span><span class="s">{Song, Jinyeop and Gore, Jeff and Kleiman-Weiner, Max}</span><span class="p">,</span>
+  <span class="na">journal</span><span class="p">=</span><span class="s">{arXiv preprint arXiv:2509.22504}</span><span class="p">,</span>
+  <span class="na">year</span><span class="p">=</span><span class="s">{2025}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Paper:</strong> <a href="https://arxiv.org/abs/2509.22504">arXiv:2509.22504</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="ai-safety" /><category term="llm-agents" /><category term="empowerment" /><summary type="html"><![CDATA[MATS Program Winter 2024-25 - Proposing a scalable method for quantifying the empowerment of Language Model agents.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Started MATS 7.0 Cohort</title><link href="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/" rel="alternate" type="text/html" title="Started MATS 7.0 Cohort" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/news/mats-cohort</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/"><![CDATA[<p>Started the ML Alignment Theory and Scholar (MATS) 7.0 cohort with mentor Max Klieman (UW).</p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Joined the ML Alignment Theory and Scholar program]]></summary></entry><entry><title type="html">MethylGPT Paper Archived and Under Review at Nature Method</title><link href="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/" rel="alternate" type="text/html" title="MethylGPT Paper Archived and Under Review at Nature Method" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/news/methylgpt-nature-method</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/"><![CDATA[<p>Our MethylGPT paper was archived and is under review at Nature Method! <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv link</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our MethylGPT paper is under review at Nature Method]]></summary></entry><entry><title type="html">MethylGPT</title><link href="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/" rel="alternate" type="text/html" title="MethylGPT" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/research/methylgpt</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/"><![CDATA[<p><img src="/assets/img/projects/methylgpt.png" alt="MethylGPT Overview" class="lead" width="800" loading="lazy" /></p>
+
+<h2 id="overview">Overview</h2>
+
+<p>MethylGPT is a foundational GPT-like model designed for human methylation data, applying transformer architectures to biological sequence analysis.</p>
+
+<h2 id="background">Background</h2>
+
+<p>DNA methylation is an epigenetic modification that plays a crucial role in gene regulation, development, and disease. Traditional analysis methods are often limited in their ability to capture complex patterns across the methylome.</p>
+
+<h2 id="approach">Approach</h2>
+
+<p>MethylGPT applies the foundation model paradigm—successful in natural language processing—to methylation data:</p>
+
+<ul>
+  <li><strong>Pre-training</strong> on large-scale methylation datasets</li>
+  <li><strong>Transfer learning</strong> to downstream tasks</li>
+  <li><strong>Interpretable representations</strong> of methylation patterns</li>
+</ul>
+
+<h2 id="key-contributions">Key Contributions</h2>
+
+<ol>
+  <li><strong>Scalable Architecture</strong>: GPT-style transformer adapted for methylation arrays</li>
+  <li><strong>Pre-trained Foundation Model</strong>: Can be fine-tuned for various downstream tasks</li>
+  <li><strong>Biological Insights</strong>: Learned representations capture meaningful biological signals</li>
+</ol>
+
+<h2 id="status">Status</h2>
+
+<p>Currently under review at <strong>Nature Methods</strong>.</p>
+
+<h2 id="citation">Citation</h2>
+
+<div class="language-bibtex highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">@article</span><span class="p">{</span><span class="nl">ying2024methylgpt</span><span class="p">,</span>
+  <span class="na">title</span><span class="p">=</span><span class="s">{MethylGPT: Foundational GPT-like Model for Human Methylation Data}</span><span class="p">,</span>
+  <span class="na">author</span><span class="p">=</span><span class="s">{Ying, Alex and Song, Jinyeop and Cui, Haoran and others}</span><span class="p">,</span>
+  <span class="na">journal</span><span class="p">=</span><span class="s">{bioRxiv}</span><span class="p">,</span>
+  <span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Preprint:</strong> <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="foundation-models" /><category term="biology" /><category term="methylation" /><summary type="html"><![CDATA[A foundation model approach to understanding human methylation patterns - under review at Nature Methods.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Scaling Law Paper Accepted to TMLR</title><link href="https://jinyeop3110.github.io/news/2024-08-01-scaling-law-tmlr/" rel="alternate" type="text/html" title="Scaling Law Paper Accepted to TMLR" /><published>2024-08-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/news/scaling-law-tmlr</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-08-01-scaling-law-tmlr/"><![CDATA[<p>Our scaling law paper was accepted to TMLR! Read it here: <a href="https://arxiv.org/abs/2406.12907">arXiv:2406.12907</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our scaling law paper was accepted to TMLR]]></summary></entry><entry><title type="html">Neural Scaling Laws</title><link href="https://jinyeop3110.github.io/research/2024-08-01-scaling-laws/" rel="alternate" type="text/html" title="Neural Scaling Laws" /><published>2024-08-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/research/scaling-laws</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-08-01-scaling-laws/"><![CDATA[<p><img src="/assets/img/projects/reconcile_nsl.png" alt="Scaling Laws Overview" class="lead" width="800" loading="lazy" /></p>
+
+<h2 id="reconciling-kaplan-and-chinchilla-scaling-laws">Reconciling Kaplan and Chinchilla Scaling Laws</h2>
+
+<p>The Neural Scaling Law (NSL) refers to how language models scale with respect to key factors: model size, training data size, and computational resources. This scaling law is important to analyze since it enables predicting how much “performance gain” we can expect by scaling up AI models and data.</p>
+
+<p>However, Kaplan et al. and Hoffmann et al. (Chinchilla) have empirically measured different scaling coefficients for large language models. In our TMLR paper <a href="https://arxiv.org/abs/2406.12907">“Reconciling Kaplan and Chinchilla Scaling Laws”</a>, we aim to identify the origin of such discrepancy through analytic methods and small language model training.</p>
+
+<h2 id="origin-of-neural-scaling-laws-the-resource-model">Origin of Neural Scaling Laws: The Resource Model</h2>
+
+<p>On the other hand, it is unknown why such a law occurs and holds across various tasks, including language, vision, and even proteins. In our ICLR 2024 workshop paper <a href="https://arxiv.org/abs/2402.05164">“A Resource Model for Neural Scaling Laws”</a>, we propose the <strong>“resource model”</strong> as a phenomenological model to explain the scaling laws of large language models.</p>
+
+<h3 id="resource-model-hypotheses">Resource Model Hypotheses</h3>
+
+<p>The Resource Model hypothesizes that:</p>
+
+<ol>
+  <li><strong>Tasks are composed of subtasks</strong> - Complex tasks can be decomposed into simpler components</li>
+  <li><strong>Resources are limited</strong> - Model capacity acts as a limited resource distributed across subtasks</li>
+  <li><strong>Power-law emergence</strong> - The combination of these factors leads to power-law scaling behavior</li>
+</ol>
+
+<p>Based on these hypotheses, we derive a <strong>-1 scaling law</strong> for general composite tasks.</p>
+
+<h2 id="publications">Publications</h2>
+
+<ul>
+  <li>
+    <p><strong>Reconciling Kaplan and Chinchilla Scaling Laws</strong>
+Tim Pearce, <em>Jinyeop Song</em>
+TMLR 2024 | <a href="https://arxiv.org/abs/2406.12907">arXiv:2406.12907</a></p>
+  </li>
+  <li>
+    <p><strong>A Resource Model for Neural Scaling Law</strong>
+<em>Jinyeop Song</em>, Ziming Liu, Max Tegmark, Jeff Gore
+ICLR 2024 BGPT Workshop | <a href="https://arxiv.org/abs/2402.05164">arXiv:2402.05164</a></p>
+  </li>
+</ul>
+
+<h2 id="citation">Citation</h2>
+
+<div class="language-bibtex highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">@article</span><span class="p">{</span><span class="nl">pearce2024reconciling</span><span class="p">,</span>
+  <span class="na">title</span><span class="p">=</span><span class="s">{Reconciling Kaplan and Chinchilla Scaling Laws}</span><span class="p">,</span>
+  <span class="na">author</span><span class="p">=</span><span class="s">{Pearce, Tim and Song, Jinyeop}</span><span class="p">,</span>
+  <span class="na">journal</span><span class="p">=</span><span class="s">{TMLR}</span><span class="p">,</span>
+  <span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+
+<span class="nc">@article</span><span class="p">{</span><span class="nl">song2024resource</span><span class="p">,</span>
+  <span class="na">title</span><span class="p">=</span><span class="s">{A resource model for neural scaling law}</span><span class="p">,</span>
+  <span class="na">author</span><span class="p">=</span><span class="s">{Song, Jinyeop and Liu, Ziming and Tegmark, Max and Gore, Jeff}</span><span class="p">,</span>
+  <span class="na">journal</span><span class="p">=</span><span class="s">{ICLR BGPT workshop}</span><span class="p">,</span>
+  <span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="scaling-laws" /><category term="llm" /><category term="theory" /><summary type="html"><![CDATA[Diverse studies on emergent Neural Scaling Laws (NSL) of AI - reconciling different formulations and proposing theoretical models.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/reconcile_nsl.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/reconcile_nsl.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Concept Encoding in In-Context Learning</title><link href="https://jinyeop3110.github.io/research/2024-06-01-concept-encoding/" rel="alternate" type="text/html" title="Concept Encoding in In-Context Learning" /><published>2024-06-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/research/concept-encoding</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-06-01-concept-encoding/"><![CDATA[<p><img src="/assets/img/projects/concept_encoding.png" alt="Concept Encoding Overview" class="lead" width="800" loading="lazy" /></p>
+
+<p class="figcaption">Overview of Concept Encoding phenomena and Concept Decodability (CD)</p>
+
+<h2 id="summary">Summary</h2>
+
+<p><strong>TLDR:</strong> We explored the mechanistic understanding of ICL success/failure modes through how well certain concepts are encoded in intermediate representations.</p>
+
+<p>Why does in-context learning (ICL) succeed or fail depending on the task? We explored the mechanisms behind these success and failure modes and sought to quantify them.</p>
+
+<h2 id="concept-encoding-phenomena">Concept Encoding Phenomena</h2>
+
+<p>We introduced the concept of <strong>Concept Encoding</strong> phenomena, which posits that representations are effectively distinguished by latent concepts. Our findings demonstrate that concept encoding occurs in the LLAMA3 8B model, as evidenced by realistic latent concepts such as verbs and nouns in part-of-speech tagging, as well as logical operators like AND and OR in bitwise operations.</p>
+
+<h2 id="key-findings">Key Findings</h2>
+
+<p>We conjecture that concept decodability—specifically, how well a given concept is separated in intermediate representations—can predict in-context learning (ICL) performance. Our observations indicate that this holds true for both the part-of-speech (POS) task and bitwise operation tasks.</p>
+
+<h3 id="causal-analysis">Causal Analysis</h3>
+
+<p>We performed various interventions and causal relation experiments supporting that concept encoding phenomena is indeed causally related with the ICL performance:</p>
+
+<ul>
+  <li><strong>Perturbation Analysis</strong>: Perturbing concept representations affects ICL accuracy</li>
+  <li><strong>Fine-tuning Experiments</strong>: Fine-tuning improves both concept decodability and ICL performance</li>
+  <li><strong>Prompting Studies</strong>: Different prompting strategies affect concept encoding patterns</li>
+</ul>
+
+<h2 id="citation">Citation</h2>
+
+<div class="language-bibtex highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">@article</span><span class="p">{</span><span class="nl">song2024context</span><span class="p">,</span>
+  <span class="na">title</span><span class="p">=</span><span class="s">{Context to Concept: Concept Encoding in In-context Learning}</span><span class="p">,</span>
+  <span class="na">author</span><span class="p">=</span><span class="s">{Song, Jinyeop and Han, Sumin and Argawal, P. and Gore, Jeffrey}</span><span class="p">,</span>
+  <span class="na">journal</span><span class="p">=</span><span class="s">{ICML 2025 (Spotlight)}</span><span class="p">,</span>
+  <span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>Paper:</strong> <a href="https://arxiv.org/abs/2412.12276">arXiv:2412.12276</a> - <strong>ICML 2025 Spotlight (Top 2.5%)</strong></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="icl" /><category term="llm" /><category term="mechanistic-interpretability" /><summary type="html"><![CDATA[Understanding why in-context learning succeeds or fails through the lens of concept encoding in intermediate representations.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/concept_encoding.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/concept_encoding.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Microbial Community Coalescence</title><link href="https://jinyeop3110.github.io/research/2023-03-01-coalescence/" rel="alternate" type="text/html" title="Microbial Community Coalescence" /><published>2023-03-01T00:00:00+00:00</published><updated>2026-02-13T22:20:35+00:00</updated><id>https://jinyeop3110.github.io/research/coalescence</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2023-03-01-coalescence/"><![CDATA[<p><img src="/assets/img/projects/coalescence.jpg" alt="Coalescence Overview" class="lead" width="800" loading="lazy" /></p>
+
+<h2 id="summary">Summary</h2>
+
+<p>Study on additivity and asymmetricity in microbial community coalescence.</p>
+
+<h2 id="status">Status</h2>
+
+<p><em>In review</em></p>
+
+<h2 id="papers">Papers</h2>
+
+<ul>
+  <li><a href="/assets/pdf/Coalescence_main_2026.pdf">Main Paper (PDF)</a></li>
+  <li><a href="/assets/pdf/Coalescence_supplementary_2026.pdf">Supplementary Materials (PDF)</a></li>
+</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="biophysics" /><category term="microbiology" /><category term="coalescence" /><summary type="html"><![CDATA[Research on how microbial communities interact when they merge - additivity and asymmetricity in coalescence.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/coalescence.jpg" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/coalescence.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
