@@ -38,11 +38,13 @@ Another key interest of mine is building **AI for Science**. I'm currently invol
 
 I'm always open to discussions and collaborations—feel free to reach out!
 
-- Email: [sjinyeop@gmail.com](mailto:sjinyeop@gmail.com)
-- Twitter/X: [@jinyeop_song](https://x.com/jinyeop_song)
-- GitHub: [jinyeop3110](https://github.com/jinyeop3110)
-- LinkedIn: [jinyeopsong3110](https://linkedin.com/in/jinyeopsong3110)
-- Google Scholar: [Profile](https://scholar.google.com/citations?user=CIfZvqcAAAAJ)
+<p style="font-size: 1.5em;">
+  <a href="mailto:sjinyeop@gmail.com" title="Email">📧</a>&nbsp;&nbsp;
+  <a href="https://x.com/jinyeop_song" title="Twitter/X">𝕏</a>&nbsp;&nbsp;
+  <a href="https://github.com/jinyeop3110" title="GitHub">🐙</a>&nbsp;&nbsp;
+  <a href="https://linkedin.com/in/jinyeopsong3110" title="LinkedIn">💼</a>&nbsp;&nbsp;
+  <a href="https://scholar.google.com/citations?user=CIfZvqcAAAAJ" title="Google Scholar">🎓</a>
+</p>
 
 ## Location
 
