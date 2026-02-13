@@ -1,0 +1,49 @@
+---
+layout: about
+image: /assets/img/profile.jpg
+hide_description: true
+permalink: /
+---
+
+# About
+
+Hi, I'm **Jinyeop Song**, a final year PhD student in the MIT Physics Department. I am on the job market for Summer 2026.
+{:.lead}
+
+<!--author-->
+
+## Research Interests
+
+My research focuses on understanding the **Science of AI**, particularly on **large language models (LLMs)**. Over the past few months, I've been exploring **Neural Scaling Laws** and **In-Context Learning (ICL)**, uncovering how these models adapt and grow in capability.
+
+Another key interest of mine is building **AI for Science**. I'm currently involved in projects developing **Scalable Foundational Models** for multiomics and proteins, helping advance scientific discovery through machine learning.
+
+## Featured Research
+
+- [**Concept Encoding in In-Context Learning**](/research/2024-06-01-concept-encoding/) - ICML 2025 Spotlight
+- [**Reconciling Kaplan and Chinchilla Scaling Laws**](/research/2024-08-01-scaling-laws/) - TMLR 2024
+- [**EELMA: Estimating Empowerment of LLM Agents**](/research/2025-01-01-eelma/) - AI Safety Research
+
+## News
+
+- **Nov 2025** - Featured in MIT News for research on knowledge-graph augmented LLMs using multi-turn RL
+- **Sep 2025** - Two papers accepted to NeurIPS 2025 Workshops: Bayesian Optimization with LLMs and LLM Agent Empowerment
+- **Jun 2025** - Summer research intern at MIT-IBM Watson AI Lab
+- **May 2025** - Our paper accepted to ICML (Spotlight, Top 2.5%)! [arXiv:2412.12276](https://arxiv.org/abs/2412.12276)
+- **Jan 2025** - Started MATS 7.0 cohort with mentor Max Kleiman-Weiner (UW)
+- **Sep 2024** - MethylGPT paper under review at Nature Methods [bioRxiv](https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2)
+- **Aug 2024** - Scaling law paper accepted to TMLR [arXiv:2406.12907](https://arxiv.org/abs/2406.12907)
+
+## Contact
+
+I'm always open to discussions and collaborations—feel free to reach out!
+
+- Email: [sjinyeop@gmail.com](mailto:sjinyeop@gmail.com)
+- Twitter/X: [@jinyeop_song](https://x.com/jinyeop_song)
+- GitHub: [jinyeop3110](https://github.com/jinyeop3110)
+- LinkedIn: [jinyeopsong3110](https://linkedin.com/in/jinyeopsong3110)
+- Google Scholar: [Profile](https://scholar.google.com/citations?user=CIfZvqcAAAAJ)
+
+## Location
+
+Cambridge, MA, 02142

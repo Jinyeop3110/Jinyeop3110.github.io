@@ -1,0 +1,25 @@
+# The primary author of this blog.
+# Must be the same as `author` in `_config.yml`.
+author1:
+  name:              Jinyeop Song
+  email:             sjinyeop@gmail.com
+
+  # Used at the bottom of each page and at the top of the `about` layout
+  about:             |
+    PhD candidate at MIT Physics researching the Science of AI (scaling laws, in-context learning, LLM agents)
+    and AI for Science (foundation models for biology).
+
+    Always open to discussions and collaborations!
+
+  # This photo will be used in the about section
+  picture:
+    path:            /assets/img/profile.jpg
+    srcset:
+      1x:            /assets/img/profile.jpg
+      2x:            /assets/img/profile.jpg
+
+  # Social media icons in sidebar
+  social:
+    github:          jinyeop3110
+    linkedin:        jinyeopsong3110
+    email:           sjinyeop@gmail.com
