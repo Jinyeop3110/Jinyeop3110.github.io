@@ -26,7 +26,7 @@ Another key interest of mine is building **AI for Science**. I'm currently invol
 
 ## News
 
-- **Nov 2025** - Featured in MIT News for research on knowledge-graph augmented LLMs using multi-turn RL
+- **Nov 2025** - Featured in [MIT EECS News](https://www.eecs.mit.edu/charting-the-future-of-ai-from-safer-answers-to-faster-thinking/) for research on knowledge-graph augmented LLMs using multi-turn RL
 - **Sep 2025** - Two papers accepted to NeurIPS 2025 Workshops: Bayesian Optimization with LLMs and LLM Agent Empowerment
 - **Jun 2025** - Summer research intern at MIT-IBM Watson AI Lab
 - **May 2025** - Our paper accepted to ICML (Spotlight, Top 2.5%)! [arXiv:2412.12276](https://arxiv.org/abs/2412.12276)
@@ -38,11 +38,11 @@ Another key interest of mine is building **AI for Science**. I'm currently invol
 
 I'm always open to discussions and collaborations—feel free to reach out!
 
-<p style="font-size: 1.5em;">
-  <a href="mailto:sjinyeop@gmail.com" title="Email">📧</a>&nbsp;&nbsp;
+<p style="font-size: 2em;">
+  <a href="mailto:sjinyeop@gmail.com" title="Email">✉️</a>&nbsp;&nbsp;
   <a href="https://x.com/jinyeop_song" title="Twitter/X">𝕏</a>&nbsp;&nbsp;
-  <a href="https://github.com/jinyeop3110" title="GitHub">🐙</a>&nbsp;&nbsp;
-  <a href="https://linkedin.com/in/jinyeopsong3110" title="LinkedIn">💼</a>&nbsp;&nbsp;
+  <a href="https://github.com/jinyeop3110" title="GitHub"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" width="28" height="28" style="vertical-align: middle;"></a>&nbsp;&nbsp;
+  <a href="https://linkedin.com/in/jinyeopsong3110" title="LinkedIn"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" alt="LinkedIn" width="28" height="28" style="vertical-align: middle;"></a>&nbsp;&nbsp;
   <a href="https://scholar.google.com/citations?user=CIfZvqcAAAAJ" title="Google Scholar">🎓</a>
 </p>
 
