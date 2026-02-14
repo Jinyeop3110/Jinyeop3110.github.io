@@ -43,7 +43,8 @@ hide_description: true
 
 - **Efficient and Transferable Agentic Knowledge Graph RAG via Reinforcement Learning**
   *Jinyeop Song*, Shuo Wang, Julian Shun, Yada Zhu
-  *In Preparation*
+  arXiv preprint
+  [arXiv](https://arxiv.org/abs/2509.26383)
 
 - **When Do LLMs Improve Bayesian Optimization? A Systematic Comparison Across Molecular and Protein Design**
   M. Akke, S. Yang, J. Ruža, *Jinyeop Song*, E. Pan, Rafael Gómez-Bombarelli
@@ -57,18 +58,27 @@ hide_description: true
 
 ## Biophysics Research
 
-- **Additivity and Asymmetricity in Microbial Community Coalescence**
+- **Interspecies Interactions Drive Community-level Selection in Microbial Coalescence**
   *Jinyeop Song*, Jiliang Hu, Jeff Gore
-  *In review*
+  *bioRxiv 2026*
+  [bioRxiv](https://www.biorxiv.org/content/10.64898/2026.02.11.704923v1)
+
+- **Transition from Global Stability to Multiple Attractors in Microcosms**
+  Jeff Gore, Jiliang Hu, You He, Matthieu Barbier, *Jinyeop Song*, Guy Bunin
+  *Under Review at Nature Portfolio*
+  [Research Square](https://www.researchsquare.com/article/rs-7669527/v1)
 
 - **Noncovalent Antibody Catenation on a Target Surface Greatly Increases the Antigen-Binding Avidity**
   *Jinyeop Song*, Bo-Seong Jeong, Seong-Woo Kim, et al.
   **eLife 2023**, 12, e81646
+  [DOI](https://doi.org/10.7554/eLife.81646)
 
 - **Deep-Learning Based Three-Dimensional Label-Free Tracking and Analysis of Immunological Synapses of CAR-T Cells**
   Moosung Lee, Young-Ho Lee, *Jinyeop Song*, Geon Kim, YoungJu Jo, HyunSeok Min, Chan Hyuk Kim, YongKeun Park
   **eLife 2020**, 9, e49023
+  [DOI](https://doi.org/10.7554/eLife.49023)
 
 - **Rapid and Label-Free Identification of Individual Bacterial Pathogens Exploiting Three-Dimensional Quantitative Phase Imaging and Deep Learning**
   Geon Kim, Daewoong Ahn, Minhee Kang, Y. Jo, Donghun Ryu, Hyeonjung Kim, *Jinyeop Song*, et al.
   **Light: Science & Applications 2022**
+  [DOI](https://doi.org/10.1038/s41377-022-00894-5)

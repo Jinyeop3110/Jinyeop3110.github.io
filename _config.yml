@@ -327,6 +327,11 @@ plugins:
   - jekyll-last-modified-at
 
 
+# Google Analytics
+# ---------------------------------------------------------------------------------------
+# To enable Google Analytics, add your tracking ID below
+# google_analytics: G-XXXXXXXXXX
+
 # SEO Tag
 # ---------------------------------------------------------------------------------------
 
