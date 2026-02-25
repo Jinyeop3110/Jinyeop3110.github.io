@@ -1,5 +1,486 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://jinyeop3110.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jinyeop3110.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-02-25T23:23:47+00:00</updated><id>https://jinyeop3110.github.io/feed.xml</id><title type="html">Jinyeop Song</title><subtitle>PhD candidate at MIT researching the Science of AI (scaling laws, in-context learning, LLM agents) and AI for Science (foundation models for biology).
-</subtitle><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><entry><title type="html">KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning</title><link href="https://jinyeop3110.github.io/news/2025-11-01-kg-rag/" rel="alternate" type="text/html" title="KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning" /><published>2025-11-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/news/kg-rag</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-11-01-kg-rag/"><![CDATA[<p><img src="/assets/img/projects/kgrag.png" alt="KG-R1 Overview" class="lead" width="800" loading="lazy" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://jinyeop3110.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jinyeop3110.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-02-25T23:26:21+00:00</updated><id>https://jinyeop3110.github.io/feed.xml</id><title type="html">Jinyeop Song</title><subtitle>PhD candidate at MIT researching the Science of AI (scaling laws, in-context learning, LLM agents) and AI for Science (foundation models for biology).
+</subtitle><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><entry><title type="html">Building a Protein-Understanding LLM: A Week of Trials, Errors, and Breakthroughs</title><link href="https://jinyeop3110.github.io/research/2026-02-25-protein-llm-journey/" rel="alternate" type="text/html" title="Building a Protein-Understanding LLM: A Week of Trials, Errors, and Breakthroughs" /><published>2026-02-25T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/research/protein-llm-journey</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2026-02-25-protein-llm-journey/"><![CDATA[<div class="central-thesis">
+  <div class="thesis-label">The Question</div>
+  <p class="thesis-text">What happens when you bridge protein language models with large language models? Can we make an LLM that truly <em>understands</em> proteins, not just parses their sequences?</p>
+</div>
+
+<h2 id="the-beginning-why-this-project">The Beginning: Why This Project?</h2>
+
+<p>It started with a simple observation. Protein language models like ESM-3 have learned remarkably rich representations from millions of protein sequences—structural features, evolutionary constraints, functional signals—all encoded in high-dimensional embeddings. Meanwhile, LLMs excel at reasoning, following instructions, and generating coherent explanations. But they exist in separate worlds.</p>
+
+<p>The question that kept nagging me: <strong>what if we could bridge these two worlds?</strong></p>
+
+<p>Not by training a protein model from scratch (prohibitively expensive), but by <em>post-training</em>—freezing the protein encoder, attaching a learnable bridge, and teaching an LLM to interpret protein embeddings alongside natural language. The best of both worlds, without the compute bill.</p>
+
+<p>This post documents the journey—the architectural choices, the debugging disasters, the data struggles, and what we learned along the way.</p>
+
+<hr />
+
+<h2 id="day-1-architecture-decisions">Day 1: Architecture Decisions</h2>
+
+<h3 id="the-core-design">The Core Design</h3>
+
+<p>We settled on a modular pipeline:</p>
+
+<ol>
+  <li><strong>Protein Encoder</strong> (frozen): ESM-3 small with 1.4B parameters producing 1536-dimensional embeddings</li>
+  <li><strong>Attention Pooling</strong>: Compress variable-length residue embeddings into 32 fixed tokens</li>
+  <li><strong>MLP Projector</strong> (trainable): Map 1536-dim protein space into 2560-dim LLM input space</li>
+  <li><strong>LLM</strong>: Qwen3-4B with LoRA on key/value matrices</li>
+</ol>
+
+<p>The idea is elegant: ESM-3 handles the protein understanding, the projector translates between representation spaces, and the LLM handles reasoning and generation. We keep ESM-3 frozen to preserve its hard-won protein knowledge, and use LoRA to efficiently adapt the LLM.</p>
+
+<div class="callout">
+  <div class="callout-label">Key Decision</div>
+  <p>Start with 32 pooled tokens. Too few and we lose protein information; too many and we blow up sequence length. 32 seemed like a reasonable middle ground—equivalent to roughly 100 words of text context.</p>
+</div>
+
+<h3 id="the-three-encoding-approaches">The Three Encoding Approaches</h3>
+
+<p>We actually designed three approaches to compare:</p>
+
+<div class="pillars">
+  <div class="pillar">
+    <div class="pillar-title">Text-Based</div>
+    <p>Raw sequence as &lt;protein&gt;MKTL...&lt;/protein&gt; — the simplest baseline. No ESM-3, just treating proteins as weird text.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-title">ESM-3 + MLP</div>
+    <p>ESM-3 embeddings → Attention Pooling → MLP Projector. Our main approach.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-title">ESM-3 + Perceiver</div>
+    <p>ESM-3 embeddings → Perceiver Resampler. More parameters (130M), potentially better information compression.</p>
+  </div>
+</div>
+
+<p>The three-way comparison would be our core thesis experiment. But first, we had to make anything work at all.</p>
+
+<hr />
+
+<h2 id="day-2-first-training-run--it-works">Day 2: First Training Run — It Works!</h2>
+
+<h3 id="the-mol-instructions-dataset">The Mol-Instructions Dataset</h3>
+
+<p>We started with Mol-Instructions, a curated set of 505K protein instruction pairs covering five task types:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Samples</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Catalytic Activity</td>
+      <td>53K</td>
+      <td>Predict enzyme reactions</td>
+    </tr>
+    <tr>
+      <td>Protein Function</td>
+      <td>114K</td>
+      <td>Predict biological roles</td>
+    </tr>
+    <tr>
+      <td>General Description</td>
+      <td>87K</td>
+      <td>Describe protein properties</td>
+    </tr>
+    <tr>
+      <td>Domain/Motif</td>
+      <td>45K</td>
+      <td>Identify structural domains</td>
+    </tr>
+    <tr>
+      <td>Protein Design</td>
+      <td>196K</td>
+      <td>Generate sequences (output, not input)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The format is clean: <code class="language-plaintext highlighter-rouge">{instruction, input, output}</code> where the input contains the protein sequence. Perfect for supervised fine-tuning.</p>
+
+<h3 id="first-results">First Results</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Run</th>
+      <th>Samples</th>
+      <th>Loss (Start → End)</th>
+      <th>Duration</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>500-sample test</td>
+      <td>500</td>
+      <td>17.35 → 4.08</td>
+      <td>~6 min</td>
+    </tr>
+    <tr>
+      <td>10K baseline</td>
+      <td>10,000</td>
+      <td>35.80 → 27.84</td>
+      <td>~96 min</td>
+    </tr>
+    <tr>
+      <td>50K full</td>
+      <td>50,000</td>
+      <td>34.25 → 14.77</td>
+      <td>~2.35 hr</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>The training converged.</strong> On 8x H100 80GB GPUs, the 50K run used only ~39 GB memory with an effective batch size of 32. The architecture was functional.</p>
+
+<p>But then came the evaluation…</p>
+
+<hr />
+
+<h2 id="day-2-3-the-evaluation-reality-check">Day 2-3: The Evaluation Reality Check</h2>
+
+<h3 id="what-works">What Works</h3>
+
+<p>The vanilla Qwen3-4B (before any fine-tuning) set a floor. It had never seen proteins explicitly, so performance was essentially random:</p>
+
+<ul>
+  <li><strong>GO Term Prediction</strong>: F1 Micro = 0.047 (the model over-predicted 11.9 terms vs 5.0 ground truth)</li>
+  <li><strong>PPI Prediction</strong>: AUROC = 0.51 (literally random)</li>
+  <li><strong>Stability Prediction</strong>: Pearson r = 0.094 (no correlation)</li>
+</ul>
+
+<p>After SFT, the numbers… didn’t improve much. In fact, some got <em>worse</em>.</p>
+
+<div class="callout">
+  <div class="callout-label">Painful Discovery #1</div>
+  <p>GO prediction <em>degraded</em> after SFT. The vanilla model at least guessed some correct terms among its many predictions. After SFT, the model predicted too few terms (or none at all). F1 went from 0.047 to 0.0.</p>
+</div>
+
+<h3 id="the-ppi-bias-problem">The PPI Bias Problem</h3>
+
+<p>All models, regardless of scale (4B, 8B, 14B), defaulted to predicting “No interaction” for every protein pair. High specificity (0.9-1.0), terrible recall (0.2 or 0.0). The models were stuck at majority-class prediction.</p>
+
+<p>The silver lining: AUROC improved with scale (0.51 → 0.60 → 0.70), suggesting the models learned better internal representations even when failing to express positive predictions.</p>
+
+<h3 id="what-this-told-us">What This Told Us</h3>
+
+<ol>
+  <li><strong>The architecture works</strong> — training converges, memory is manageable</li>
+  <li><strong>But SFT alone isn’t enough</strong> — instruction-tuning doesn’t automatically teach structured output (GO terms) or overcome class imbalance (PPI)</li>
+  <li><strong>Scale helps internal representations</strong> — the knowledge is there, it just doesn’t surface in generation</li>
+</ol>
+
+<p>We needed two things: better training data and task-specific rewards (RL).</p>
+
+<hr />
+
+<h2 id="day-4-the-instruct-model-disaster">Day 4: The Instruct Model Disaster</h2>
+
+<p>This is the debugging war story.</p>
+
+<p>We launched an 8B training run overnight. The next morning, the loss curve looked fine:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Step</th>
+      <th>Train Loss</th>
+      <th>Eval Loss</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>250</td>
+      <td>8.30</td>
+      <td>2.09</td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>4.80</td>
+      <td>1.89</td>
+    </tr>
+    <tr>
+      <td>5000</td>
+      <td>3.86</td>
+      <td>1.84</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>But generation was garbage. Literal garbage:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>KQKQKQKQKQKQKQKQ...
+SSSSSSSSSSSSSSSS...
+(empty string)
+</code></pre></div></div>
+
+<p>After hours of debugging, I found it: the config file had <code class="language-plaintext highlighter-rouge">path: Qwen/Qwen3-8B</code> — the <strong>base</strong> model, not <code class="language-plaintext highlighter-rouge">Qwen/Qwen3-8B-Instruct-2507</code>.</p>
+
+<div class="callout">
+  <div class="callout-label">Why This Matters</div>
+  <p><strong>Base models don't know how to stop.</strong> They never learned instruction-following, chat templates, or turn-taking. The LoRA adapter we trained was bound to the base model's weight space and couldn't be transferred to Instruct. The entire overnight run was wasted.</p>
+</div>
+
+<h3 id="the-fix">The Fix</h3>
+
+<p>All model configs now use <code class="language-plaintext highlighter-rouge">-it</code> suffix to make this mistake impossible:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Config</th>
+      <th>Before</th>
+      <th>After</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>qwen3_4b.yaml</td>
+      <td><code class="language-plaintext highlighter-rouge">qwen3_4b</code></td>
+      <td><code class="language-plaintext highlighter-rouge">qwen3_4b_it</code></td>
+    </tr>
+    <tr>
+      <td>qwen3_8b.yaml</td>
+      <td><code class="language-plaintext highlighter-rouge">qwen3_8b</code></td>
+      <td><code class="language-plaintext highlighter-rouge">qwen3_8b_it</code></td>
+    </tr>
+    <tr>
+      <td>qwen3_14b.yaml</td>
+      <td><code class="language-plaintext highlighter-rouge">qwen3_14b</code></td>
+      <td><code class="language-plaintext highlighter-rouge">qwen3_14b_it</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>A simple naming convention that would have saved 8 hours of H100 time. Lesson learned.</p>
+
+<hr />
+
+<h2 id="day-4-5-protein-boundary-tokens">Day 4-5: Protein Boundary Tokens</h2>
+
+<h3 id="the-problem">The Problem</h3>
+
+<p>The ESM-3 embedding path used a single <code class="language-plaintext highlighter-rouge">&lt;|protein_embed|&gt;</code> placeholder. The LLM had no explicit signal for where the protein representation starts and ends. It was just… 32 tokens appearing in the middle of text.</p>
+
+<h3 id="the-solution">The Solution</h3>
+
+<p>We introduced structured boundary tokens:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;|protein_start|&gt;  &lt;|protein_embed|&gt;  &lt;|protein_end|&gt;
+     ID 151669         ID 151670          ID 151671
+</code></pre></div></div>
+
+<p>At forward time, the embedding looks like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[..., text, START_embed, prot_1, prot_2, ..., prot_32, END_embed, text, ...]
+         ↑ LLM learns    ↑ 32 ESM-3 pooled tokens      ↑ LLM learns
+         what this means  (replaced at forward)         what this means
+</code></pre></div></div>
+
+<p>The start/end tokens remain as regular LLM embeddings—the model learns what they mean through training. The middle tokens get replaced by ESM-3’s pooled output. All three are masked from loss computation.</p>
+
+<p>This gave the LLM clear modality boundaries, and the next training run showed noticeably better attention patterns on the protein regions.</p>
+
+<hr />
+
+<h2 id="day-6-scaling-up-data">Day 6: Scaling Up Data</h2>
+
+<h3 id="why-505k-wasnt-enough">Why 505K Wasn’t Enough</h3>
+
+<p>Mol-Instructions covers five tasks well, but they all come from one paper’s annotation pipeline. The model learned that particular group’s phrasing from that particular subset of UniProt. We needed:</p>
+
+<ul>
+  <li><strong>Different annotation styles</strong>: Long-form paragraphs vs. structured one-liners</li>
+  <li><strong>More tasks</strong>: Subunit structure, tissue specificity, PTMs, gene prediction</li>
+  <li><strong>Scale</strong>: From ~300K effective records to millions</li>
+</ul>
+
+<h3 id="the-six-sources">The Six Sources</h3>
+
+<p>After evaluating several candidates (dropping two for noise/unavailability), we assembled:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Source</th>
+      <th>Records</th>
+      <th>What It Brings</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Mol-Instructions</strong></td>
+      <td>299K</td>
+      <td>Curated instruction pairs (ICLR 2024)</td>
+    </tr>
+    <tr>
+      <td><strong>Swiss-Prot</strong></td>
+      <td>1.08M</td>
+      <td>Gene prediction, organism prediction, function</td>
+    </tr>
+    <tr>
+      <td><strong>ProteinLMDataset</strong></td>
+      <td>826K</td>
+      <td>Subunit, PTM, disease, tissue, induction</td>
+    </tr>
+    <tr>
+      <td><strong>SwissProtCLAP</strong></td>
+      <td>511K</td>
+      <td>Rich paragraph-length descriptions</td>
+    </tr>
+    <tr>
+      <td><strong>ProtDescribe</strong></td>
+      <td>1.76M</td>
+      <td>Naming, similarity, location, function</td>
+    </tr>
+    <tr>
+      <td><strong>Protein2Text-QA</strong></td>
+      <td>52K</td>
+      <td>44,915 unique questions — highest diversity</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Total: 4.52 million training records.</strong></p>
+
+<h3 id="sequence-length-distribution">Sequence Length Distribution</h3>
+
+<p>One thing to always check with protein datasets: the length distribution. Protein length controls ESM-3 memory (geometric attention is O(L²)), training sequence length, and representation quality.</p>
+
+<p><img src="/assets/img/projects/protein_seq_length_histogram.png" alt="Protein Sequence Length Distribution" class="lead" width="700" loading="lazy" /></p>
+
+<p class="figcaption">Distribution of protein sequence lengths across the combined 4.5M dataset. The median sits at 306 amino acids.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Statistic</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Median</td>
+      <td>306 AA</td>
+    </tr>
+    <tr>
+      <td>Mean</td>
+      <td>339 AA</td>
+    </tr>
+    <tr>
+      <td>5th percentile</td>
+      <td>89 AA</td>
+    </tr>
+    <tr>
+      <td>95th percentile</td>
+      <td>751 AA</td>
+    </tr>
+    <tr>
+      <td>Max</td>
+      <td>1,000 AA</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The distribution peaks at 150-350 amino acids (typical single-domain proteins) with a long right tail. Mol-Instructions had a hard cutoff at 768 AA; the other sources extend to 1,000 AA—introducing longer proteins the model hadn’t seen before.</p>
+
+<h3 id="data-quality-gotchas">Data Quality Gotchas</h3>
+
+<div class="callout">
+  <div class="callout-label">Watch Out</div>
+  <p><strong>Single-word outputs:</strong> 31% of ProteinLMDataset subunit records have outputs like just "Monomer." — accurate, but not the verbose responses we want. <strong>12-16% duplicates:</strong> Template augmentation inflated effective weight of some sources. <strong>72.8% sequence overlap:</strong> Most sources derive from UniProt, so the same ~440K proteins appear repeatedly—but in different analytical contexts.</p>
+</div>
+
+<hr />
+
+<h2 id="the-rl-path-forward">The RL Path Forward</h2>
+
+<p>SFT established the foundation, but the evaluation results made clear: we need task-specific rewards to push beyond “reasonable-sounding but wrong” predictions.</p>
+
+<h3 id="grpo-with-verifiable-rewards">GRPO with Verifiable Rewards</h3>
+
+<p>We implemented four reward functions for Group Relative Policy Optimization:</p>
+
+<p><strong>GO Term Prediction</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Reward = F1 score between predicted and ground truth GO terms
+- Regex extracts GO:\d{7} patterns
+- Partial match (2/3 correct): reward = 0.80
+- Exact match: reward = 1.00
+</code></pre></div></div>
+
+<p><strong>Stability/ddG Prediction</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Reward = exp(-error² / 2σ²) with σ=1.0 kcal/mol
+- Error of 0.2 kcal/mol: reward = 0.98
+- Error of 1.0 kcal/mol: reward = 0.61
+- No parseable number: reward = 0.00
+</code></pre></div></div>
+
+<p><strong>Structure Quality Assessment</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Reward = 0.4×(quality alignment) + 0.3×(pLDDT accuracy) + 0.3×(category match)
+- Validates "well-folded" claims against actual pLDDT
+- Gaussian on numerical prediction error
+</code></pre></div></div>
+
+<p>The pipeline: SFT checkpoint → GRPO training → Final model. No reward model needed—just verifiable metrics computed from model outputs.</p>
+
+<hr />
+
+<h2 id="current-state-and-whats-next">Current State and What’s Next</h2>
+
+<h3 id="what-works-now">What Works Now</h3>
+
+<ol>
+  <li><strong>Full pipeline functional</strong>: ESM-3 + Qwen3 trains stably, evaluates correctly, checkpoints properly</li>
+  <li><strong>4.5M training dataset</strong>: Six sources, schema-validated, length-filtered</li>
+  <li><strong>Three encoding approaches</strong>: Text, MLP projector, Perceiver Resampler—ready for comparison</li>
+  <li><strong>GRPO rewards implemented</strong>: GO, PPI, Stability, ESMFold structural quality</li>
+</ol>
+
+<h3 id="immediate-priorities">Immediate Priorities</h3>
+
+<ol>
+  <li><strong>Re-run 8B training</strong> with fixed Instruct model and boundary tokens</li>
+  <li><strong>Three-way comparison</strong> (text vs MLP vs Perceiver) on GO/PPI/Stability benchmarks</li>
+  <li><strong>First GRPO run</strong> using GO F1 rewards (clearest signal)</li>
+  <li><strong>MLP vs Perceiver ablation</strong> — the core thesis experiment</li>
+</ol>
+
+<div class="conclusion">
+
+## Lessons Learned
+
+Building multimodal LLMs is humbling. Here's what this week taught me:
+
+**1. Naming conventions save hours.** The `-it` suffix on Instruct models would have prevented an overnight training disaster. Small conventions, big impact.
+
+**2. Evaluation comes first.** We spent days on architecture before realizing our evaluation setup was incomplete. Should have done it the other way around.
+
+**3. SFT is necessary but not sufficient.** The model learns to generate reasonable-sounding text, but task-specific rewards (RL) are needed to actually improve metrics.
+
+**4. Data diversity matters more than scale alone.** 300K samples from one source produced models with specific linguistic tics. 4.5M samples from six sources should help generalization.
+
+**5. Proteins are hard.** They're longer than typical text, have different statistical properties, and require domain-specific evaluation. There's no shortcut to understanding them.
+
+The architecture works. The data pipeline works. Now we make the model actually learn protein biology.
+
+</div>
+
+<h2 id="resources">Resources</h2>
+
+<p><strong>Project Repository:</strong> <a href="https://github.com/Jinyeop3110/Post_Training_Protein_LLM">Post_Training_Protein_LLM</a></p>
+
+<p><strong>Related Work:</strong></p>
+<ul>
+  <li><a href="https://github.com/facebookresearch/esm">ESM-3: Protein Language Model</a></li>
+  <li><a href="https://arxiv.org/abs/2306.08018">Mol-Instructions Dataset (ICLR 2024)</a></li>
+  <li><a href="https://github.com/volcengine/verl">veRL: Volcano Engine RL Framework</a></li>
+</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm" /><category term="protein" /><category term="multimodal" /><category term="esm3" /><category term="rl" /><summary type="html"><![CDATA[The story of building a multimodal LLM that truly understands proteins—from architecture decisions to debugging disasters to assembling 4.5 million training records.]]></summary></entry><entry><title type="html">KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning</title><link href="https://jinyeop3110.github.io/news/2025-11-01-kg-rag/" rel="alternate" type="text/html" title="KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning" /><published>2025-11-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/news/kg-rag</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-11-01-kg-rag/"><![CDATA[<p><img src="/assets/img/projects/kgrag.png" alt="KG-R1 Overview" class="lead" width="800" loading="lazy" /></p>
 
 <h2 id="summary">Summary</h2>
 
@@ -9,7 +490,7 @@
 
 <p><a href="/assets/pdf/KG_R1_2026.pdf">Download Paper (PDF)</a></p>
 
-<p><em>Featured in MIT News, November 2025</em></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><category term="rag" /><category term="knowledge-graph" /><category term="reinforcement-learning" /><summary type="html"><![CDATA[Multi-turn RL approach for knowledge-graph augmented LLMs.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">ICML Spotlight Paper Accepted</title><link href="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/" rel="alternate" type="text/html" title="ICML Spotlight Paper Accepted" /><published>2025-05-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/news/icml-spotlight</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/"><![CDATA[<p>Our paper was accepted to ICML (Spotlight, Top 2.5%)! <a href="https://arxiv.org/abs/2412.12276">arXiv:2412.12276</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our paper was accepted to ICML as a Spotlight presentation]]></summary></entry><entry><title type="html">A Systems Biology Approach to Multi-LLM Agent Systems</title><link href="https://jinyeop3110.github.io/research/2025-02-01-multiagent-systems/" rel="alternate" type="text/html" title="A Systems Biology Approach to Multi-LLM Agent Systems" /><published>2025-02-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/research/multiagent-systems</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2025-02-01-multiagent-systems/"><![CDATA[<div class="central-thesis">
+<p><em>Featured in MIT News, November 2025</em></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><category term="rag" /><category term="knowledge-graph" /><category term="reinforcement-learning" /><summary type="html"><![CDATA[Multi-turn RL approach for knowledge-graph augmented LLMs.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">ICML Spotlight Paper Accepted</title><link href="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/" rel="alternate" type="text/html" title="ICML Spotlight Paper Accepted" /><published>2025-05-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/news/icml-spotlight</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/"><![CDATA[<p>Our paper was accepted to ICML (Spotlight, Top 2.5%)! <a href="https://arxiv.org/abs/2412.12276">arXiv:2412.12276</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our paper was accepted to ICML as a Spotlight presentation]]></summary></entry><entry><title type="html">A Systems Biology Approach to Multi-LLM Agent Systems</title><link href="https://jinyeop3110.github.io/research/2025-02-01-multiagent-systems/" rel="alternate" type="text/html" title="A Systems Biology Approach to Multi-LLM Agent Systems" /><published>2025-02-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/research/multiagent-systems</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2025-02-01-multiagent-systems/"><![CDATA[<div class="central-thesis">
   <div class="thesis-label">Central Thesis</div>
   <p class="thesis-text">Systems Biology offers a productive lens for understanding multi-LLM agent dynamics—treating agents as nodes in regulatory networks enables principled approaches to stability and optimization.</p>
 </div>
@@ -163,7 +644,7 @@ This research connects my background in systems biology and ecological dynamics 
 <ul>
   <li><a href="/news/2025-01-01-eelma/">EELMA: Estimating Empowerment of LLM Agents</a></li>
   <li><a href="/news/2025-05-01-icml-spotlight/">Neural Scaling Laws (ICML Spotlight)</a></li>
-</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm-agents" /><category term="multi-agent" /><category term="systems-biology" /><category term="rl" /><summary type="html"><![CDATA[Research proposal on applying systems biology principles to understand and stabilize multi-agent LLM training dynamics.]]></summary></entry><entry><title type="html">EELMA: Estimating Empowerment of Language Model Agents</title><link href="https://jinyeop3110.github.io/news/2025-01-01-eelma/" rel="alternate" type="text/html" title="EELMA: Estimating Empowerment of Language Model Agents" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/news/eelma</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-eelma/"><![CDATA[<p><img src="/assets/img/projects/empowerment.png" alt="EELMA Overview" class="lead" width="800" loading="lazy" /></p>
+</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm-agents" /><category term="multi-agent" /><category term="systems-biology" /><category term="rl" /><summary type="html"><![CDATA[Research proposal on applying systems biology principles to understand and stabilize multi-agent LLM training dynamics.]]></summary></entry><entry><title type="html">EELMA: Estimating Empowerment of Language Model Agents</title><link href="https://jinyeop3110.github.io/news/2025-01-01-eelma/" rel="alternate" type="text/html" title="EELMA: Estimating Empowerment of Language Model Agents" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/news/eelma</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-eelma/"><![CDATA[<p><img src="/assets/img/projects/empowerment.png" alt="EELMA Overview" class="lead" width="800" loading="lazy" /></p>
 
 <p class="figcaption">EELMA - Estimating Empowerment of Language Model Agent, provides a scalable method for quantifying POWER of LM agents.</p>
 
@@ -222,7 +703,7 @@ This research connects my background in systems biology and ecological dynamics 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><strong>Paper:</strong> <a href="https://arxiv.org/abs/2509.22504">arXiv:2509.22504</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><category term="ai-safety" /><category term="llm-agents" /><category term="empowerment" /><summary type="html"><![CDATA[MATS Program Winter 2024-25 - Proposing a scalable method for quantifying the empowerment of Language Model agents.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Started MATS 7.0 Cohort</title><link href="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/" rel="alternate" type="text/html" title="Started MATS 7.0 Cohort" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/news/mats-cohort</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/"><![CDATA[<p>Started the ML Alignment Theory and Scholar (MATS) 7.0 cohort with mentor Max Klieman (UW).</p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Joined the ML Alignment Theory and Scholar program]]></summary></entry><entry><title type="html">MethylGPT Paper Archived and Under Review at Nature Method</title><link href="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/" rel="alternate" type="text/html" title="MethylGPT Paper Archived and Under Review at Nature Method" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/news/methylgpt-nature-method</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/"><![CDATA[<p>Our MethylGPT paper was archived and is under review at Nature Method! <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv link</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our MethylGPT paper is under review at Nature Method]]></summary></entry><entry><title type="html">MethylGPT</title><link href="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/" rel="alternate" type="text/html" title="MethylGPT" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/research/methylgpt</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/"><![CDATA[<p><img src="/assets/img/projects/methylgpt.png" alt="MethylGPT Overview" class="lead" width="800" loading="lazy" /></p>
+<p><strong>Paper:</strong> <a href="https://arxiv.org/abs/2509.22504">arXiv:2509.22504</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><category term="ai-safety" /><category term="llm-agents" /><category term="empowerment" /><summary type="html"><![CDATA[MATS Program Winter 2024-25 - Proposing a scalable method for quantifying the empowerment of Language Model agents.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Started MATS 7.0 Cohort</title><link href="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/" rel="alternate" type="text/html" title="Started MATS 7.0 Cohort" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/news/mats-cohort</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/"><![CDATA[<p>Started the ML Alignment Theory and Scholar (MATS) 7.0 cohort with mentor Max Klieman (UW).</p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Joined the ML Alignment Theory and Scholar program]]></summary></entry><entry><title type="html">MethylGPT Paper Archived and Under Review at Nature Method</title><link href="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/" rel="alternate" type="text/html" title="MethylGPT Paper Archived and Under Review at Nature Method" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/news/methylgpt-nature-method</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/"><![CDATA[<p>Our MethylGPT paper was archived and is under review at Nature Method! <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv link</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our MethylGPT paper is under review at Nature Method]]></summary></entry><entry><title type="html">MethylGPT</title><link href="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/" rel="alternate" type="text/html" title="MethylGPT" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/research/methylgpt</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/"><![CDATA[<p><img src="/assets/img/projects/methylgpt.png" alt="MethylGPT Overview" class="lead" width="800" loading="lazy" /></p>
 
 <h2 id="overview">Overview</h2>
 
@@ -264,7 +745,7 @@ This research connects my background in systems biology and ecological dynamics 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><strong>Preprint:</strong> <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="foundation-models" /><category term="biology" /><category term="methylation" /><summary type="html"><![CDATA[A foundation model approach to understanding human methylation patterns - under review at Nature Methods.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Scaling Law Paper Accepted to TMLR</title><link href="https://jinyeop3110.github.io/news/2024-08-01-scaling-law-tmlr/" rel="alternate" type="text/html" title="Scaling Law Paper Accepted to TMLR" /><published>2024-08-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/news/scaling-law-tmlr</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-08-01-scaling-law-tmlr/"><![CDATA[<p>Our scaling law paper was accepted to TMLR! Read it here: <a href="https://arxiv.org/abs/2406.12907">arXiv:2406.12907</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our scaling law paper was accepted to TMLR]]></summary></entry><entry><title type="html">Neural Scaling Laws</title><link href="https://jinyeop3110.github.io/research/2024-08-01-scaling-laws/" rel="alternate" type="text/html" title="Neural Scaling Laws" /><published>2024-08-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/research/scaling-laws</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-08-01-scaling-laws/"><![CDATA[<p><img src="/assets/img/projects/reconcile_nsl.png" alt="Scaling Laws Overview" class="lead" width="800" loading="lazy" /></p>
+<p><strong>Preprint:</strong> <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="foundation-models" /><category term="biology" /><category term="methylation" /><summary type="html"><![CDATA[A foundation model approach to understanding human methylation patterns - under review at Nature Methods.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Scaling Law Paper Accepted to TMLR</title><link href="https://jinyeop3110.github.io/news/2024-08-01-scaling-law-tmlr/" rel="alternate" type="text/html" title="Scaling Law Paper Accepted to TMLR" /><published>2024-08-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/news/scaling-law-tmlr</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-08-01-scaling-law-tmlr/"><![CDATA[<p>Our scaling law paper was accepted to TMLR! Read it here: <a href="https://arxiv.org/abs/2406.12907">arXiv:2406.12907</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our scaling law paper was accepted to TMLR]]></summary></entry><entry><title type="html">Neural Scaling Laws</title><link href="https://jinyeop3110.github.io/research/2024-08-01-scaling-laws/" rel="alternate" type="text/html" title="Neural Scaling Laws" /><published>2024-08-01T00:00:00+00:00</published><updated>2026-02-25T23:25:15+00:00</updated><id>https://jinyeop3110.github.io/research/scaling-laws</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-08-01-scaling-laws/"><![CDATA[<p><img src="/assets/img/projects/reconcile_nsl.png" alt="Scaling Laws Overview" class="lead" width="800" loading="lazy" /></p>
 
 <h2 id="reconciling-kaplan-and-chinchilla-scaling-laws">Reconciling Kaplan and Chinchilla Scaling Laws</h2>
 
@@ -318,42 +799,4 @@ ICLR 2024 BGPT Workshop | <a href="https://arxiv.org/abs/2402.05164">arXiv:2402.
   <span class="na">journal</span><span class="p">=</span><span class="s">{ICLR BGPT workshop}</span><span class="p">,</span>
   <span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="scaling-laws" /><category term="llm" /><category term="theory" /><summary type="html"><![CDATA[Diverse studies on emergent Neural Scaling Laws (NSL) of AI - reconciling different formulations and proposing theoretical models.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/reconcile_nsl.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/reconcile_nsl.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Concept Encoding in In-Context Learning</title><link href="https://jinyeop3110.github.io/research/2024-06-01-concept-encoding/" rel="alternate" type="text/html" title="Concept Encoding in In-Context Learning" /><published>2024-06-01T00:00:00+00:00</published><updated>2026-02-25T23:22:45+00:00</updated><id>https://jinyeop3110.github.io/research/concept-encoding</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-06-01-concept-encoding/"><![CDATA[<p><img src="/assets/img/projects/concept_encoding.png" alt="Concept Encoding Overview" class="lead" width="800" loading="lazy" /></p>
-
-<p class="figcaption">Overview of Concept Encoding phenomena and Concept Decodability (CD)</p>
-
-<h2 id="summary">Summary</h2>
-
-<p><strong>TLDR:</strong> We explored the mechanistic understanding of ICL success/failure modes through how well certain concepts are encoded in intermediate representations.</p>
-
-<p>Why does in-context learning (ICL) succeed or fail depending on the task? We explored the mechanisms behind these success and failure modes and sought to quantify them.</p>
-
-<h2 id="concept-encoding-phenomena">Concept Encoding Phenomena</h2>
-
-<p>We introduced the concept of <strong>Concept Encoding</strong> phenomena, which posits that representations are effectively distinguished by latent concepts. Our findings demonstrate that concept encoding occurs in the LLAMA3 8B model, as evidenced by realistic latent concepts such as verbs and nouns in part-of-speech tagging, as well as logical operators like AND and OR in bitwise operations.</p>
-
-<h2 id="key-findings">Key Findings</h2>
-
-<p>We conjecture that concept decodability—specifically, how well a given concept is separated in intermediate representations—can predict in-context learning (ICL) performance. Our observations indicate that this holds true for both the part-of-speech (POS) task and bitwise operation tasks.</p>
-
-<h3 id="causal-analysis">Causal Analysis</h3>
-
-<p>We performed various interventions and causal relation experiments supporting that concept encoding phenomena is indeed causally related with the ICL performance:</p>
-
-<ul>
-  <li><strong>Perturbation Analysis</strong>: Perturbing concept representations affects ICL accuracy</li>
-  <li><strong>Fine-tuning Experiments</strong>: Fine-tuning improves both concept decodability and ICL performance</li>
-  <li><strong>Prompting Studies</strong>: Different prompting strategies affect concept encoding patterns</li>
-</ul>
-
-<h2 id="citation">Citation</h2>
-
-<div class="language-bibtex highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">@article</span><span class="p">{</span><span class="nl">song2024context</span><span class="p">,</span>
-  <span class="na">title</span><span class="p">=</span><span class="s">{Context to Concept: Concept Encoding in In-context Learning}</span><span class="p">,</span>
-  <span class="na">author</span><span class="p">=</span><span class="s">{Song, Jinyeop and Han, Sumin and Argawal, P. and Gore, Jeffrey}</span><span class="p">,</span>
-  <span class="na">journal</span><span class="p">=</span><span class="s">{ICML 2025 (Spotlight)}</span><span class="p">,</span>
-  <span class="na">year</span><span class="p">=</span><span class="s">{2024}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p><strong>Paper:</strong> <a href="https://arxiv.org/abs/2412.12276">arXiv:2412.12276</a> - <strong>ICML 2025 Spotlight (Top 2.5%)</strong></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="icl" /><category term="llm" /><category term="mechanistic-interpretability" /><summary type="html"><![CDATA[Understanding why in-context learning succeeds or fails through the lens of concept encoding in intermediate representations.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/concept_encoding.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/concept_encoding.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
+</code></pre></div></div>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="scaling-laws" /><category term="llm" /><category term="theory" /><summary type="html"><![CDATA[Diverse studies on emergent Neural Scaling Laws (NSL) of AI - reconciling different formulations and proposing theoretical models.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/reconcile_nsl.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/reconcile_nsl.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
