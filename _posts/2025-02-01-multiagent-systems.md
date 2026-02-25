@@ -4,8 +4,6 @@ title: "A Systems Biology Approach to Multi-LLM Agent Systems"
 description: >
   Research proposal on applying systems biology principles to understand and stabilize multi-agent LLM training dynamics.
 date: 2025-02-01
-image:
-  path: /assets/img/projects/multiagent.png
 categories: [research]
 tags: [llm-agents, multi-agent, systems-biology, rl]
 ---
@@ -96,5 +94,5 @@ This research bridges my background in systems biology with my current focus on 
 **Full Proposal:** [Research Statement (PDF)](/assets/pdf/Research_Statement_multiagent.pdf)
 
 **Related Work:**
-- [EELMA: Estimating Empowerment of LLM Agents](/2025-01-01-eelma/)
-- [Neural Scaling Laws (ICML Spotlight)](/2025-05-01-icml-spotlight/)
+- [EELMA: Estimating Empowerment of LLM Agents](/research/2025-01-01-eelma/)
+- [Neural Scaling Laws (ICML Spotlight)](/research/2025-05-01-icml-spotlight/)
