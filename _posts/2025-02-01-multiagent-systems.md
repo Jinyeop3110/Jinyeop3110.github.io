@@ -147,5 +147,5 @@ This research connects my background in systems biology and ecological dynamics 
 **Full Proposal:** [Research Statement (PDF)](/assets/pdf/Research_Statement_multiagent.pdf)
 
 **Related Work:**
-- [EELMA: Estimating Empowerment of LLM Agents](/research/2025-01-01-eelma/)
+- [EELMA: Estimating Empowerment of LLM Agents](/news/2025-01-01-eelma/)
 - [Neural Scaling Laws (ICML Spotlight)](/news/2025-05-01-icml-spotlight/)

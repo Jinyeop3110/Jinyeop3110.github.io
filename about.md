@@ -7,9 +7,7 @@ permalink: /
 
 # About
 
-<img src="/assets/img/profile.jpg" alt="Jinyeop Song" style="float: right; margin-left: 20px; margin-bottom: 10px; width: 180px; border-radius: 8px;">
-
-Hi, I'm **Jinyeop Song**, a final year PhD student in the [MIT Physics Department](https://physics.mit.edu/), advised by [Prof. Jeff Gore](https://www.gorelab.org/). I am on the job market for Summer 2026.
+Hi, I'm **Jinyeop Song**, a final year PhD student in the [MIT Physics Department](https://physics.mit.edu/), advised by [Prof. Jeff Gore](https://www.gorelab.org/). I am a former [MATS](https://www.matsprogram.org/) scholar and [MIT-IBM Watson AI Lab](https://mitibmwatsonailab.mit.edu/) research intern. *I am on the job market for Summer 2026.*
 {:.lead}
 
 <!--author-->
