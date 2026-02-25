@@ -12,3 +12,119 @@
     margin: 1rem 0;
   }
 }
+
+// Custom blog styling
+:root {
+  --accent-color: #c04b2d;
+  --surface-warm: #fdf8f4;
+  --rule-color: #e8e0d8;
+}
+
+// Accent bar on h2 headers
+.content h2 {
+  position: relative;
+  padding-left: 16px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    background: var(--accent-color);
+    border-radius: 2px;
+  }
+}
+
+// Callout boxes
+.callout {
+  background: var(--surface-warm);
+  border: 1px solid var(--rule-color);
+  border-radius: 8px;
+  padding: 24px 28px;
+  margin: 32px 0;
+
+  .callout-label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Central thesis box
+.central-thesis {
+  background: linear-gradient(135deg, var(--surface-warm) 0%, #fff 100%);
+  border: 2px solid var(--accent-color);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 40px 0;
+  text-align: center;
+
+  .thesis-label {
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .thesis-text {
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// Pillars/columns layout
+.pillars {
+  display: flex;
+  gap: 24px;
+  margin: 32px 0;
+  flex-wrap: wrap;
+
+  .pillar {
+    flex: 1;
+    min-width: 250px;
+    background: var(--surface-warm);
+    border: 1px solid var(--rule-color);
+    border-radius: 8px;
+    padding: 20px 24px;
+
+    .pillar-title {
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+// Conclusion box
+.conclusion {
+  background: linear-gradient(135deg, #fef6f0 0%, #fdf8f4 100%);
+  border-radius: 12px;
+  padding: 32px;
+  margin: 40px 0;
+
+  h2 {
+    padding-left: 0;
+
+    &::before {
+      display: none;
+    }
+  }
+}
