@@ -1,5 +1,253 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://jinyeop3110.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jinyeop3110.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-03-08T23:17:19+00:00</updated><id>https://jinyeop3110.github.io/feed.xml</id><title type="html">Jinyeop Song</title><subtitle>PhD candidate at MIT researching the Science of AI (scaling laws, in-context learning, LLM agents) and AI for Science (foundation models for biology).
-</subtitle><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><entry><title type="html">Protein LLM Part 2: Scaling to 4.9 Million Samples</title><link href="https://jinyeop3110.github.io/research/2026-03-07-protein-llm-scaling/" rel="alternate" type="text/html" title="Protein LLM Part 2: Scaling to 4.9 Million Samples" /><published>2026-03-07T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/research/protein-llm-scaling</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2026-03-07-protein-llm-scaling/"><![CDATA[<div class="central-thesis">
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://jinyeop3110.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jinyeop3110.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2026-03-17T03:50:44+00:00</updated><id>https://jinyeop3110.github.io/feed.xml</id><title type="html">Jinyeop Song</title><subtitle>PhD candidate at MIT researching the Science of AI (scaling laws, in-context learning, LLM agents) and AI for Science (foundation models for biology).
+</subtitle><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><entry><title type="html">Teaching a Protein LLM with Reinforcement Learning: The Gradient Routing Problem</title><link href="https://jinyeop3110.github.io/research/2026-03-13-protein-llm-grpo-gradient-routing/" rel="alternate" type="text/html" title="Teaching a Protein LLM with Reinforcement Learning: The Gradient Routing Problem" /><published>2026-03-13T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/research/protein-llm-grpo-gradient-routing</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2026-03-13-protein-llm-grpo-gradient-routing/"><![CDATA[<div class="central-thesis">
+  <div class="thesis-label">The Question</div>
+  <p class="thesis-text">When a multimodal protein LLM excels at supervised fine-tuning, why does it struggle with reinforcement learning -- and what does gradient flow tell us about the answer?</p>
+</div>
+
+<h2 id="the-setup-a-protein-llm-that-understands-structure">The Setup: A Protein LLM That Understands Structure</h2>
+
+<p>Over the past month, I have been building a multimodal protein language model. The core idea is simple but ambitious: can we combine a protein structure encoder with a general-purpose language model to create a system that truly <em>understands</em> proteins – not just as sequences of amino acid letters, but as three-dimensional molecular machines with specific structural and functional properties?</p>
+
+<p>The architecture has four components. First, a protein sequence enters ESM-3, a protein foundation model trained by EvolutionaryScale on billions of protein sequences. ESM-3 produces rich 1536-dimensional embeddings that capture structural, evolutionary, and functional information about each residue. These embeddings then pass through an attention pooling layer that compresses variable-length protein representations into a fixed set of 32 tokens, followed by a two-layer MLP projector (1536 to 5120 to 2560) that maps them into the LLM’s input space. Finally, these 32 projected tokens are injected into Qwen3-8B-Instruct alongside the text prompt, and the LLM generates its response.</p>
+
+<p><img src="/assets/img/blog/protein-llm/fig1_schematic_overview.png" alt="Schematic overview of the four-pathway architecture" /></p>
+
+<p>We compare this multimodal “MLP” pathway against a simpler text-only baseline where the raw amino acid sequence is directly tokenized as text (wrapped in <code class="language-plaintext highlighter-rouge">&lt;protein&gt;...&lt;/protein&gt;</code> tags) and fed to the LLM. No encoder, no projector – just the LLM seeing letters like MKTLLILAVL as regular text tokens. This comparison lets us isolate the contribution of ESM-3’s structural embeddings.</p>
+
+<p>The entire system is trained with LoRA (rank 8, applied to all linear layers in the LLM), keeping the base Qwen3-8B weights frozen and ESM-3 permanently frozen. The trainable parameters are the LoRA adapters (~2M params), the attention pooling (~9.5M), and the MLP projector (~21M) – about 32.5M parameters in total, a fraction of the 8 billion in the base LLM.</p>
+
+<h2 id="the-data-489-million-protein-instructions">The Data: 4.89 Million Protein Instructions</h2>
+
+<p>Before we could train anything, we needed data. We assembled a dataset from six protein-focused sources, covering four categories of tasks:</p>
+
+<ul>
+  <li><strong>Protein description and function</strong> – explaining what a protein does based on its sequence</li>
+  <li><strong>Structure prediction and analysis</strong> – discussing 3D structure, folding, and stability</li>
+  <li><strong>Interaction and binding</strong> – protein-protein and protein-ligand interactions</li>
+  <li><strong>Design and engineering</strong> – rational design and mutation effects</li>
+</ul>
+
+<p>After preprocessing, sampling, and quality filtering, the final combined dataset contained 4.89 million instruction-response pairs. Each example follows the Qwen3 chat template format with a protein-expert system prompt, the protein sequence (either as ESM-3 embeddings or raw text), and a question-answer pair.</p>
+
+<h2 id="sft-results-the-mlp-advantage">SFT Results: The MLP Advantage</h2>
+
+<p>The supervised fine-tuning results were unambiguous. Over 9750 training steps on 8x H100 GPUs, the ESM3+MLP model converged to an eval_loss of <strong>0.361</strong> – a 70.1% improvement over the text-only baseline at 1.207.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>ESM3+MLP</th>
+      <th>Text-Only</th>
+      <th>MLP Advantage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Best eval_loss</td>
+      <td><strong>0.361</strong> (step 9750)</td>
+      <td>1.207 (step 8000)</td>
+      <td>70.1% lower</td>
+    </tr>
+    <tr>
+      <td>Final token_avg_loss</td>
+      <td>0.438</td>
+      <td>1.643</td>
+      <td>73.4% lower</td>
+    </tr>
+    <tr>
+      <td>Gradient norm (mean)</td>
+      <td>0.627</td>
+      <td>2.365</td>
+      <td>3.8x lower</td>
+    </tr>
+    <tr>
+      <td>Convergence</td>
+      <td>Stable plateau</td>
+      <td>Slight overfitting</td>
+      <td>–</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>These numbers tell a clear story. The MLP model benefits enormously from ESM-3’s structural embeddings. Where the text-only model must infer structural information from raw amino acid letters – an extremely lossy representation – the MLP model receives pre-computed structural features that ESM-3 learned from billions of protein sequences.</p>
+
+<p><img src="/assets/img/blog/protein-llm/fig5_sft_loss_curves.png" alt="SFT eval loss curves comparing MLP and text-only approaches" /></p>
+
+<p>The convergence dynamics are also revealing. The MLP model’s eval_loss decreases smoothly and monotonically, with the last five evaluation checkpoints ranging only 0.006 (from 0.361 to 0.367). This is a cleanly converged model. The text-only model, by contrast, reaches its best eval_loss at step 8000 (1.207) but then begins overfitting, degrading to 1.266 by step 9500. The overfitting window spans about 1500 steps, suggesting that with early stopping, step 8000 is the best text checkpoint.</p>
+
+<p>The gradient norms reinforce this picture. The MLP model maintains a mean gradient norm of 0.627 with standard deviation 0.326 – smooth, well-behaved optimization. The text-only model runs at 2.365 mean gradient norm with 0.647 standard deviation. The 3.8x higher gradients in text-only reflect a harder optimization landscape where the model must work much harder to extract useful signal from raw sequence tokens.</p>
+
+<p>We also attempted a third pathway – the Perceiver Resampler – which replaces both pooling and MLP with a cross-attention mechanism (29.4M parameters, comparable to MLP’s 30.5M). Unfortunately, this experiment failed to launch; the log directory was created but remained empty. The perceiver pathway remains untested at the 4.89M scale, and retrying it is on our priority list.</p>
+
+<h2 id="from-imitation-to-reasoning-enter-grpo">From Imitation to Reasoning: Enter GRPO</h2>
+
+<p>SFT teaches the model to produce outputs that look like the training data. But can we go further? Can we teach the model to <em>reason</em> about protein structure using reinforcement learning?</p>
+
+<p>Group Relative Policy Optimization (GRPO) is our RL method of choice. For each prompt, the model generates a group of completions (typically 8 or 16). A reward function scores each completion, and the model updates toward the better-rewarded outputs using a policy gradient. The key innovation of GRPO over standard RLHF is that rewards are normalized <em>within</em> each group, producing relative advantages rather than absolute scores.</p>
+
+<p>For the structure quality task, we designed a multi-component reward function that evaluates the model’s ability to assess protein structural quality:</p>
+
+<ul>
+  <li><strong>Quality alignment</strong> (weight 0.4): Does the model correctly categorize structural quality based on the ESMFold-computed pLDDT score?</li>
+  <li><strong>Numerical accuracy</strong> (weight 0.3): How close is the model’s predicted pLDDT to the actual value?</li>
+  <li><strong>Category match</strong> (weight 0.3): Does the predicted quality category (high/medium/low/very low) match the ground truth?</li>
+  <li><strong>Format bonus</strong> (0.1): Does the output follow the expected JSON format?</li>
+</ul>
+
+<p>The training data consists of 5878 protein sequences (filtered from 10K by removing proteins longer than 512 amino acids). Each protein is folded by ESMFold to produce ground-truth structural quality metrics, and the model must learn to predict these metrics from the protein sequence.</p>
+
+<p>We ran 13 GRPO experiments over three days, systematically testing different configurations: MLP vs text-only approaches, different training durations (3 to 10 epochs), frozen vs unfrozen multimodal parameters, focal reward weighting, and classification-based task reformulations.</p>
+
+<h2 id="the-reversal-text-wins-at-rl">The Reversal: Text Wins at RL</h2>
+
+<p>Then came the surprise. When we applied GRPO to both SFT checkpoints, the rankings completely inverted.</p>
+
+<p>The text-only model, starting from its eval_loss=1.207 SFT checkpoint (the <em>worse</em> SFT model), rapidly learned to generate well-formatted, accurate structure quality assessments. Over training, its mean reward climbed to <strong>0.832</strong>, with near-perfect format compliance (format bonus 0.099 out of 0.1) and remarkably well-calibrated pLDDT predictions (79.1 predicted vs 79.7 actual – within 1% of ground truth).</p>
+
+<p>The MLP model, despite its dramatically superior SFT performance (eval_loss 0.361), stalled at a much lower reward. Its standard GRPO configuration reached only <strong>0.582</strong> mean reward, with format compliance stuck at 65% and systematically underestimating pLDDT (67.9 predicted vs 79.7 actual – off by 15%).</p>
+
+<p><img src="/assets/img/blog/protein-llm/fig13_grpo_structure_reward_curves.png" alt="GRPO reward curves showing text-only outperforming MLP" /></p>
+
+<p>Let me emphasize how counterintuitive this is. The model that <em>better understands</em> proteins (as measured by SFT loss) is <em>worse</em> at learning to reason about them through RL. The model with cruder protein representations (raw text tokens) learns faster and reaches higher reward.</p>
+
+<h2 id="diagnosing-the-problem-follow-the-gradients">Diagnosing the Problem: Follow the Gradients</h2>
+
+<p>To understand why, I looked at the gradient norms. In training, gradient norms tell you which parameters are actually receiving learning signal. If a parameter group has zero gradient, it is not learning – regardless of how much compute you spend.</p>
+
+<p>The gradient norms told a striking story. In the MLP model during structure quality GRPO:</p>
+
+<ul>
+  <li><strong>LoRA gradients: effectively zero</strong> – the LLM’s adapter weights received no learning signal</li>
+  <li><strong>Multimodal gradients: 0.247</strong> – only the projector updated</li>
+</ul>
+
+<p>For contrast, in a different GRPO task (ProteinLM benchmark), the pattern reversed:</p>
+
+<ul>
+  <li><strong>LoRA gradients: 0.826</strong> – the LLM adapters were actively learning</li>
+  <li><strong>Multimodal gradients: 0.0</strong> – the projector was completely frozen</li>
+</ul>
+
+<p>The text-only model, with its single gradient pathway, had no such problem:</p>
+
+<ul>
+  <li><strong>LoRA gradients: 0.476-0.493</strong> – healthy, consistent signal</li>
+</ul>
+
+<p><img src="/assets/img/blog/protein-llm/fig16_grpo_structure_grad_norms.png" alt="Gradient norms showing the routing problem" /></p>
+
+<p>I call this the <strong>gradient routing problem</strong>: in the multimodal model, gradients flow exclusively to one subsystem during GRPO, completely starving the other. The “winner” appears to depend on the reward function and task characteristics, but the result is always the same – half the model cannot learn.</p>
+
+<p>This is fundamentally different from SFT. During supervised fine-tuning, the next-token prediction loss provides a dense, per-token gradient signal that flows through the entire computational graph. Both the projector and LoRA adapters receive meaningful gradients because every token prediction depends on both the protein embeddings (flowing through the projector) and the language modeling capability (captured by LoRA). The loss is computed on hundreds of tokens per example, providing rich gradient information.</p>
+
+<p>During GRPO, the signal is sparse. The reward is a single scalar computed on the <em>entire</em> completion. The policy gradient must propagate this scalar backward through the generation process, and somewhere in this chain, the signal becomes “winner-take-all.” The parameter group that provides the steepest local descent captures the gradient signal, leaving the other group in a flat region of the loss landscape.</p>
+
+<h2 id="the-fix-partial-freeze-and-focus">The Fix (Partial): Freeze and Focus</h2>
+
+<p>If the gradient routing problem prevents simultaneous updates, what happens when we eliminate one pathway entirely?</p>
+
+<p>We ran a “frozen-MM” experiment: freeze the multimodal projector completely and only update LoRA weights during GRPO. This forces all gradient signal through the LoRA pathway, removing the competition.</p>
+
+<p>The results were encouraging:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Configuration</th>
+      <th>Mean Reward</th>
+      <th>Format Bonus</th>
+      <th>LoRA Grad</th>
+      <th>MM Grad</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Text-only (standard)</td>
+      <td><strong>0.832</strong></td>
+      <td>0.099</td>
+      <td>0.476</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>MLP frozen-MM</td>
+      <td>0.774</td>
+      <td>0.095</td>
+      <td>0.071</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>MLP frozen-MM + focal</td>
+      <td>0.725</td>
+      <td>0.095</td>
+      <td>0.119</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>MLP standard</td>
+      <td>0.582</td>
+      <td>0.065</td>
+      <td>~0</td>
+      <td>0.247</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Freezing the projector raised MLP GRPO reward from 0.582 to <strong>0.774</strong> – a 33% improvement. Format compliance jumped from 65% to 95%. This confirms that the gradient routing problem was the primary bottleneck: once LoRA can actually receive gradients, the MLP model learns effectively.</p>
+
+<p>But text-only still outperforms at 0.832. The LoRA gradients in frozen-MM MLP (0.071-0.119) are noticeably smaller than text-only (0.476). Even with the projector frozen, its presence in the forward pass creates a partial information bottleneck. The LoRA adapters must learn through a compressed 32-token protein representation, while the text-only model’s LoRA can directly interact with every amino acid token in the sequence.</p>
+
+<p>We also tried adding focal reward weighting, which upweights harder examples. This actually slightly hurt performance (0.725 vs 0.774 for frozen-MM alone), possibly because the focal weighting destabilizes the already-small LoRA gradients.</p>
+
+<h2 id="the-reward-breakdown-component-level-analysis">The Reward Breakdown: Component-Level Analysis</h2>
+
+<p>Breaking down the reward into components reveals exactly where each model excels and struggles.</p>
+
+<p><img src="/assets/img/blog/protein-llm/fig14_grpo_structure_reward_breakdown.png" alt="Reward component breakdown for text vs MLP" /></p>
+
+<p>The text-only model outperforms across all four components. The biggest gaps are in numerical accuracy (text: 0.185, standard MLP: 0.086, frozen-MM MLP: 0.169) and category match (text: 0.197, standard MLP: 0.104, frozen-MM MLP: 0.164). Quality alignment is closer (text: 0.351, standard MLP: 0.326, frozen-MM MLP: 0.347).</p>
+
+<p>One particularly revealing detail is pLDDT calibration. The actual mean pLDDT in the evaluation set is 79.7. The text-only model predicts 79.1 – remarkably close. The frozen-MM model <em>overestimates</em> at 85.1, while the standard MLP model <em>underestimates</em> at 67.9. This bidirectional miscalibration suggests that the projector embeddings contain strong pLDDT-relevant signal, but the GRPO training process fails to calibrate it properly. When the projector is frozen, its fixed embeddings anchor the LLM toward high-quality predictions; when unfrozen, the projector drifts in the absence of LoRA co-adaptation.</p>
+
+<p><img src="/assets/img/blog/protein-llm/fig15_grpo_structure_format_rate.png" alt="Format compliance and policy gradient loss" /></p>
+
+<p>The format compliance story is particularly clear. The text-only model achieves essentially 100% format compliance from early in training. The standard MLP model stays stuck at 74-76%. The frozen-MM model recovers to ~95% compliance. Format compliance is entirely a function of LoRA learning – the LLM needs to learn the JSON output format – and when LoRA gradients are zero, format never improves.</p>
+
+<h2 id="the-proteinlm-benchmark-a-negative-result">The ProteinLM Benchmark: A Negative Result</h2>
+
+<p>We also tried GRPO on a second task: the ProteinLM benchmark, a curated set of 849 protein understanding questions with multiple-choice answers. The reward function scored the model on answer accuracy.</p>
+
+<p>This was a clear negative result. Neither 3-epoch training (39 steps, final reward 0.695) nor 10-epoch training (130 steps, final reward 0.676) showed any reward improvement. The reward oscillated noisily around 0.68 throughout training with no discernible trend.</p>
+
+<p>The root cause was different from structure quality but equally instructive. Here, 37-42% of groups had zero reward standard deviation, meaning the model generated nearly identical completions within each group. When all completions in a group are the same, the advantages are all zero, and no learning occurs. Nearly half the compute was wasted on groups that produced zero gradient signal.</p>
+
+<p>Interestingly, the gradient routing was reversed compared to structure quality: LoRA received healthy gradients (mean 0.8) while multimodal gradients were exactly zero. The task’s small dataset (849 samples) and the high zero-std fraction suggest it simply does not provide enough diversity of training signal for GRPO to gain traction.</p>
+
+<h2 id="what-this-means-for-multimodal-rl">What This Means for Multimodal RL</h2>
+
+<p>The gradient routing problem reveals something fundamental about the difference between supervised and reinforcement learning in multimodal architectures.</p>
+
+<p>In SFT, the loss landscape is smooth and well-conditioned. Every token contributes to the loss, and the chain rule distributes gradients naturally through both the projector and LoRA. The two parameter groups cooperate: the projector provides better protein representations, and LoRA learns to use them. This is classical multi-task cooperation.</p>
+
+<p>In GRPO, the optimization landscape is fundamentally different. The reward is a single scalar for an entire completion. The policy gradient amplifies differences between better and worse completions, but this sparse signal must compete for bandwidth between two parameter groups. The result is a “winner-take-all” dynamic that resembles the gradient conflicts studied in multi-task learning (Sener &amp; Koltun, 2018; Yu et al., 2020).</p>
+
+<p>This connects to broader findings in the multimodal RL literature. Vision-language models like Flamingo and LLaVA also struggle with RL fine-tuning, often requiring careful stage-wise training. The gradient routing problem may be a general phenomenon in multimodal RL, not specific to protein models.</p>
+
+<h2 id="what-is-next">What is Next</h2>
+
+<p>Three directions follow from these findings:</p>
+
+<p><strong>1. Two-stage GRPO.</strong> First train with frozen multimodal parameters to teach format compliance and basic reward structure through LoRA. Then unfreeze the projector for fine-grained structural learning. This sequences the gradient pathways rather than forcing them to compete. The frozen-MM results (0.774 reward) suggest this first stage could establish a strong foundation.</p>
+
+<p><strong>2. Gradient balancing.</strong> Explicitly balance the gradient norms between LoRA and multimodal parameters using methods like GradNorm (Chen et al., 2018) or PCGrad (Yu et al., 2020). The mutual exclusion we observe is exactly the kind of gradient conflict these methods were designed to address. We could also try simply scaling the multimodal learning rate relative to LoRA during GRPO.</p>
+
+<p><strong>3. The Perceiver pathway.</strong> Our Perceiver Resampler SFT failed to launch and remains untested. With 29.4M parameters (comparable to MLP’s 30.5M), the Perceiver uses cross-attention rather than concatenation to integrate protein information. This architectural difference may produce different gradient routing behavior during GRPO, potentially avoiding the winner-take-all dynamic.</p>
+
+<p>The central paradox remains: our best SFT model (MLP, eval_loss 0.361) produces our worst GRPO learner (reward 0.582), while our weaker SFT model (text-only, eval_loss 1.207) produces our best GRPO learner (reward 0.832). This SFT-RL inversion is the defining challenge for the next phase of this project, and resolving it could teach us something important about how multimodal systems learn from sparse reward signals.</p>
+
+<hr />
+
+<p><em>This analysis covers 4 SFT and 13 GRPO experiments run between March 6-13, 2026, on 8x H100 GPUs. All models use Qwen3-8B-Instruct-2507 with LoRA (r=8). The combined SFT dataset contains 4.89M instruction-response pairs from six protein data sources. GRPO structure quality data contains 5878 training samples with ESMFold-based rewards. All loss values reported as eval_loss unless otherwise noted; training loss uses token_avg_loss (true per-token average, not HF Trainer’s running average).</em></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm" /><category term="protein" /><category term="multimodal" /><category term="esm3" /><category term="grpo" /><category term="reinforcement-learning" /><summary type="html"><![CDATA[After training a multimodal protein LLM with ESM-3 embeddings and LoRA on 4.89M samples, we applied GRPO reinforcement learning for structure quality prediction. Text-only reaches 0.832 reward while our multimodal MLP pathway stalls at 0.582 -- revealing a fundamental gradient routing problem where LoRA and projector gradients cannot flow simultaneously. Here is what we found and what it means for multimodal RL.]]></summary></entry><entry><title type="html">Protein LLM Part 2: Scaling to 4.9 Million Samples</title><link href="https://jinyeop3110.github.io/research/2026-03-07-protein-llm-scaling/" rel="alternate" type="text/html" title="Protein LLM Part 2: Scaling to 4.9 Million Samples" /><published>2026-03-07T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/research/protein-llm-scaling</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2026-03-07-protein-llm-scaling/"><![CDATA[<div class="central-thesis">
   <div class="thesis-label">The Big Picture</div>
   <p class="thesis-text">We scaled our protein-LLM training data from 50K to 4.9 million samples across six sources. The result: <strong>eval_loss dropped 90.1%</strong> — from 3.64 to 0.361 — and the model now generates scientifically meaningful protein descriptions.</p>
 </div>
@@ -347,7 +595,7 @@ The architecture works. The data works. <span style="color: red;">Next up: the f
 <ul>
   <li><a href="https://github.com/facebookresearch/esm">ESM-3: Protein Language Model</a></li>
   <li><a href="https://arxiv.org/abs/2306.08018">Mol-Instructions Dataset (ICLR 2024)</a></li>
-</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm" /><category term="protein" /><category term="multimodal" /><category term="esm3" /><category term="sft" /><category term="scaling" /><summary type="html"><![CDATA[From 50K to 4.9M training samples — how scaling data transformed our protein-understanding LLM, what the numbers look like, and what comes next.]]></summary></entry><entry><title type="html">Building a Protein-Understanding LLM: A Week of Trials, Errors, and Breakthroughs</title><link href="https://jinyeop3110.github.io/research/2026-02-25-protein-llm-journey/" rel="alternate" type="text/html" title="Building a Protein-Understanding LLM: A Week of Trials, Errors, and Breakthroughs" /><published>2026-02-25T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/research/protein-llm-journey</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2026-02-25-protein-llm-journey/"><![CDATA[<div class="central-thesis">
+</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm" /><category term="protein" /><category term="multimodal" /><category term="esm3" /><category term="sft" /><category term="scaling" /><summary type="html"><![CDATA[From 50K to 4.9M training samples — how scaling data transformed our protein-understanding LLM, what the numbers look like, and what comes next.]]></summary></entry><entry><title type="html">Building a Protein-Understanding LLM: A Week of Trials, Errors, and Breakthroughs</title><link href="https://jinyeop3110.github.io/research/2026-02-25-protein-llm-journey/" rel="alternate" type="text/html" title="Building a Protein-Understanding LLM: A Week of Trials, Errors, and Breakthroughs" /><published>2026-02-25T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/research/protein-llm-journey</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2026-02-25-protein-llm-journey/"><![CDATA[<div class="central-thesis">
   <div class="thesis-label">The Question</div>
   <p class="thesis-text">What happens when you bridge protein language models with large language models? Can we make an LLM that truly <em>understands</em> proteins, not just parses their sequences?</p>
 </div>
@@ -828,7 +1076,7 @@ The architecture works. The data pipeline works. Now we make the model actually 
   <li><a href="https://github.com/facebookresearch/esm">ESM-3: Protein Language Model</a></li>
   <li><a href="https://arxiv.org/abs/2306.08018">Mol-Instructions Dataset (ICLR 2024)</a></li>
   <li><a href="https://github.com/volcengine/verl">veRL: Volcano Engine RL Framework</a></li>
-</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm" /><category term="protein" /><category term="multimodal" /><category term="esm3" /><category term="rl" /><summary type="html"><![CDATA[The story of building a multimodal LLM that truly understands proteins—from architecture decisions to debugging disasters to assembling 4.5 million training records.]]></summary></entry><entry><title type="html">KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning</title><link href="https://jinyeop3110.github.io/news/2025-11-01-kg-rag/" rel="alternate" type="text/html" title="KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning" /><published>2025-11-01T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/news/kg-rag</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-11-01-kg-rag/"><![CDATA[<p><img src="/assets/img/projects/kgrag.png" alt="KG-R1 Overview" class="lead" width="800" loading="lazy" /></p>
+</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm" /><category term="protein" /><category term="multimodal" /><category term="esm3" /><category term="rl" /><summary type="html"><![CDATA[The story of building a multimodal LLM that truly understands proteins—from architecture decisions to debugging disasters to assembling 4.5 million training records.]]></summary></entry><entry><title type="html">KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning</title><link href="https://jinyeop3110.github.io/news/2025-11-01-kg-rag/" rel="alternate" type="text/html" title="KG-R1: Efficient Knowledge Graph RAG via Reinforcement Learning" /><published>2025-11-01T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/news/kg-rag</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-11-01-kg-rag/"><![CDATA[<p><img src="/assets/img/projects/kgrag.png" alt="KG-R1 Overview" class="lead" width="800" loading="lazy" /></p>
 
 <h2 id="summary">Summary</h2>
 
@@ -838,7 +1086,7 @@ The architecture works. The data pipeline works. Now we make the model actually 
 
 <p><a href="/assets/pdf/KG_R1_2026.pdf">Download Paper (PDF)</a></p>
 
-<p><em>Featured in MIT News, November 2025</em></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><category term="rag" /><category term="knowledge-graph" /><category term="reinforcement-learning" /><summary type="html"><![CDATA[Multi-turn RL approach for knowledge-graph augmented LLMs.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">ICML Spotlight Paper Accepted</title><link href="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/" rel="alternate" type="text/html" title="ICML Spotlight Paper Accepted" /><published>2025-05-01T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/news/icml-spotlight</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/"><![CDATA[<p>Our paper was accepted to ICML (Spotlight, Top 2.5%)! <a href="https://arxiv.org/abs/2412.12276">arXiv:2412.12276</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our paper was accepted to ICML as a Spotlight presentation]]></summary></entry><entry><title type="html">A Systems Biology Approach to Multi-LLM Agent Systems</title><link href="https://jinyeop3110.github.io/research/2025-02-01-multiagent-systems/" rel="alternate" type="text/html" title="A Systems Biology Approach to Multi-LLM Agent Systems" /><published>2025-02-01T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/research/multiagent-systems</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2025-02-01-multiagent-systems/"><![CDATA[<div class="central-thesis">
+<p><em>Featured in MIT News, November 2025</em></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><category term="rag" /><category term="knowledge-graph" /><category term="reinforcement-learning" /><summary type="html"><![CDATA[Multi-turn RL approach for knowledge-graph augmented LLMs.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/kgrag.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">ICML Spotlight Paper Accepted</title><link href="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/" rel="alternate" type="text/html" title="ICML Spotlight Paper Accepted" /><published>2025-05-01T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/news/icml-spotlight</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-05-01-icml-spotlight/"><![CDATA[<p>Our paper was accepted to ICML (Spotlight, Top 2.5%)! <a href="https://arxiv.org/abs/2412.12276">arXiv:2412.12276</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our paper was accepted to ICML as a Spotlight presentation]]></summary></entry><entry><title type="html">A Systems Biology Approach to Multi-LLM Agent Systems</title><link href="https://jinyeop3110.github.io/research/2025-02-01-multiagent-systems/" rel="alternate" type="text/html" title="A Systems Biology Approach to Multi-LLM Agent Systems" /><published>2025-02-01T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/research/multiagent-systems</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2025-02-01-multiagent-systems/"><![CDATA[<div class="central-thesis">
   <div class="thesis-label">Central Thesis</div>
   <p class="thesis-text">Systems Biology offers a productive lens for understanding multi-LLM agent dynamics—treating agents as nodes in regulatory networks enables principled approaches to stability and optimization.</p>
 </div>
@@ -992,7 +1240,7 @@ This research connects my background in systems biology and ecological dynamics 
 <ul>
   <li><a href="/news/2025-01-01-eelma/">EELMA: Estimating Empowerment of LLM Agents</a></li>
   <li><a href="/news/2025-05-01-icml-spotlight/">Neural Scaling Laws (ICML Spotlight)</a></li>
-</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm-agents" /><category term="multi-agent" /><category term="systems-biology" /><category term="rl" /><summary type="html"><![CDATA[Research proposal on applying systems biology principles to understand and stabilize multi-agent LLM training dynamics.]]></summary></entry><entry><title type="html">EELMA: Estimating Empowerment of Language Model Agents</title><link href="https://jinyeop3110.github.io/news/2025-01-01-eelma/" rel="alternate" type="text/html" title="EELMA: Estimating Empowerment of Language Model Agents" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/news/eelma</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-eelma/"><![CDATA[<p><img src="/assets/img/projects/empowerment.png" alt="EELMA Overview" class="lead" width="800" loading="lazy" /></p>
+</ul>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="llm-agents" /><category term="multi-agent" /><category term="systems-biology" /><category term="rl" /><summary type="html"><![CDATA[Research proposal on applying systems biology principles to understand and stabilize multi-agent LLM training dynamics.]]></summary></entry><entry><title type="html">EELMA: Estimating Empowerment of Language Model Agents</title><link href="https://jinyeop3110.github.io/news/2025-01-01-eelma/" rel="alternate" type="text/html" title="EELMA: Estimating Empowerment of Language Model Agents" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/news/eelma</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-eelma/"><![CDATA[<p><img src="/assets/img/projects/empowerment.png" alt="EELMA Overview" class="lead" width="800" loading="lazy" /></p>
 
 <p class="figcaption">EELMA - Estimating Empowerment of Language Model Agent, provides a scalable method for quantifying POWER of LM agents.</p>
 
@@ -1051,7 +1299,7 @@ This research connects my background in systems biology and ecological dynamics 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><strong>Paper:</strong> <a href="https://arxiv.org/abs/2509.22504">arXiv:2509.22504</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><category term="ai-safety" /><category term="llm-agents" /><category term="empowerment" /><summary type="html"><![CDATA[MATS Program Winter 2024-25 - Proposing a scalable method for quantifying the empowerment of Language Model agents.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Started MATS 7.0 Cohort</title><link href="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/" rel="alternate" type="text/html" title="Started MATS 7.0 Cohort" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/news/mats-cohort</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/"><![CDATA[<p>Started the ML Alignment Theory and Scholar (MATS) 7.0 cohort with mentor Max Klieman (UW).</p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Joined the ML Alignment Theory and Scholar program]]></summary></entry><entry><title type="html">MethylGPT Paper Archived and Under Review at Nature Method</title><link href="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/" rel="alternate" type="text/html" title="MethylGPT Paper Archived and Under Review at Nature Method" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/news/methylgpt-nature-method</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/"><![CDATA[<p>Our MethylGPT paper was archived and is under review at Nature Method! <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv link</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our MethylGPT paper is under review at Nature Method]]></summary></entry><entry><title type="html">MethylGPT</title><link href="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/" rel="alternate" type="text/html" title="MethylGPT" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/research/methylgpt</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/"><![CDATA[<p><img src="/assets/img/projects/methylgpt.png" alt="MethylGPT Overview" class="lead" width="800" loading="lazy" /></p>
+<p><strong>Paper:</strong> <a href="https://arxiv.org/abs/2509.22504">arXiv:2509.22504</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><category term="ai-safety" /><category term="llm-agents" /><category term="empowerment" /><summary type="html"><![CDATA[MATS Program Winter 2024-25 - Proposing a scalable method for quantifying the empowerment of Language Model agents.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/empowerment.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Started MATS 7.0 Cohort</title><link href="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/" rel="alternate" type="text/html" title="Started MATS 7.0 Cohort" /><published>2025-01-01T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/news/mats-cohort</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2025-01-01-mats-cohort/"><![CDATA[<p>Started the ML Alignment Theory and Scholar (MATS) 7.0 cohort with mentor Max Klieman (UW).</p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Joined the ML Alignment Theory and Scholar program]]></summary></entry><entry><title type="html">MethylGPT Paper Archived and Under Review at Nature Method</title><link href="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/" rel="alternate" type="text/html" title="MethylGPT Paper Archived and Under Review at Nature Method" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/news/methylgpt-nature-method</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-09-01-methylgpt-nature-method/"><![CDATA[<p>Our MethylGPT paper was archived and is under review at Nature Method! <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv link</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our MethylGPT paper is under review at Nature Method]]></summary></entry><entry><title type="html">MethylGPT</title><link href="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/" rel="alternate" type="text/html" title="MethylGPT" /><published>2024-09-01T00:00:00+00:00</published><updated>2026-03-17T03:47:42+00:00</updated><id>https://jinyeop3110.github.io/research/methylgpt</id><content type="html" xml:base="https://jinyeop3110.github.io/research/2024-09-01-methylgpt/"><![CDATA[<p><img src="/assets/img/projects/methylgpt.png" alt="MethylGPT Overview" class="lead" width="800" loading="lazy" /></p>
 
 <h2 id="overview">Overview</h2>
 
@@ -1093,4 +1341,4 @@ This research connects my background in systems biology and ecological dynamics 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><strong>Preprint:</strong> <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="foundation-models" /><category term="biology" /><category term="methylation" /><summary type="html"><![CDATA[A foundation model approach to understanding human methylation patterns - under review at Nature Methods.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Scaling Law Paper Accepted to TMLR</title><link href="https://jinyeop3110.github.io/news/2024-08-01-scaling-law-tmlr/" rel="alternate" type="text/html" title="Scaling Law Paper Accepted to TMLR" /><published>2024-08-01T00:00:00+00:00</published><updated>2026-03-08T23:15:52+00:00</updated><id>https://jinyeop3110.github.io/news/scaling-law-tmlr</id><content type="html" xml:base="https://jinyeop3110.github.io/news/2024-08-01-scaling-law-tmlr/"><![CDATA[<p>Our scaling law paper was accepted to TMLR! Read it here: <a href="https://arxiv.org/abs/2406.12907">arXiv:2406.12907</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="news" /><summary type="html"><![CDATA[Our scaling law paper was accepted to TMLR]]></summary></entry></feed>
+<p><strong>Preprint:</strong> <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">bioRxiv</a></p>]]></content><author><name>Jinyeop Song</name><email>sjinyeop@gmail.com</email></author><category term="research" /><category term="foundation-models" /><category term="biology" /><category term="methylation" /><summary type="html"><![CDATA[A foundation model approach to understanding human methylation patterns - under review at Nature Methods.]]></summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" /><media:content medium="image" url="https://jinyeop3110.github.io/assets/img/projects/methylgpt.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
