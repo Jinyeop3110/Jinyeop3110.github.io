@@ -215,5 +215,8 @@ DEPENDENCIES
   kramdown-math-katex
   webrick
 
+RUBY VERSION
+   ruby 3.2.11p268
+
 BUNDLED WITH
    2.6.3

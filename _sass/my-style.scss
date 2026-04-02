@@ -128,3 +128,143 @@
     }
   }
 }
+
+// ── Publication Cards ──
+
+.pub-entry {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule-color);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.pub-thumb {
+  flex-shrink: 0;
+  width: 120px;
+
+  img {
+    width: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid var(--rule-color);
+  }
+}
+
+.pub-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.pub-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  margin-bottom: 4px;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--accent-color);
+    }
+  }
+}
+
+.pub-authors {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.pub-venue {
+  margin-bottom: 8px;
+}
+
+.venue-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+  line-height: 1.6;
+
+  &.spotlight {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffcc80;
+  }
+
+  &.published {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+  }
+
+  &.preprint {
+    background: #f5f5f5;
+    color: #616161;
+    border: 1px solid #e0e0e0;
+  }
+}
+
+.pub-abstract {
+  font-size: 0.88rem;
+  color: #666;
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.pub-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pub-btn {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 3px 12px;
+  border: 1.5px solid var(--accent-color);
+  border-radius: 14px;
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: var(--accent-color);
+    color: #fff;
+  }
+}
+
+// Responsive: stack pub cards on small screens
+@media (max-width: 600px) {
+  .pub-entry {
+    flex-direction: column;
+  }
+
+  .pub-thumb {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+// Keep the Hydejack about-page avatar from floating into the intro copy
+article.page .avatar {
+  float: none !important;
+  display: block;
+  width: min(12rem, 40vw);
+  margin: 1.5rem auto !important;
+}
+
+article.page .avatar img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
