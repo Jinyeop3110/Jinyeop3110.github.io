@@ -362,6 +362,7 @@
 
   <h3>Detailed Reports</h3>
   <a href="/reports/2026-04-03_pdl1_binder_demo.html" class="report-link">Apr 3 &middot; PD-L1 Demo</a>
+  <a href="/reports/2026-04-04_agent_session_sweep.html" class="report-link">Apr 4 &middot; Agent Session Log</a>
   <a href="/reports/2026-04-05_beam_search_sweep.html" class="report-link">Apr 5 &middot; Sweep Results</a>
   <a href="/reports/2026-04-05_config_diversity.html" class="report-link">Apr 5 &middot; Config Diversity</a>
 </aside>
@@ -409,6 +410,11 @@
         <div class="pillar-title">Configs explore different space</div>
         <p>Different search strategies produce different sequences. Multi-config pooling beats single-config compute.</p>
       </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Coming Soon: Small Molecules</div>
+      <p>The same hyperparameter sensitivity applies to <strong>small-molecule drug design</strong>. Diffusion-based molecular generators (e.g., DiffDock, TargetDiff) face analogous challenges: sampling strategies, noise schedules, and scoring functions interact with the binding pocket in target-dependent ways. We plan to extend this agent framework to ligand-based design, demonstrating that the need for adaptive hyperparameter search is a general principle across modalities.</p>
     </div>
 
     <div class="callout">
