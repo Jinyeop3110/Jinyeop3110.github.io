@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protein LLM Series - Jinyeop Song</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f5f6f7;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    /* ── Top Nav ── */
+    .topnav {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 14px 24px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .topnav .brand {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #4fb1ba;
+      text-decoration: none;
+    }
+    .topnav .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 18px;
+      font-size: 0.95rem;
+    }
+    .topnav .nav-links a:hover { color: #fff; }
+    .menu-toggle {
+      display: none;
+      background: none; border: none; color: #fff;
+      font-size: 1.5rem; cursor: pointer;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 52px; left: 0; bottom: 0;
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+      padding: 20px 0;
+      z-index: 90;
+      transition: transform 0.3s;
+    }
+    .sidebar h3 {
+      padding: 8px 20px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-top: 12px;
+    }
+    .sidebar h3:first-child { margin-top: 0; }
+    .sidebar a {
+      display: block;
+      padding: 7px 20px 7px 28px;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+    }
+    .sidebar a:hover {
+      background: #f0f8f8;
+      color: #4fb1ba;
+    }
+    .sidebar a.active {
+      background: #e8f5f5;
+      color: #16a085;
+      border-left-color: #16a085;
+      font-weight: 600;
+    }
+    .sidebar .back-link {
+      padding: 12px 20px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4fb1ba;
+    }
+
+    /* ── Main Content ── */
+    .main {
+      margin-left: 260px;
+      margin-top: 52px;
+      padding: 40px 48px 80px;
+      max-width: 920px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      color: #1a1a2e;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #4fb1ba;
+    }
+    h3 {
+      font-size: 1.15rem;
+      margin-top: 32px;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    p { margin-bottom: 14px; }
+    strong { color: #1a1a2e; }
+
+    /* ── Part dividers ── */
+    .part-section {
+      padding-top: 24px;
+      margin-top: 56px;
+      border-top: 3px solid #4fb1ba;
+    }
+    .part-section:first-of-type { margin-top: 0; border-top: none; }
+    .part-label {
+      display: inline-block;
+      background: #4fb1ba;
+      color: #fff;
+      padding: 4px 14px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .part-date {
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    /* ── Callout / Thesis boxes ── */
+    .central-thesis {
+      background: linear-gradient(135deg, #1a1a2e, #16a085);
+      color: #fff;
+      padding: 28px 32px;
+      border-radius: 8px;
+      margin: 20px 0 28px;
+    }
+    .thesis-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+    .thesis-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .callout {
+      background: #fff8e1;
+      border-left: 4px solid #f9a825;
+      padding: 16px 20px;
+      border-radius: 0 6px 6px 0;
+      margin: 20px 0;
+    }
+    .callout-label {
+      font-weight: 700;
+      color: #f57f17;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .conclusion {
+      background: #e8f5e9;
+      border-left: 4px solid #43a047;
+      padding: 20px 24px;
+      border-radius: 0 6px 6px 0;
+      margin: 28px 0;
+    }
+    .conclusion h2 {
+      border-bottom: none;
+      margin-top: 0;
+      color: #2e7d32;
+    }
+
+    /* ── Pillars ── */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .pillar {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .pillar-title {
+      font-weight: 700;
+      color: #4fb1ba;
+      margin-bottom: 6px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.92rem;
+      background: #fff;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    th {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid #eee;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafa; }
+
+    /* ── Code blocks ── */
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 16px 20px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      margin: 16px 0;
+      line-height: 1.5;
+    }
+    code {
+      font-family: "Fira Code", "Cascadia Code", Consolas, monospace;
+      font-size: 0.88em;
+    }
+    p code, li code, td code {
+      background: #eef1f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #c0392b;
+    }
+
+    /* ── Images ── */
+    .fig {
+      margin: 24px 0;
+      text-align: center;
+    }
+    .fig img {
+      max-width: 100%;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .figcaption {
+      font-size: 0.85rem;
+      color: #777;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin: 10px 0 16px 24px;
+    }
+    li { margin-bottom: 6px; }
+
+    /* ── Horizontal rule ── */
+    hr {
+      border: none;
+      border-top: 1px solid #ddd;
+      margin: 32px 0;
+    }
+
+    /* ── Resources ── */
+    .resources {
+      background: #f0f4f8;
+      padding: 20px 24px;
+      border-radius: 8px;
+      margin: 24px 0;
+    }
+    .resources a {
+      color: #4fb1ba;
+      text-decoration: none;
+    }
+    .resources a:hover { text-decoration: underline; }
+
+    /* ── Links ── */
+    a { color: #4fb1ba; }
+    a:hover { color: #16a085; }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; padding: 24px 20px 60px; }
+      .menu-toggle { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav class="topnav">
+  <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+  <a href="/" class="brand">Jinyeop Song</a>
+  <div class="nav-links">
+    <a href="/publications/">Publications</a>
+    <a href="/cv/">CV</a>
+    <a href="/posts/">Blog</a>
+  </div>
+</nav>
+
+<!-- Left Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <a href="/posts/" class="back-link">&larr; Back to Blog</a>
+
+  <h3>Overview</h3>
+  <a href="#overview">Series Overview</a>
+  <a href="#overview-architecture">Architecture</a>
+  <a href="#overview-scaling">Scaling Data</a>
+  <a href="#overview-rl">RL &amp; Gradient Routing</a>
+  <a href="#overview-next">What's Next</a>
+  <a href="#overview-timeline">Timeline</a>
+
+  <h3>Part 1: Building the LLM</h3>
+  <a href="#part1">Introduction</a>
+  <a href="#part1-architecture">Architecture Decisions</a>
+  <a href="#part1-first-run">First Training Run</a>
+  <a href="#part1-eval">Evaluation Reality Check</a>
+  <a href="#part1-instruct">Instruct Model Disaster</a>
+  <a href="#part1-boundary">Boundary Tokens</a>
+  <a href="#part1-scaling-data">Scaling Up Data</a>
+  <a href="#part1-rl-path">RL Path Forward</a>
+  <a href="#part1-lessons">Lessons Learned</a>
+
+  <h3>Part 2: Scaling to 4.9M</h3>
+  <a href="#part2">Introduction</a>
+  <a href="#part2-experiment">Scaling Experiment</a>
+  <a href="#part2-results">Results</a>
+  <a href="#part2-stability">Training Stability</a>
+  <a href="#part2-comparison">Architectural Comparison</a>
+  <a href="#part2-meaning">What This Means</a>
+  <a href="#part2-takeaway">Takeaway</a>
+
+  <h3>Part 3: GRPO &amp; Gradients</h3>
+  <a href="#part3">Introduction</a>
+  <a href="#part3-sft">SFT Results</a>
+  <a href="#part3-grpo">Enter GRPO</a>
+  <a href="#part3-reversal">The Reversal</a>
+  <a href="#part3-diagnosis">Gradient Diagnosis</a>
+  <a href="#part3-fix">Freeze &amp; Focus Fix</a>
+  <a href="#part3-reward">Reward Breakdown</a>
+  <a href="#part3-proteinlm">ProteinLM Benchmark</a>
+  <a href="#part3-implications">Implications</a>
+</aside>
+
+<!-- Main Content -->
+<div class="main">
+
+  <!-- ============================================================ -->
+  <!--                    SERIES OVERVIEW                            -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="overview">
+    <span class="part-label">Series Overview</span>
+    <h1>Protein LLM: Teaching Language Models to Understand Proteins</h1>
+    <p class="part-date">March 20, 2026</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">The Project</div>
+      <p class="thesis-text">Can we teach a language model to effectively leverage protein structural embeddings &mdash; going beyond raw amino acid sequences to reason about structure, function, and evolutionary relationships &mdash; by bridging a protein encoder with an LLM?</p>
+    </div>
+
+    <p>This is a living summary of the Protein LLM project. Each section captures a phase of the work and links to the detailed deep dive below.</p>
+
+    <hr>
+
+    <h2 id="overview-architecture">The Architecture</h2>
+
+    <p>We connect two worlds: <strong>ESM-3</strong>, a protein foundation model that encodes structural and evolutionary knowledge into 1536-dimensional embeddings, and <strong>Qwen3-8B-Instruct</strong>, a general-purpose LLM. A learnable bridge (pooling + projector) translates between them. ESM-3 stays frozen; the LLM adapts via LoRA.</p>
+
+    <p>To isolate what each component contributes, we designed a <strong>four-way comparison</strong>:</p>
+
+    <table>
+      <tr><th>Approach</th><th>How protein enters the LLM</th><th>Trainable params</th></tr>
+      <tr><td><strong>Text</strong></td><td>Raw sequence as <code>&lt;protein&gt;MKTL...&lt;/protein&gt;</code> tokens</td><td>~2M (LoRA only)</td></tr>
+      <tr><td><strong>MLP</strong></td><td>ESM-3 &rarr; AttentionPooling (32 tokens) &rarr; MLP projector</td><td>~32.5M</td></tr>
+      <tr><td><strong>Perceiver</strong></td><td>ESM-3 &rarr; Perceiver Resampler (cross-attention)</td><td>~31.4M</td></tr>
+      <tr><td><strong>Flamingo</strong></td><td>ESM-3 &rarr; Perceiver &rarr; Gated cross-attention at LLM layers</td><td>~120-150M</td></tr>
+    </table>
+
+    <p>We also explored the full training pipeline: <strong>SSL</strong> (continued pre-training on biology literature) &rarr; <strong>SFT</strong> (instruction fine-tuning on protein tasks) &rarr; <strong>GRPO</strong> (reinforcement learning with verifiable rewards).</p>
+
+    <hr>
+
+    <h2 id="overview-scaling">Scaling Data: 50K &rarr; 4.9 Million Samples</h2>
+
+    <p>Our first 50K-sample run proved the architecture converges. But one data source wasn't enough. We assembled <strong>4.89 million instruction pairs</strong> from six sources.</p>
+
+    <table>
+      <tr><th>Metric</th><th>50K / Qwen3-4B</th><th>4.89M / Qwen3-8B</th><th>Change</th></tr>
+      <tr><td>eval_loss</td><td>3.64</td><td><strong>0.361</strong></td><td>-90.1%*</td></tr>
+      <tr><td>BLEU (best)</td><td>&mdash;</td><td>0.315</td><td>first measurement</td></tr>
+      <tr><td>ROUGE-L (best)</td><td>&mdash;</td><td>0.515</td><td>first measurement</td></tr>
+    </table>
+
+    <p><em>*This comparison spans both a model change (4B&rarr;8B) and data change (50K&rarr;4.89M). On the same 8B model, data scaling alone gave an 81% reduction (1.91&rarr;0.361).</em></p>
+
+    <div class="callout">
+      <div class="callout-label">Important Update</div>
+      <p>The 4.89M dataset was later refined to <strong>1.82M samples</strong> after discovering protein overlap between train and evaluation splits. The eval_loss numbers above may be inflated by this leakage.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="overview-rl">Reinforcement Learning: The Gradient Routing Problem</h2>
+
+    <p>With a strong SFT checkpoint in hand, we applied <strong>GRPO</strong> using verifiable rewards. Then came the surprise &mdash; the rankings <strong>completely inverted</strong>:</p>
+
+    <table>
+      <tr><th>Model</th><th>SFT eval_loss</th><th>GRPO Reward (best)</th></tr>
+      <tr><td>ESM3+MLP</td><td><strong>0.361</strong> (better)</td><td>0.780 (worse)</td></tr>
+      <tr><td>Text-only</td><td>1.207 (worse)</td><td><strong>0.832</strong> (better)</td></tr>
+    </table>
+
+    <p><strong>The gradient routing problem:</strong> During GRPO, gradients flow predominantly to either the projector OR the LoRA adapters &mdash; not both effectively. SFT's dense per-token loss flows naturally through the entire graph; GRPO's sparse scalar reward creates competition.</p>
+
+    <hr>
+
+    <h2 id="overview-next">What's Next</h2>
+
+    <h3>SSL: Domain Pre-Training</h3>
+    <p>Continued pre-training on 50GB of biology literature using Qwen3.5-4B BASE with LoRA to inject biological domain knowledge before instruction tuning.</p>
+
+    <h3>Perceiver &amp; Flamingo at Scale</h3>
+    <p>Both architectures are implemented but untested at 4.89M scale. Cross-attention (Perceiver) may exhibit different gradient routing during GRPO.</p>
+
+    <h3>Resolving the Gradient Routing Problem</h3>
+    <ol>
+      <li><strong>Two-stage GRPO</strong> &mdash; freeze projector first, then unfreeze</li>
+      <li><strong>Gradient balancing</strong> &mdash; GradNorm or PCGrad</li>
+      <li><strong>Architectural solutions</strong> &mdash; Perceiver/Flamingo may route gradients differently</li>
+    </ol>
+
+    <hr>
+
+    <h2 id="overview-timeline">Timeline</h2>
+
+    <table>
+      <tr><th>Date</th><th>Phase</th><th>Key Result</th></tr>
+      <tr><td>Feb 2026</td><td>Architecture &amp; first training</td><td>ESM3+MLP converges; 50K SFT eval_loss=3.64</td></tr>
+      <tr><td>Mar 7</td><td>Data scaling</td><td>4.89M samples; eval_loss 0.361 (-90.1%)</td></tr>
+      <tr><td>Mar 13</td><td>GRPO reinforcement learning</td><td>Gradient routing problem; text 0.832 vs MLP 0.582</td></tr>
+      <tr><td>Mar 16</td><td>SSL pipeline &amp; curated data</td><td>50GB SSL corpus + 1.82M curated SFT dataset</td></tr>
+      <tr><td>TBD</td><td>Four-way comparison</td><td>Text vs MLP vs Perceiver vs Flamingo at scale</td></tr>
+      <tr><td>TBD</td><td>Gradient routing fix</td><td>Two-stage GRPO / gradient balancing</td></tr>
+    </table>
+
+    <div class="resources">
+      <strong>Project Repository:</strong> <a href="https://github.com/Jinyeop3110/Post_Training_Protein_LLM" target="_blank">Post_Training_Protein_LLM</a><br>
+      <strong>Key References:</strong>
+      <a href="https://github.com/facebookresearch/esm" target="_blank">ESM-3</a> &middot;
+      <a href="https://arxiv.org/abs/2306.08018" target="_blank">Mol-Instructions (ICLR 2024)</a>
+    </div>
+  </div>
+
+
+  <!-- ============================================================ -->
+  <!--              PART 1: BUILDING THE LLM                        -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="part1">
+    <span class="part-label">Part 1</span>
+    <h1>Building a Protein-Understanding LLM: Trials, Errors, and Breakthroughs</h1>
+    <p class="part-date">February 25, 2026</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">The Question</div>
+      <p class="thesis-text">What happens when you bridge protein language models with large language models? Can we make an LLM that leverages structural protein embeddings, not just parses their sequences?</p>
+    </div>
+
+    <h2>The Beginning: Why This Project?</h2>
+
+    <p>It started with a simple observation. Protein language models like ESM-3 have learned remarkably rich representations from millions of protein sequences &mdash; structural features, evolutionary constraints, functional signals &mdash; all encoded in high-dimensional embeddings. Meanwhile, LLMs excel at reasoning, following instructions, and generating coherent explanations. But they exist in separate worlds.</p>
+
+    <p>The question that kept nagging me: <strong>what if we could bridge these two worlds?</strong></p>
+
+    <p>Not by training a protein model from scratch (prohibitively expensive), but by <em>post-training</em> &mdash; freezing the protein encoder, attaching a learnable bridge, and teaching an LLM to interpret protein embeddings alongside natural language.</p>
+
+    <hr>
+
+    <h2 id="part1-architecture">Day 1: Architecture Decisions</h2>
+
+    <h3>The Core Design</h3>
+
+    <p>We settled on a modular pipeline:</p>
+    <ol>
+      <li><strong>Protein Encoder</strong> (frozen): ESM-3 small with 1.4B parameters producing 1536-dimensional embeddings</li>
+      <li><strong>Attention Pooling</strong>: Compress variable-length residue embeddings into 32 fixed tokens</li>
+      <li><strong>MLP Projector</strong> (trainable): Map 1536-dim protein space into 2560-dim LLM input space</li>
+      <li><strong>LLM</strong>: Qwen3-4B with LoRA on all linear layers</li>
+    </ol>
+
+    <div class="callout">
+      <div class="callout-label">Key Decision</div>
+      <p>Start with 32 pooled tokens. Too few and we lose protein information; too many and we blow up sequence length. 32 seemed like a reasonable middle ground &mdash; equivalent to roughly 100 words of text context.</p>
+    </div>
+
+    <h3>The Three Encoding Approaches</h3>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-title">Text-Based</div>
+        <p>Raw sequence as &lt;protein&gt;MKTL...&lt;/protein&gt; &mdash; the simplest baseline. No ESM-3, just treating proteins as weird text.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">ESM-3 + MLP</div>
+        <p>ESM-3 embeddings &rarr; Attention Pooling &rarr; MLP Projector. Our main approach.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">ESM-3 + Perceiver</div>
+        <p>ESM-3 embeddings &rarr; Perceiver Resampler. ~29M parameters, with latent_dim decoupling for better information compression.</p>
+      </div>
+    </div>
+
+    <p><em>We later added a fourth approach &mdash; Flamingo-style gated cross-attention &mdash; bringing the comparison to four pathways.</em></p>
+
+    <hr>
+
+    <h2 id="part1-first-run">Day 2: First Training Run &mdash; It Works!</h2>
+
+    <h3>The Mol-Instructions Dataset</h3>
+
+    <p>We started with Mol-Instructions, a curated set of 505K protein instruction pairs:</p>
+
+    <table>
+      <tr><th>Task</th><th>Samples</th><th>Description</th></tr>
+      <tr><td>Catalytic Activity</td><td>53K</td><td>Predict enzyme reactions</td></tr>
+      <tr><td>Protein Function</td><td>114K</td><td>Predict biological roles</td></tr>
+      <tr><td>General Description</td><td>87K</td><td>Describe protein properties</td></tr>
+      <tr><td>Domain/Motif</td><td>45K</td><td>Identify structural domains</td></tr>
+      <tr><td>Protein Design</td><td>196K</td><td>Generate sequences</td></tr>
+    </table>
+
+    <h3>First Results</h3>
+
+    <table>
+      <tr><th>Run</th><th>Samples</th><th>Loss (Start &rarr; End)</th><th>Duration</th></tr>
+      <tr><td>500-sample test</td><td>500</td><td>17.35 &rarr; 4.08</td><td>~6 min</td></tr>
+      <tr><td>10K baseline</td><td>10,000</td><td>35.80 &rarr; 27.84</td><td>~96 min</td></tr>
+      <tr><td>50K full</td><td>50,000</td><td>34.25 &rarr; 14.77</td><td>~2.35 hr</td></tr>
+    </table>
+
+    <p><strong>The training converged.</strong> On 8x H100 80GB GPUs, the 50K run used only ~39 GB memory with an effective batch size of 32.</p>
+
+    <hr>
+
+    <h2 id="part1-eval">Day 2-3: The Evaluation Reality Check</h2>
+
+    <p>The vanilla Qwen3-4B set a floor &mdash; essentially random performance:</p>
+    <ul>
+      <li><strong>GO Term Prediction</strong>: F1 Micro = 0.047</li>
+      <li><strong>PPI Prediction</strong>: AUROC = 0.51 (literally random)</li>
+      <li><strong>Stability Prediction</strong>: Pearson r = 0.094</li>
+    </ul>
+
+    <p>After SFT, the numbers didn't improve much. Some got <em>worse</em>.</p>
+
+    <div class="callout">
+      <div class="callout-label">Painful Discovery #1</div>
+      <p>GO prediction <em>degraded</em> after SFT. The vanilla model at least guessed some correct terms. After SFT, the model predicted too few terms (or none at all). F1 went from 0.047 to 0.0.</p>
+    </div>
+
+    <h3>The PPI Bias Problem</h3>
+    <p>All models defaulted to predicting "No interaction" for every protein pair. High specificity (0.9-1.0), terrible recall (0.2 or 0.0). The silver lining: AUROC improved with scale (0.51 &rarr; 0.60 &rarr; 0.70), suggesting better internal representations.</p>
+
+    <h3>What This Told Us</h3>
+    <ol>
+      <li><strong>The architecture works</strong> &mdash; training converges, memory is manageable</li>
+      <li><strong>SFT alone isn't enough</strong> &mdash; instruction-tuning doesn't automatically teach structured output</li>
+      <li><strong>Scale helps internal representations</strong> &mdash; the knowledge is there, it just doesn't surface in generation</li>
+    </ol>
+
+    <hr>
+
+    <h2 id="part1-instruct">Day 4: The Instruct Model Disaster</h2>
+
+    <p>We launched an 8B training run overnight. Loss looked fine. But generation was garbage:</p>
+
+    <pre><code>KQKQKQKQKQKQKQKQ...
+SSSSSSSSSSSSSSSS...
+(empty string)</code></pre>
+
+    <p>After hours of debugging: the config had <code>path: Qwen/Qwen3-8B</code> &mdash; the <strong>base</strong> model, not <code>Qwen/Qwen3-8B-Instruct-2507</code>.</p>
+
+    <div class="callout">
+      <div class="callout-label">Why This Matters</div>
+      <p><strong>Base models don't know how to stop.</strong> They never learned instruction-following, chat templates, or turn-taking. The LoRA adapter trained on the base model couldn't be transferred to Instruct. The entire overnight run was wasted.</p>
+    </div>
+
+    <p>Fix: All model configs now use <code>-it</code> suffix. A simple naming convention that would have saved 8 hours of H100 time.</p>
+
+    <hr>
+
+    <h2 id="part1-boundary">Day 4-5: Protein Boundary Tokens</h2>
+
+    <p>The ESM-3 embedding path used a single <code>&lt;|protein_embed|&gt;</code> placeholder. The LLM had no explicit signal for where the protein representation starts and ends.</p>
+
+    <p>Solution &mdash; structured boundary tokens:</p>
+
+    <pre><code>&lt;|protein_start|&gt;  &lt;|protein_embed|&gt;  &lt;|protein_end|&gt;
+     ID 151669         ID 151670          ID 151671</code></pre>
+
+    <pre><code>[..., text, START_embed, prot_1, prot_2, ..., prot_32, END_embed, text, ...]
+         &uarr; LLM learns    &uarr; 32 ESM-3 pooled tokens      &uarr; LLM learns
+         what this means  (replaced at forward)         what this means</code></pre>
+
+    <p>The start/end tokens remain as regular LLM embeddings. The middle tokens get replaced by ESM-3's pooled output. All three are masked from loss computation.</p>
+
+    <hr>
+
+    <h2 id="part1-scaling-data">Day 6: Scaling Up Data</h2>
+
+    <h3>Why 505K Wasn't Enough</h3>
+    <p>Mol-Instructions covers five tasks well, but they all come from one paper's annotation pipeline. We needed different annotation styles, more tasks, and scale.</p>
+
+    <h3>The Six Sources</h3>
+
+    <table>
+      <tr><th>Source</th><th>Records</th><th>What It Brings</th></tr>
+      <tr><td><strong>Mol-Instructions</strong></td><td>299K</td><td>Curated instruction pairs (ICLR 2024)</td></tr>
+      <tr><td><strong>Swiss-Prot</strong></td><td>1.08M</td><td>Gene prediction, organism prediction, function</td></tr>
+      <tr><td><strong>ProteinLMDataset</strong></td><td>826K</td><td>Subunit, PTM, disease, tissue, induction</td></tr>
+      <tr><td><strong>SwissProtCLAP</strong></td><td>511K</td><td>Rich paragraph-length descriptions</td></tr>
+      <tr><td><strong>ProtDescribe</strong></td><td>1.76M</td><td>Naming, similarity, location, function</td></tr>
+      <tr><td><strong>Protein2Text-QA</strong></td><td>52K</td><td>44,915 unique questions &mdash; highest diversity</td></tr>
+    </table>
+
+    <p><strong>Total: 4.52 million training records.</strong></p>
+
+    <h3>Sequence Length Distribution</h3>
+
+    <div class="fig">
+      <img src="/assets/img/projects/protein_seq_length_histogram.png" alt="Protein Sequence Length Distribution" loading="lazy">
+      <p class="figcaption">Distribution of protein sequence lengths across the combined 4.5M dataset. Median: 306 amino acids.</p>
+    </div>
+
+    <table>
+      <tr><th>Statistic</th><th>Value</th></tr>
+      <tr><td>Median</td><td>306 AA</td></tr>
+      <tr><td>Mean</td><td>339 AA</td></tr>
+      <tr><td>5th percentile</td><td>89 AA</td></tr>
+      <tr><td>95th percentile</td><td>751 AA</td></tr>
+      <tr><td>Max</td><td>1,000 AA</td></tr>
+    </table>
+
+    <div class="callout">
+      <div class="callout-label">Watch Out</div>
+      <p><strong>Single-word outputs:</strong> 31% of ProteinLMDataset subunit records have outputs like just "Monomer." <strong>12-16% duplicates</strong> from template augmentation. <strong>72.8% sequence overlap</strong> across sources &mdash; same proteins, different analytical contexts.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="part1-rl-path">The RL Path Forward</h2>
+
+    <p>SFT established the foundation, but we need task-specific rewards to push beyond "reasonable-sounding but wrong." We implemented <strong>GRPO</strong> with four verifiable reward functions &mdash; GO term F1, stability prediction accuracy, PPI interaction detection, and ESMFold structural quality assessment.</p>
+
+    <hr>
+
+    <div class="conclusion" id="part1-lessons">
+      <h2>Lessons Learned</h2>
+      <ol>
+        <li><strong>Naming conventions save hours.</strong> The <code>-it</code> suffix on Instruct models would have prevented an overnight disaster.</li>
+        <li><strong>Evaluation comes first.</strong> We spent days on architecture before realizing our evaluation was incomplete.</li>
+        <li><strong>SFT is necessary but not sufficient.</strong> Task-specific rewards (RL) are needed for downstream metrics.</li>
+        <li><strong>Data diversity likely matters alongside scale.</strong> 300K from one source &rarr; linguistic tics. 4.5M from six sources should help.</li>
+        <li><strong>Proteins are hard.</strong> Longer than typical text, different statistical properties, domain-specific evaluation.</li>
+      </ol>
+    </div>
+  </div>
+
+
+  <!-- ============================================================ -->
+  <!--              PART 2: SCALING TO 4.9M                         -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="part2">
+    <span class="part-label">Part 2</span>
+    <h1>Scaling to 4.9 Million Samples</h1>
+    <p class="part-date">March 7, 2026</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">The Big Picture</div>
+      <p class="thesis-text">We scaled our protein-LLM training from 50K samples on Qwen3-4B to 4.9 million samples on Qwen3-8B across six sources. Combined, these changes reduced eval_loss from 3.64 to 0.361.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Important Update (March 2026)</div>
+      <p>The 4.89M combined dataset was later refined to <strong>1.82M samples</strong> after discovering significant protein overlap between train and evaluation splits. <strong>All results below reflect the original 4.89M training and may not hold on the curated dataset.</strong></p>
+    </div>
+
+    <hr>
+
+    <h2 id="part2-experiment">The Scaling Experiment</h2>
+
+    <table>
+      <tr><th>What Changed</th><th>Before</th><th>After</th></tr>
+      <tr><td>Training samples</td><td>50K (one source)</td><td>4.89M (six sources)</td></tr>
+      <tr><td>Dataset diversity</td><td>5 task types</td><td>15+ task types</td></tr>
+      <tr><td>Annotation styles</td><td>Template-based only</td><td>Paragraphs, QA, structured</td></tr>
+      <tr><td>Total training steps</td><td>2,595</td><td>28,941</td></tr>
+    </table>
+
+    <p>Everything else stayed constant: Qwen3-8B-Instruct, ESM-3 small (frozen), MLP projector, LoRA on all linear layers, 8x H100 GPUs with FSDP.</p>
+
+    <hr>
+
+    <h2 id="part2-results">The Results</h2>
+
+    <h3>Loss Dropped Off a Cliff</h3>
+
+    <div class="fig">
+      <img src="/assets/img/projects/mlp_combined_train_loss.png" alt="Training Loss Over Time" loading="lazy">
+      <p class="figcaption">Training loss showing continued improvement through epoch 1. The combined dataset produces dramatically lower loss than single-source training.</p>
+    </div>
+
+    <table>
+      <tr><th>Metric</th><th>Combined 4.9M (MLP)</th><th>Text-Only on 4.9M</th><th>Mol-Instr Only (505K)</th></tr>
+      <tr><td><strong>eval_loss</strong></td><td><strong>0.361</strong></td><td>1.207</td><td>1.908</td></tr>
+      <tr><td><strong>token_avg_loss</strong></td><td><strong>0.366</strong></td><td>1.643</td><td>2.282</td></tr>
+      <tr><td>MLP advantage vs text</td><td>&mdash;</td><td>70.1% lower</td><td>81.1% lower</td></tr>
+    </table>
+
+    <div class="fig">
+      <img src="/assets/img/projects/mlp_combined_eval_loss.png" alt="Eval Loss Comparison" loading="lazy">
+      <p class="figcaption">Eval loss at epoch 1 checkpoint: 0.361 &mdash; dramatically lower than mol-instructions-only (1.908).</p>
+    </div>
+
+    <h3>The Two Biggest Levers</h3>
+
+    <table>
+      <tr><th>Date</th><th>Change</th><th>eval_loss</th><th>Improvement</th></tr>
+      <tr><td>Feb 20</td><td>First run (Qwen3-4B, 50K)</td><td>3.64</td><td>baseline</td></tr>
+      <tr><td>Feb 23</td><td>Scale model: 4B &rarr; 8B</td><td>1.94</td><td>47%</td></tr>
+      <tr><td>Feb 27</td><td>Text-only baseline (8B, 505K)</td><td>2.42</td><td>33%</td></tr>
+      <tr><td>Mar 5</td><td>MLP on full mol-instructions</td><td>1.91</td><td>48%</td></tr>
+      <tr><td><strong>Mar 7</strong></td><td><strong>Combined 4.89M dataset</strong></td><td><strong>0.361</strong></td><td><strong>90%</strong></td></tr>
+    </table>
+
+    <h3>First Generation Quality Numbers</h3>
+
+    <table>
+      <tr><th>Metric</th><th>Best Value (step 9,250)</th></tr>
+      <tr><td><strong>BLEU</strong></td><td><strong>0.315</strong></td></tr>
+      <tr><td><strong>ROUGE-L</strong></td><td><strong>0.515</strong></td></tr>
+    </table>
+
+    <p>Scores declined slightly by the final checkpoint (step 9,750: BLEU 0.255, ROUGE-L 0.481), suggesting some overfitting.</p>
+
+    <hr>
+
+    <h2 id="part2-stability">Training Stability</h2>
+
+    <h3>Gradient Norms</h3>
+
+    <div class="fig">
+      <img src="/assets/img/projects/mlp_combined_grad_norms.png" alt="Gradient Norms" loading="lazy">
+      <p class="figcaption">Gradient norm trajectories. The combined run stabilizes to a mean of 0.627 after initial spikes in the first 100 steps.</p>
+    </div>
+
+    <p>Brief instability early on (steps 10-100), then rock-solid stability. Mean gradient norm: 0.627 &mdash; lower than both mol-instructions-only (1.67) and text baseline (1.48). More diverse data actually made optimization <em>smoother</em>.</p>
+
+    <hr>
+
+    <h2 id="part2-comparison">Architectural Comparison</h2>
+
+    <p>On 50K data, MLP and Perceiver achieve nearly identical performance: eval_loss 1.942 vs 1.952 (MLP wins by 0.5%).</p>
+
+    <table>
+      <tr><th>Approach</th><th>Projector Params</th><th>50K eval_loss</th><th>4.89M eval_loss</th></tr>
+      <tr><td>Text-only</td><td>&mdash; (LoRA only)</td><td>2.415</td><td>1.207</td></tr>
+      <tr><td><strong>MLP</strong></td><td><strong>30.5M</strong></td><td><strong>1.942</strong></td><td><strong>0.361</strong></td></tr>
+      <tr><td>Perceiver</td><td>29.4M</td><td>1.952</td><td>Not yet run</td></tr>
+      <tr><td>Flamingo</td><td>~120-150M</td><td>&mdash;</td><td>Not yet run</td></tr>
+    </table>
+
+    <hr>
+
+    <h2 id="part2-meaning">What This Means</h2>
+
+    <h3>Data Diversity Hypothesis: Supported</h3>
+    <p>Combining six sources produced substantially lower loss than single-source training. <strong>Scaling data from diverse sources yielded larger gains than scaling model size.</strong></p>
+
+    <p>72% of proteins appear in multiple sources but described differently each time. Multiple annotation perspectives help generalization &mdash; though disentangling diversity from scale requires further experiments.</p>
+
+    <h3>ESM-3 Embeddings Show a Clear SFT Advantage</h3>
+    <p>On 4.89M: eval_loss 0.361 (ESM-3+MLP) vs 1.207 (text-only). The structural information in ESM-3's 1536-dim embeddings appears difficult to recover from sequences alone.</p>
+
+    <hr>
+
+    <div class="conclusion" id="part2-takeaway">
+      <h2>The Takeaway</h2>
+      <p><strong>Data diversity and scale are among the most impactful levers</strong> for protein LLM SFT performance.</p>
+      <ul>
+        <li><strong>eval_loss: 1.91 &rarr; 0.361</strong> on same 8B model (81% reduction from data scaling)</li>
+        <li><strong>BLEU: 0.315, ROUGE-L: 0.515</strong> at best checkpoint</li>
+        <li>33.7% through training (headroom remains)</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ============================================================ -->
+  <!--              PART 3: GRPO & GRADIENT ROUTING                 -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="part3">
+    <span class="part-label">Part 3</span>
+    <h1>Teaching a Protein LLM with RL: The Gradient Routing Problem</h1>
+    <p class="part-date">March 13, 2026</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">The Question</div>
+      <p class="thesis-text">When a multimodal protein LLM achieves strong supervised fine-tuning loss, why does it struggle with reinforcement learning &mdash; and what does gradient flow tell us about the answer?</p>
+    </div>
+
+    <p>Over the past month, I built a multimodal protein language model &mdash; ESM-3 encodes sequences into 1536-dimensional structural embeddings, passing through attention pooling (32 tokens) and an MLP projector into Qwen3-8B-Instruct. LoRA adapts the LLM; ESM-3 stays frozen. ~32.5M trainable parameters.</p>
+
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig1_schematic_overview.png" alt="Four-pathway architecture schematic" loading="lazy">
+      <p class="figcaption">Schematic overview of the four-pathway architecture.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="part3-sft">SFT Results: The MLP Advantage</h2>
+
+    <table>
+      <tr><th>Metric</th><th>ESM3+MLP</th><th>Text-Only</th><th>MLP Advantage</th></tr>
+      <tr><td>Best eval_loss</td><td><strong>0.361</strong></td><td>1.207</td><td>70.1% lower</td></tr>
+      <tr><td>Gradient norm (mean)</td><td>0.627</td><td>2.365</td><td>3.8x lower</td></tr>
+    </table>
+
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig5_sft_loss_curves.png" alt="SFT eval loss curves" loading="lazy">
+      <p class="figcaption">SFT eval loss curves. MLP converged smoothly; text-only showed degradation after step 8000.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="part3-grpo">From Imitation to Reasoning: Enter GRPO</h2>
+
+    <p>Group Relative Policy Optimization (GRPO): for each prompt, generate a group of completions (8-16). A reward function scores each, and the model updates toward better-rewarded outputs using policy gradient. Rewards are normalized <em>within</em> each group.</p>
+
+    <p>For structure quality, we designed a multi-component reward:</p>
+    <ul>
+      <li><strong>Quality alignment</strong> (0.4): Correct structural quality categorization based on pLDDT</li>
+      <li><strong>Numerical accuracy</strong> (0.3): Predicted vs actual pLDDT closeness</li>
+      <li><strong>Category match</strong> (0.3): Quality category (high/medium/low/very low) match</li>
+      <li><strong>Format bonus</strong> (0.1): Expected JSON format compliance</li>
+    </ul>
+
+    <p>Training data: 5,878 protein sequences folded by ESMFold to produce ground-truth structural quality metrics. We ran 13 GRPO experiments over three days.</p>
+
+    <hr>
+
+    <h2 id="part3-reversal">The Reversal: Text Wins at RL</h2>
+
+    <p>The text-only model (the <em>worse</em> SFT model) rapidly learned structure quality assessment: <strong>0.832</strong> mean reward, near-perfect format compliance, and remarkably calibrated pLDDT predictions (79.1 predicted vs 79.7 actual).</p>
+
+    <p>The MLP model showed <strong>0.582</strong> reward in its initial configuration: format compliance stuck at 65%, pLDDT underestimated (67.9 vs 79.7). A separate run reached 0.780, but text-only still led.</p>
+
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig13_grpo_structure_reward_curves.png" alt="GRPO reward curves" loading="lazy">
+      <p class="figcaption">GRPO reward curves showing text-only outperforming MLP. The model with better SFT is worse at RL.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="part3-diagnosis">Diagnosing the Problem: Follow the Gradients</h2>
+
+    <table>
+      <tr><th>Model / Task</th><th>LoRA Gradients</th><th>Multimodal Gradients</th></tr>
+      <tr><td>MLP, Structure GRPO</td><td>~0 (frozen out)</td><td>0.247</td></tr>
+      <tr><td>MLP, ProteinLM GRPO</td><td>0.826</td><td>0.0 (frozen out)</td></tr>
+      <tr><td>Text-only, Structure GRPO</td><td>0.476-0.493</td><td>N/A</td></tr>
+    </table>
+
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig16_grpo_structure_grad_norms.png" alt="Gradient norms showing the routing problem" loading="lazy">
+      <p class="figcaption">Gradient norms revealing the routing problem: one subsystem captures signal, starving the other.</p>
+    </div>
+
+    <p>This is the <strong>gradient routing problem</strong>: gradients flow predominantly to one subsystem during GRPO, largely starving the other. The "winner" depends on the reward function and task characteristics.</p>
+
+    <p>During SFT, every token contributes to loss, distributing gradients through both projector and LoRA. During GRPO, the reward is a single scalar &mdash; creating a "winner-take-all" dynamic where the steepest local descent captures the signal.</p>
+
+    <hr>
+
+    <h2 id="part3-fix">The Fix (Partial): Freeze and Focus</h2>
+
+    <p>Freeze the multimodal projector completely and only update LoRA during GRPO. This eliminates the competition:</p>
+
+    <table>
+      <tr><th>Configuration</th><th>Mean Reward</th><th>Format Bonus</th><th>LoRA Grad</th><th>MM Grad</th></tr>
+      <tr><td>Text-only (standard)</td><td><strong>0.832</strong></td><td>0.099</td><td>0.476</td><td>0.0</td></tr>
+      <tr><td>MLP best run</td><td>0.780</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+      <tr><td>MLP frozen-MM</td><td>0.774</td><td>0.095</td><td>0.071</td><td>0.0</td></tr>
+      <tr><td>MLP frozen-MM + focal</td><td>0.725</td><td>0.095</td><td>0.119</td><td>0.0</td></tr>
+      <tr><td>MLP standard (gradient-starved)</td><td>0.582</td><td>0.065</td><td>~0</td><td>0.247</td></tr>
+    </table>
+
+    <p>Frozen-MM: reward jumps from 0.582 to 0.774. Format compliance from 65% to 95%. The gradient routing problem was the primary bottleneck.</p>
+
+    <p>But text-only still wins (0.832). Even with projector frozen, LoRA gradients (0.071-0.119) are smaller than text-only (0.476) &mdash; the 32-token compression creates an information bottleneck.</p>
+
+    <hr>
+
+    <h2 id="part3-reward">Reward Breakdown: Component-Level Analysis</h2>
+
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig14_grpo_structure_reward_breakdown.png" alt="Reward component breakdown" loading="lazy">
+      <p class="figcaption">Reward component breakdown: text-only outperforms across all four components.</p>
+    </div>
+
+    <p>Biggest gaps in numerical accuracy (text: 0.185, standard MLP: 0.086) and category match (text: 0.197, standard MLP: 0.104). Quality alignment closer (text: 0.351, standard MLP: 0.326).</p>
+
+    <p><strong>pLDDT calibration</strong>: Actual mean 79.7. Text-only predicts 79.1 (remarkably close). Frozen-MM overestimates at 85.1. Standard MLP underestimates at 67.9. The projector embeddings contain strong signal but GRPO fails to calibrate it properly.</p>
+
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig15_grpo_structure_format_rate.png" alt="Format compliance" loading="lazy">
+      <p class="figcaption">Format compliance: text-only reaches ~100% early. Standard MLP stuck at 74-76%. Frozen-MM recovers to ~95%.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="part3-proteinlm">ProteinLM Benchmark: A Negative Result</h2>
+
+    <p>GRPO on 849 multiple-choice protein questions: clear negative result. Neither 3-epoch (reward 0.695) nor 10-epoch (reward 0.676) showed improvement. 37-42% of groups had zero reward standard deviation &mdash; identical completions within each group meant zero gradient signal. Nearly half the compute was wasted.</p>
+
+    <p>Interestingly, gradient routing was <em>reversed</em>: LoRA received healthy gradients (0.8) while multimodal gradients were exactly zero.</p>
+
+    <hr>
+
+    <h2 id="part3-implications">What This Means for Multimodal RL</h2>
+
+    <p>In SFT, every token contributes to loss, and chain rule distributes gradients through both projector and LoRA. In GRPO, the sparse scalar reward creates competition &mdash; a "winner-take-all" dynamic resembling gradient conflicts in multi-task learning.</p>
+
+    <p><strong>Scope caveat:</strong> Observed on two GRPO tasks with one architecture (MLP projector). Generalization to other multimodal RL settings remains untested.</p>
+
+    <h3>What's Next</h3>
+    <ol>
+      <li><strong>Two-stage GRPO.</strong> Frozen projector first (format + basic reward via LoRA), then unfreeze for structural refinement.</li>
+      <li><strong>Gradient balancing.</strong> GradNorm or PCGrad to prevent winner-take-all dynamics.</li>
+      <li><strong>The Perceiver pathway.</strong> Cross-attention may produce different gradient routing behavior.</li>
+    </ol>
+
+    <div class="conclusion">
+      <h2>The Central Paradox</h2>
+      <p>Our best SFT model (MLP, eval_loss 0.361) produces our worst GRPO learner (reward 0.582), while our weaker SFT model (text-only, eval_loss 1.207) produces our best GRPO learner (reward 0.832). This SFT&rarr;RL inversion is the key challenge for the next phase.</p>
+    </div>
+
+    <div class="resources">
+      <strong>Project Repository:</strong> <a href="https://github.com/Jinyeop3110/Post_Training_Protein_LLM" target="_blank">Post_Training_Protein_LLM</a><br>
+      <strong>Key References:</strong>
+      <a href="https://github.com/facebookresearch/esm" target="_blank">ESM-3</a> &middot;
+      <a href="https://arxiv.org/abs/2306.08018" target="_blank">Mol-Instructions (ICLR 2024)</a>
+      <br><br>
+      <em>This analysis covers 4 SFT and 13 GRPO experiments run between March 6-13, 2026, on 8x H100 GPUs. All models use Qwen3-8B-Instruct-2507 with LoRA (r=8). The combined SFT dataset contains 4.89M instruction-response pairs from six protein data sources.</em>
+    </div>
+  </div>
+
+</div><!-- end .main -->
+
+<script>
+  // Sidebar active link highlighting on scroll
+  const links = document.querySelectorAll('.sidebar a[href^="#"]');
+  const sections = [];
+  links.forEach(link => {
+    const id = link.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ el, link });
+  });
+
+  function updateActive() {
+    let current = sections[0];
+    const scrollY = window.scrollY + 100;
+    for (const s of sections) {
+      if (s.el.offsetTop <= scrollY) current = s;
+    }
+    links.forEach(l => l.classList.remove('active'));
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateActive);
+  updateActive();
+
+  // Smooth scroll
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        window.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' });
+      }
+      // Close mobile sidebar
+      document.querySelector('.sidebar').classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
