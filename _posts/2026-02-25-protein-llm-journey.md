@@ -2,7 +2,7 @@
 layout: post
 title: "Building a Protein-Understanding LLM: A Week of Trials, Errors, and Breakthroughs"
 description: >
-  The story of building a multimodal LLM that truly understands proteins—from architecture decisions to debugging disasters to assembling 4.5 million training records.
+  The story of building a multimodal LLM that processes protein embeddings alongside natural language—from architecture decisions to debugging disasters to assembling 4.5 million training records.
 date: 2026-02-25
 categories: [research]
 tags: [llm, protein, multimodal, esm3, rl]
@@ -10,7 +10,7 @@ tags: [llm, protein, multimodal, esm3, rl]
 
 <div class="central-thesis">
   <div class="thesis-label">The Question</div>
-  <p class="thesis-text">What happens when you bridge protein language models with large language models? Can we make an LLM that truly <em>understands</em> proteins, not just parses their sequences?</p>
+  <p class="thesis-text">What happens when you bridge protein language models with large language models? Can we make an LLM that leverages structural protein embeddings, not just parses their sequences?</p>
 </div>
 
 ## The Beginning: Why This Project?
@@ -34,7 +34,7 @@ We settled on a modular pipeline:
 1. **Protein Encoder** (frozen): ESM-3 small with 1.4B parameters producing 1536-dimensional embeddings
 2. **Attention Pooling**: Compress variable-length residue embeddings into 32 fixed tokens
 3. **MLP Projector** (trainable): Map 1536-dim protein space into 2560-dim LLM input space
-4. **LLM**: Qwen3-4B with LoRA on key/value matrices
+4. **LLM**: Qwen3-4B with LoRA on all linear layers (attention and MLP)
 
 The idea is elegant: ESM-3 handles the protein understanding, the projector translates between representation spaces, and the LLM handles reasoning and generation. We keep ESM-3 frozen to preserve its hard-won protein knowledge, and use LoRA to efficiently adapt the LLM.
 
@@ -58,11 +58,13 @@ We actually designed three approaches to compare:
   </div>
   <div class="pillar">
     <div class="pillar-title">ESM-3 + Perceiver</div>
-    <p>ESM-3 embeddings → Perceiver Resampler. More parameters (130M), potentially better information compression.</p>
+    <p>ESM-3 embeddings → Perceiver Resampler. ~29M parameters, comparable to MLP, with latent_dim decoupling for potentially better information compression.</p>
   </div>
 </div>
 
-The three-way comparison would be our core thesis experiment. But first, we had to make anything work at all.
+*We later added a fourth approach — [Flamingo-style gated cross-attention](/research/2026-03-13-protein-llm-grpo-gradient-routing/) — bringing the comparison to four pathways.*
+
+The four-way comparison would be our core thesis experiment. But first, we had to make anything work at all.
 
 ---
 
@@ -254,54 +256,21 @@ The distribution peaks at 150-350 amino acids (typical single-domain proteins) w
 
 ## The RL Path Forward
 
-SFT established the foundation, but the evaluation results made clear: we need task-specific rewards to push beyond "reasonable-sounding but wrong" predictions.
+SFT established the foundation, but the evaluation results made clear: we need task-specific rewards to push beyond "reasonable-sounding but wrong" predictions. We implemented **GRPO** (Group Relative Policy Optimization) with four verifiable reward functions — GO term F1, stability prediction accuracy, PPI interaction detection, and ESMFold structural quality assessment. No reward model needed, just computable metrics from model outputs.
 
-### GRPO with Verifiable Rewards
-
-We implemented four reward functions for Group Relative Policy Optimization:
-
-**GO Term Prediction**
-```
-Reward = F1 score between predicted and ground truth GO terms
-- Regex extracts GO:\d{7} patterns
-- Partial match (2/3 correct): reward = 0.80
-- Exact match: reward = 1.00
-```
-
-**Stability/ddG Prediction**
-```
-Reward = exp(-error² / 2σ²) with σ=1.0 kcal/mol
-- Error of 0.2 kcal/mol: reward = 0.98
-- Error of 1.0 kcal/mol: reward = 0.61
-- No parseable number: reward = 0.00
-```
-
-**Structure Quality Assessment**
-```
-Reward = 0.4×(quality alignment) + 0.3×(pLDDT accuracy) + 0.3×(category match)
-- Validates "well-folded" claims against actual pLDDT
-- Gaussian on numerical prediction error
-```
-
-The pipeline: SFT checkpoint → GRPO training → Final model. No reward model needed—just verifiable metrics computed from model outputs.
+The full GRPO story — including a surprising reversal where text-only outperforms ESM-3 — is told in [Part 3](/research/2026-03-13-protein-llm-grpo-gradient-routing/).
 
 ---
 
 ## Current State and What's Next
 
-### What Works Now
+### Where This Leads
 
-1. **Full pipeline functional**: ESM-3 + Qwen3 trains stably, evaluates correctly, checkpoints properly
-2. **4.5M training dataset**: Six sources, schema-validated, length-filtered
-3. **Three encoding approaches**: Text, MLP projector, Perceiver Resampler—ready for comparison
-4. **GRPO rewards implemented**: GO, PPI, Stability, ESMFold structural quality
+The architecture works, the data pipeline works, and the evaluation framework is in place. The next chapters of this story:
 
-### Immediate Priorities
-
-1. **Re-run 8B training** with fixed Instruct model and boundary tokens
-2. **Three-way comparison** (text vs MLP vs Perceiver) on GO/PPI/Stability benchmarks
-3. **First GRPO run** using GO F1 rewards (clearest signal)
-4. **MLP vs Perceiver ablation** — the core thesis experiment
+- **[Part 2: Scaling to 4.9 Million Samples](/research/2026-03-07-protein-llm-scaling/)** — What happens when we go from 50K to millions of training examples across six data sources
+- **[Part 3: The Gradient Routing Problem](/research/2026-03-13-protein-llm-grpo-gradient-routing/)** — GRPO reinforcement learning reveals a fundamental tension between the encoder bridge and LLM adapters
+- **[Series Overview](/research/2026-03-20-protein-llm-series-overview/)** — The full project arc, including what's next
 
 <div class="conclusion">
 
@@ -313,9 +282,9 @@ Building multimodal LLMs is humbling. Here's what this week taught me:
 
 **2. Evaluation comes first.** We spent days on architecture before realizing our evaluation setup was incomplete. Should have done it the other way around.
 
-**3. SFT is necessary but not sufficient.** The model learns to generate reasonable-sounding text, but task-specific rewards (RL) are needed to actually improve metrics.
+**3. SFT is necessary but not sufficient.** The model learns to generate reasonable-sounding text, but task-specific rewards (RL) are needed to actually improve downstream metrics.
 
-**4. Data diversity matters more than scale alone.** 300K samples from one source produced models with specific linguistic tics. 4.5M samples from six sources should help generalization.
+**4. Data diversity likely matters alongside scale.** 300K samples from one source produced models with specific linguistic tics. 4.5M samples from six sources should help generalization, though disentangling the effects of scale vs. diversity requires further controlled experiments.
 
 **5. Proteins are hard.** They're longer than typical text, have different statistical properties, and require domain-specific evaluation. There's no shortcut to understanding them.
 
@@ -330,4 +299,8 @@ The architecture works. The data pipeline works. Now we make the model actually 
 **Related Work:**
 - [ESM-3: Protein Language Model](https://github.com/facebookresearch/esm)
 - [Mol-Instructions Dataset (ICLR 2024)](https://arxiv.org/abs/2306.08018)
-- [veRL: Volcano Engine RL Framework](https://github.com/volcengine/verl)
+
+**Related Posts:**
+- [Part 2: Scaling to 4.9 Million Samples](/research/2026-03-07-protein-llm-scaling/)
+- [Part 3: The Gradient Routing Problem](/research/2026-03-13-protein-llm-grpo-gradient-routing/)
+- [Series Overview](/research/2026-03-20-protein-llm-series-overview/)

@@ -10,7 +10,12 @@ tags: [llm, protein, multimodal, esm3, sft, scaling]
 
 <div class="central-thesis">
   <div class="thesis-label">The Big Picture</div>
-  <p class="thesis-text">We scaled our protein-LLM training data from 50K to 4.9 million samples across six sources. The result: <strong>eval_loss dropped 90.1%</strong> — from 3.64 to 0.361 — and the model now generates scientifically meaningful protein descriptions.</p>
+  <p class="thesis-text">We scaled our protein-LLM training from 50K samples on Qwen3-4B to 4.9 million samples on Qwen3-8B across six sources. Combined, these changes reduced eval_loss from 3.64 to 0.361 — though model scaling and data scaling both contributed to this gain.</p>
+</div>
+
+<div class="callout">
+  <div class="callout-label">Important Update (March 2026)</div>
+  <p>The 4.89M combined dataset described in this post was later refined to <strong>1.82M samples</strong> after discovering significant protein overlap between train and evaluation splits in three sources (ProtDescribe, Swiss-Prot, Protein2Text-QA). <strong>All results below — including the 0.361 eval_loss and 70.1% MLP advantage — reflect the original 4.89M training and may not hold on the curated dataset.</strong> See the <a href="/research/2026-03-20-protein-llm-series-overview/">series overview</a> for the current project state.</p>
 </div>
 
 ## Where We Left Off
@@ -42,22 +47,20 @@ Everything else stayed constant: Qwen3-8B-Instruct, ESM-3 small (frozen), MLP pr
 
 The combined dataset didn't just incrementally improve things — it fundamentally changed the loss landscape.
 
-![Training Loss Over Time](/assets/img/projects/mlp_epoch1_train_loss.png){:.lead width="700" loading="lazy"}
+![Training Loss Over Time](/assets/img/projects/mlp_combined_train_loss.png){:.lead width="700" loading="lazy"}
 
 Training loss (token_avg_loss) showing continued improvement through epoch 1 (step 9,750). The combined dataset produces dramatically lower loss than single-source training.
 {:.figcaption}
 
 At step 9,750 (33.7% through training, epoch 1 complete), the model has achieved:
 
-| Metric | Combined 4.9M | Mol-Instr Only (505K) | <span style="color: red;">Text-Only on 4.9M (step ~190)</span> |
-|--------|---------------|----------------------|-------------------|
-| **eval_loss** | **0.361** | 1.908 | <span style="color: red;">pending (run in progress)</span> |
-| **token_avg_loss** | **0.366** | 2.282 | <span style="color: red;">2.356 (early)</span> |
-| Improvement vs Mol-Instr | 81.1% | baseline | <span style="color: red;">TBD</span> |
+| Metric | Combined 4.9M (MLP) | Text-Only on 4.9M | Mol-Instr Only (505K) |
+|--------|---------------------|-------------------|----------------------|
+| **eval_loss** | **0.361** | 1.207 | 1.908 |
+| **token_avg_loss** | **0.366** | 1.643 | 2.282 |
+| MLP advantage vs text | — | 70.1% lower | 81.1% lower |
 
-<span style="color: red;">**Note:** The text-only baseline on the 4.89M combined dataset is currently running but only ~190 steps in. A fair head-to-head comparison at matched step counts is pending. The 57% advantage cited at step 200 (token_avg_loss 1.02 vs 2.36) is preliminary.</span>
-
-![Evaluation Loss Comparison](/assets/img/projects/mlp_epoch1_eval_loss.png){:.lead width="700" loading="lazy"}
+![Evaluation Loss Comparison](/assets/img/projects/mlp_combined_eval_loss.png){:.lead width="700" loading="lazy"}
 
 Eval loss at epoch 1 checkpoint: 0.361 — dramatically lower than the mol-instructions-only run (1.908).
 {:.figcaption}
@@ -66,33 +69,34 @@ Eval loss at epoch 1 checkpoint: 0.361 — dramatically lower than the mol-instr
 
 Looking back at two weeks of experiments, two changes drove the most improvement:
 
-| Date | Change | eval_loss | Improvement |
-|------|--------|-----------|-------------|
+| Date | Change | eval_loss | Improvement vs baseline |
+|------|--------|-----------|------------------------|
 | Feb 20 | First run (Qwen3-4B, 50K) | 3.64 | baseline |
-| Feb 23 | Scale model: 4B to 8B | 2.50 | 31% |
-| Feb 27 | Text-only baseline (8B, 505K) | 2.42 | 3% |
-| Mar 5 | MLP on full mol-instructions | 1.91 | 21% |
-| **Mar 7** | **Combined 4.89M dataset** | **0.361** | **81%** |
+| Feb 23 | Scale model: 4B → 8B (50K) | 1.94 | 47% |
+| Feb 27 | Text-only baseline (8B, 505K) | 2.42 | 33% |
+| Mar 5 | MLP on full mol-instructions | 1.91 | 48% |
+| **Mar 7** | **Combined 4.89M dataset** | **0.361** | **90%** |
 
-**Data scaling provided 2.6x more improvement than model scaling.** Going from 505K to 4.89M samples (10x) cut eval_loss by 81%, while going from 4B to 8B parameters (2x) only cut it by 31%.
+**Caveat:** The 3.64 → 0.361 comparison spans both a model change (4B → 8B) and a data change (50K → 4.89M). The cleanest data-scaling comparison is on the same 8B model: 1.91 (505K, mol-instructions only) → 0.361 (4.89M, six sources), an 81% reduction. Model scaling alone (4B → 8B on 50K data) gave a 47% reduction (3.64 → 1.94). Data scaling on the 8B model gave a larger improvement, though these are not perfectly controlled ablations (data diversity and scale changed simultaneously).
 
-This makes intuitive sense: with diverse data sources, the model sees the same proteins described in multiple ways — function annotations, structural domains, QA pairs, long-form descriptions. It's like studying a subject from six different textbooks instead of one.
+With diverse data sources, the model sees the same proteins described in multiple ways — function annotations, structural domains, QA pairs, long-form descriptions. It's like studying a subject from six different textbooks instead of one — though we cannot fully disentangle the effects of data diversity from data scale without further experiments.
 
 ### First Generation Quality Numbers
 
 For the first time, we measured how well the model actually generates protein descriptions:
 
-| Task Type | BLEU | ROUGE-L |
-|-----------|------|---------|
-| Catalytic Activity | 0.392 | 0.541 |
-| Protein Function | 0.404 | 0.523 |
-| General Description | 0.265 | 0.436 |
-| Domain/Motif | 0.166 | 0.433 |
-| **Overall** | **0.307** | **0.483** |
+Best generation metrics were achieved at step 9,250:
+
+| Metric | Best Value (step 9,250) |
+|--------|------------------------|
+| **BLEU** | **0.315** |
+| **ROUGE-L** | **0.515** |
+
+Note: these scores declined slightly by the final checkpoint (step 9,750: BLEU 0.255, ROUGE-L 0.481), suggesting some overfitting to the training distribution in later steps.
 
 The model is strongest on catalytic activity and function prediction — tasks where the training data is richest. Domain/motif prediction lags behind, likely because its outputs are more structured (specific domain names and boundaries) rather than free-form text.
 
-ROUGE-L of 0.48 means the model captures roughly half the content of reference answers. Not perfect, but a solid foundation for reinforcement learning to build on.
+ROUGE-L of 0.515 means the model captures roughly half the content of reference answers. These are moderate scores — the model produces relevant outputs but is far from matching reference quality. They provide a starting point for reinforcement learning to build on.
 
 ---
 
@@ -102,7 +106,7 @@ ROUGE-L of 0.48 means the model captures roughly half the content of reference a
 
 One concern with scaling to 4.9M samples from diverse sources: would the varied annotation styles cause training instability?
 
-![Gradient Norms](/assets/img/projects/mlp_epoch1_grad_norms.png){:.lead width="700" loading="lazy"}
+![Gradient Norms](/assets/img/projects/mlp_combined_grad_norms.png){:.lead width="700" loading="lazy"}
 
 Gradient norm trajectories across runs. The main combined run stabilizes to a mean of 0.627 after initial spikes in the first 100 steps.
 {:.figcaption}
@@ -121,69 +125,58 @@ The most exciting part: **the run is 33.7% complete** (epoch 1 of 3). Both train
 
 On the 50K mol-instructions dataset, MLP and Perceiver Resampler achieve nearly identical performance: eval_loss 1.942 vs 1.952 (MLP wins by 0.5%). The simpler MLP projector (30.5M params) captures the essential protein-to-language mapping as well as the more complex Perceiver (29.4M params) at this data scale.
 
-<span style="color: red;">
+### Four-Way Comparison Status
 
-### Planned: Four-Way Comparison on 4.89M
+The core thesis of this project is a systematic comparison of protein-to-LLM bridging architectures. At the time of writing, only MLP had been trained on the full dataset:
 
-The core thesis of this project is a systematic four-way comparison of protein-to-LLM bridging architectures. So far, only MLP has been trained on the full combined dataset. The remaining comparisons:
+| Approach | Projector Params | 50K eval_loss | 4.89M eval_loss |
+|----------|-----------------|---------------|-----------------|
+| Text-only | — (LoRA only) | 2.415 | 1.207 |
+| **MLP** | **30.5M** | **1.942** | **0.361** |
+| Perceiver Resampler | 29.4M | 1.952 | Not yet run |
+| Flamingo (gated cross-attn) | ~120-150M | — | Not yet run |
 
-| Approach | Projector Params | 50K eval_loss | 4.89M eval_loss | Status |
-|----------|-----------------|---------------|-----------------|--------|
-| Text-only | — (LoRA only) | 2.415 | **pending** | Running (~190 steps) |
-| **MLP** | **30.5M** | **1.942** | **0.361** | **Epoch 1 complete** |
-| Perceiver Resampler | 29.4M | 1.952 | **pending** | Not yet started |
-| Flamingo (gated cross-attn) | ~120-150M | — | **pending** | Implemented, not yet run |
-
-The Perceiver and Flamingo architectures are fully implemented and validated on small data. Scaling them to 4.89M is the next priority.
-
-</span>
+The Perceiver and Flamingo at-scale experiments remain a priority. See the [series overview](/research/2026-03-20-protein-llm-series-overview/) for current status.
 
 ---
 
 ## What This Means
 
-### The Data Diversity Hypothesis: Confirmed
+### The Data Diversity Hypothesis: Supported (Not Yet Confirmed)
 
-Our bet from Part 1 paid off. Combining six sources with different annotation styles, task types, and protein coverage produced a model that generalizes far better than any single source could. The key insight: **it's not just about more data, it's about more perspectives on the same proteins.**
+Combining six sources with different annotation styles, task types, and protein coverage produced a model with substantially lower loss than single-source training. The key observation: **scaling data from diverse sources yielded larger gains than scaling model size.**
 
-72% of proteins appear in multiple sources — but described differently each time. The model learns that BRCA1 isn't just "a DNA repair protein" (Mol-Instructions) — it's also "involved in homologous recombination" (Swiss-Prot), "contains BRCT domains" (ProteinLMDataset), and has a detailed functional description (SwissProtCLAP). Multiple views create deeper understanding.
+72% of proteins appear in multiple sources — but described differently each time. The model sees BRCA1 as "a DNA repair protein" (Mol-Instructions), "involved in homologous recombination" (Swiss-Prot), "contains BRCT domains" (ProteinLMDataset), and in a detailed functional description (SwissProtCLAP). We hypothesize that multiple annotation perspectives help generalization, but confirming this requires controlled experiments that hold data volume constant while varying diversity.
 
-### ESM-3 Embeddings Still Matter
+### ESM-3 Embeddings Show a Clear SFT Advantage
 
-Even with 10x more data, the ESM-3 encoder provides a consistent advantage over text-only processing. The structural information encoded in ESM-3's 1536-dimensional embeddings — fold types, binding sites, evolutionary constraints — can't be recovered from amino acid sequences alone, no matter how much text data you add.
+On the 4.89M dataset, the ESM-3 encoder provides a large eval_loss advantage over text-only processing (0.361 vs 1.207). The structural information encoded in ESM-3's 1536-dimensional embeddings — fold types, binding sites, evolutionary constraints — appears difficult to recover from amino acid sequences alone. However, as we discuss in [Part 3](/research/2026-03-13-protein-llm-grpo-gradient-routing/), this advantage does not automatically transfer to reinforcement learning, and these numbers are from the pre-curation 4.89M dataset.
 
 ---
 
 ## What's Next
 
-1. **Let the run finish.** At 33.7% complete with loss still dropping, we expect eval_loss to reach 0.30-0.35 by completion.
+1. **Complete the training run.** At the time of writing, the MLP run was 33.7% complete. The final results are reported above.
 
-<span style="color: red;">
+2. **Text-only baseline completed.** The text-only model on 4.89M reached eval_loss of 1.207 — confirming the MLP's 70.1% advantage. The full comparison is in [Part 3](/research/2026-03-13-protein-llm-grpo-gradient-routing/).
 
-2. **Text-only baseline on 4.89M.** Currently running. This will provide a fair apples-to-apples comparison of ESM-3 MLP vs text-only on identical data at scale. Early numbers (step ~190) show token_avg_loss of 2.36 vs MLP's 1.02 at the same step, but we need matched training duration for a conclusive comparison.
+3. **Perceiver and Flamingo at scale.** Both architectures are implemented and validated on 50K data but remain untested at full scale.
 
-3. **Perceiver Resampler on combined data.** With MLP established, we'll train the Perceiver architecture on the same data. This is the core thesis comparison: does a more expressive cross-attention projector (29.4M params) outperform the simpler MLP (30.5M params) at scale?
-
-4. **Flamingo gated cross-attention.** The fourth approach inserts protein information via gated cross-attention at every 4th LLM layer, rather than prefix injection. A fundamentally different architectural choice to test (~120-150M trainable params, no LoRA).
-
-5. **GRPO reinforcement learning.** The current checkpoint is strong enough for downstream RL. We'll fine-tune with verifiable rewards — GO term F1, stability prediction accuracy, structure quality — to push beyond "reasonable-sounding" to "measurably correct."
-
-6. **Downstream task evaluation.** GO term prediction (F1), protein stability prediction (MAE), and protein-protein interaction accuracy — these task-specific benchmarks will measure whether lower loss translates to genuine scientific utility.
-
-</span>
+4. **GRPO reinforcement learning.** Using verifiable rewards (GO term F1, stability prediction, ESMFold structural quality) to push beyond SFT. The results — including a surprising reversal where text-only outperforms MLP at RL — are in [Part 3](/research/2026-03-13-protein-llm-grpo-gradient-routing/).
 
 <div class="conclusion">
 
 ## The Takeaway
 
-Two weeks in, and the story is clear: **data diversity is the biggest lever for protein LLM performance.** Not model scale, not architecture complexity — just giving the model multiple perspectives on the same biology.
+Two weeks in, and the results suggest that **data diversity and scale are among the most impactful levers** for protein LLM SFT performance — though model scaling also contributes, and the two effects are not fully disentangled.
 
-The numbers:
-- **eval_loss: 3.64 to 0.361** (90.1% reduction)
-- **BLEU: 0.307, ROUGE-L: 0.483** (first generation metrics)
-- **33.7% through training** (epoch 1 complete, significant headroom remains)
+The numbers (on the original 4.89M dataset, before curation to 1.82M):
+- **eval_loss: 1.91 → 0.361** on same 8B model (81% reduction from data scaling)
+- **eval_loss: 3.64 → 0.361** across model + data changes combined
+- **BLEU: 0.315, ROUGE-L: 0.515** at best checkpoint (moderate, not strong)
+- **33.7% through training** (epoch 1 complete, headroom remains)
 
-The architecture works. The data works. <span style="color: red;">Next up: the full four-way architecture comparison and reinforcement learning with verifiable rewards.</span>
+The architecture works. The data pipeline works. The next chapter explores reinforcement learning — and an unexpected challenge. See [Part 3](/research/2026-03-13-protein-llm-grpo-gradient-routing/).
 
 </div>
 
@@ -193,6 +186,8 @@ The architecture works. The data works. <span style="color: red;">Next up: the f
 
 **Related Posts:**
 - [Part 1: Building a Protein-Understanding LLM](/research/2026-02-25-protein-llm-journey/)
+- [Part 3: The Gradient Routing Problem](/research/2026-03-13-protein-llm-grpo-gradient-routing/)
+- [Series Overview](/research/2026-03-20-protein-llm-series-overview/)
 
 **Key References:**
 - [ESM-3: Protein Language Model](https://github.com/facebookresearch/esm)

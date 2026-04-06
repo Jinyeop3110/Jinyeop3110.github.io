@@ -4,9 +4,9 @@ title: "Teaching a Protein LLM with Reinforcement Learning: The Gradient Routing
 description: >
   After training a multimodal protein LLM with ESM-3 embeddings and LoRA on 4.89M samples,
   we applied GRPO reinforcement learning for structure quality prediction. Text-only reaches
-  0.832 reward while our multimodal MLP pathway stalls at 0.582 -- revealing a fundamental
-  gradient routing problem where LoRA and projector gradients cannot flow simultaneously.
-  Here is what we found and what it means for multimodal RL.
+  0.832 reward while the MLP pathway peaks at 0.780 (0.582 in the gradient-starved configuration)
+  -- revealing a gradient routing problem where LoRA and projector gradients compete for signal.
+  Here is what we found and what it suggests for multimodal RL.
 date: 2026-03-13
 categories: [research]
 tags: [llm, protein, multimodal, esm3, grpo, reinforcement-learning]
@@ -14,58 +14,44 @@ tags: [llm, protein, multimodal, esm3, grpo, reinforcement-learning]
 
 <div class="central-thesis">
   <div class="thesis-label">The Question</div>
-  <p class="thesis-text">When a multimodal protein LLM excels at supervised fine-tuning, why does it struggle with reinforcement learning -- and what does gradient flow tell us about the answer?</p>
+  <p class="thesis-text">When a multimodal protein LLM achieves strong supervised fine-tuning loss, why does it struggle with reinforcement learning -- and what does gradient flow tell us about the answer?</p>
 </div>
 
 ## The Setup: A Protein LLM That Understands Structure
 
-Over the past month, I have been building a multimodal protein language model. The core idea is simple but ambitious: can we combine a protein structure encoder with a general-purpose language model to create a system that truly *understands* proteins -- not just as sequences of amino acid letters, but as three-dimensional molecular machines with specific structural and functional properties?
-
-The architecture has four components. First, a protein sequence enters ESM-3, a protein foundation model trained by EvolutionaryScale on billions of protein sequences. ESM-3 produces rich 1536-dimensional embeddings that capture structural, evolutionary, and functional information about each residue. These embeddings then pass through an attention pooling layer that compresses variable-length protein representations into a fixed set of 32 tokens, followed by a two-layer MLP projector (1536 to 5120 to 2560) that maps them into the LLM's input space. Finally, these 32 projected tokens are injected into Qwen3-8B-Instruct alongside the text prompt, and the LLM generates its response.
+Over the past month, I have been building a multimodal protein language model — the full architecture story is in [Part 1](/research/2026-02-25-protein-llm-journey/). In brief: ESM-3, a protein foundation model, encodes sequences into rich 1536-dimensional structural embeddings. These pass through attention pooling (32 tokens) and an MLP projector into Qwen3-8B-Instruct. LoRA adapts the LLM; ESM-3 stays frozen. About 32.5M trainable parameters total — a fraction of the 8B base model.
 
 ![Schematic overview of the four-pathway architecture](/assets/img/blog/protein-llm/fig1_schematic_overview.png)
 
-We compare this multimodal "MLP" pathway against a simpler text-only baseline where the raw amino acid sequence is directly tokenized as text (wrapped in `<protein>...</protein>` tags) and fed to the LLM. No encoder, no projector -- just the LLM seeing letters like MKTLLILAVL as regular text tokens. This comparison lets us isolate the contribution of ESM-3's structural embeddings.
-
-The entire system is trained with LoRA (rank 8, applied to all linear layers in the LLM), keeping the base Qwen3-8B weights frozen and ESM-3 permanently frozen. The trainable parameters are the LoRA adapters (~2M params), the attention pooling (~9.5M), and the MLP projector (~21M) -- about 32.5M parameters in total, a fraction of the 8 billion in the base LLM.
+We compare this multimodal "MLP" pathway against a text-only baseline where raw amino acid sequences enter the LLM directly as tokens. No encoder, no projector — just the LLM seeing letters like MKTLLILAVL as text. This comparison isolates the contribution of ESM-3's structural embeddings.
 
 ## The Data: 4.89 Million Protein Instructions
 
-Before we could train anything, we needed data. We assembled a dataset from six protein-focused sources, covering four categories of tasks:
+We trained on 4.89M instruction pairs from six protein data sources covering function prediction, structure analysis, interactions, and design tasks (see [Part 2](/research/2026-03-07-protein-llm-scaling/) for details).
 
-- **Protein description and function** -- explaining what a protein does based on its sequence
-- **Structure prediction and analysis** -- discussing 3D structure, folding, and stability
-- **Interaction and binding** -- protein-protein and protein-ligand interactions
-- **Design and engineering** -- rational design and mutation effects
-
-After preprocessing, sampling, and quality filtering, the final combined dataset contained 4.89 million instruction-response pairs. Each example follows the Qwen3 chat template format with a protein-expert system prompt, the protein sequence (either as ESM-3 embeddings or raw text), and a question-answer pair.
+<div class="callout">
+  <div class="callout-label">Important Note</div>
+  <p>This dataset was later refined to <strong>1.82M samples</strong> after discovering protein overlap between train and evaluation splits in three sources. The GRPO experiments in this post use SFT checkpoints trained on the original 4.89M data. The SFT eval_loss values (0.361, 1.207) may be inflated by data leakage; the relative trends and GRPO findings are expected to hold but should be re-validated on the curated dataset.</p>
+</div>
 
 ## SFT Results: The MLP Advantage
 
-The supervised fine-tuning results were unambiguous. Over 9750 training steps on 8x H100 GPUs, the ESM3+MLP model converged to an eval_loss of **0.361** -- a 70.1% improvement over the text-only baseline at 1.207.
+The SFT results established a clear hierarchy (full analysis in [Part 2](/research/2026-03-07-protein-llm-scaling/)):
 
 | Metric | ESM3+MLP | Text-Only | MLP Advantage |
 |--------|----------|-----------|---------------|
-| Best eval_loss | **0.361** (step 9750) | 1.207 (step 8000) | 70.1% lower |
-| Final token_avg_loss | 0.438 | 1.643 | 73.4% lower |
+| Best eval_loss | **0.361** | 1.207 | 70.1% lower |
 | Gradient norm (mean) | 0.627 | 2.365 | 3.8x lower |
-| Convergence | Stable plateau | Slight overfitting | -- |
-
-These numbers tell a clear story. The MLP model benefits enormously from ESM-3's structural embeddings. Where the text-only model must infer structural information from raw amino acid letters -- an extremely lossy representation -- the MLP model receives pre-computed structural features that ESM-3 learned from billions of protein sequences.
 
 ![SFT eval loss curves comparing MLP and text-only approaches](/assets/img/blog/protein-llm/fig5_sft_loss_curves.png)
 
-The convergence dynamics are also revealing. The MLP model's eval_loss decreases smoothly and monotonically, with the last five evaluation checkpoints ranging only 0.006 (from 0.361 to 0.367). This is a cleanly converged model. The text-only model, by contrast, reaches its best eval_loss at step 8000 (1.207) but then begins overfitting, degrading to 1.266 by step 9500. The overfitting window spans about 1500 steps, suggesting that with early stopping, step 8000 is the best text checkpoint.
-
-The gradient norms reinforce this picture. The MLP model maintains a mean gradient norm of 0.627 with standard deviation 0.326 -- smooth, well-behaved optimization. The text-only model runs at 2.365 mean gradient norm with 0.647 standard deviation. The 3.8x higher gradients in text-only reflect a harder optimization landscape where the model must work much harder to extract useful signal from raw sequence tokens.
-
-We also attempted a third pathway -- the Perceiver Resampler -- which replaces both pooling and MLP with a cross-attention mechanism (29.4M parameters, comparable to MLP's 30.5M). Unfortunately, this experiment failed to launch; the log directory was created but remained empty. The perceiver pathway remains untested at the 4.89M scale, and retrying it is on our priority list.
+The MLP model converged smoothly with no overfitting, while text-only showed degradation after step 8000. ESM-3's structural embeddings give a massive SFT advantage. The natural expectation: this advantage should carry over to reinforcement learning. Right?
 
 ## From Imitation to Reasoning: Enter GRPO
 
 SFT teaches the model to produce outputs that look like the training data. But can we go further? Can we teach the model to *reason* about protein structure using reinforcement learning?
 
-Group Relative Policy Optimization (GRPO) is our RL method of choice. For each prompt, the model generates a group of completions (typically 8 or 16). A reward function scores each completion, and the model updates toward the better-rewarded outputs using a policy gradient. The key innovation of GRPO over standard RLHF is that rewards are normalized *within* each group, producing relative advantages rather than absolute scores.
+Group Relative Policy Optimization (GRPO) is our RL method of choice. For each prompt, the model generates a group of completions (typically 8 or 16). A reward function scores each completion, and the model updates toward the better-rewarded outputs using a policy gradient. The key innovation of GRPO over PPO-based RLHF is that rewards are normalized *within* each group, producing relative advantages rather than absolute scores.
 
 For the structure quality task, we designed a multi-component reward function that evaluates the model's ability to assess protein structural quality:
 
@@ -73,6 +59,8 @@ For the structure quality task, we designed a multi-component reward function th
 - **Numerical accuracy** (weight 0.3): How close is the model's predicted pLDDT to the actual value?
 - **Category match** (weight 0.3): Does the predicted quality category (high/medium/low/very low) match the ground truth?
 - **Format bonus** (0.1): Does the output follow the expected JSON format?
+
+The three main components sum to 1.0, with the format bonus additive on top (maximum possible reward: 1.1).
 
 The training data consists of 5878 protein sequences (filtered from 10K by removing proteins longer than 512 amino acids). Each protein is folded by ESMFold to produce ground-truth structural quality metrics, and the model must learn to predict these metrics from the protein sequence.
 
@@ -84,35 +72,29 @@ Then came the surprise. When we applied GRPO to both SFT checkpoints, the rankin
 
 The text-only model, starting from its eval_loss=1.207 SFT checkpoint (the *worse* SFT model), rapidly learned to generate well-formatted, accurate structure quality assessments. Over training, its mean reward climbed to **0.832**, with near-perfect format compliance (format bonus 0.099 out of 0.1) and remarkably well-calibrated pLDDT predictions (79.1 predicted vs 79.7 actual -- within 1% of ground truth).
 
-The MLP model, despite its dramatically superior SFT performance (eval_loss 0.361), stalled at a much lower reward. Its standard GRPO configuration reached only **0.582** mean reward, with format compliance stuck at 65% and systematically underestimating pLDDT (67.9 predicted vs 79.7 actual -- off by 15%).
+The MLP model, despite its dramatically superior SFT performance (eval_loss 0.361), showed lower reward in its initial GRPO configuration: **0.582** mean reward, with format compliance stuck at 65% and systematically underestimating pLDDT (67.9 predicted vs 79.7 actual -- off by 15%). A separate MLP run with different hyperparameters reached 0.780, narrowing the gap — but the text-only model still led, and the gradient analysis below explains why.
 
 ![GRPO reward curves showing text-only outperforming MLP](/assets/img/blog/protein-llm/fig13_grpo_structure_reward_curves.png)
 
-Let me emphasize how counterintuitive this is. The model that *better understands* proteins (as measured by SFT loss) is *worse* at learning to reason about them through RL. The model with cruder protein representations (raw text tokens) learns faster and reaches higher reward.
+Let me emphasize how counterintuitive this is. The model with *better SFT performance* (as measured by eval_loss) is *worse* at learning through RL. The model with cruder protein representations (raw text tokens) learns faster and reaches higher reward.
 
 ## Diagnosing the Problem: Follow the Gradients
 
 To understand why, I looked at the gradient norms. In training, gradient norms tell you which parameters are actually receiving learning signal. If a parameter group has zero gradient, it is not learning -- regardless of how much compute you spend.
 
-The gradient norms told a striking story. In the MLP model during structure quality GRPO:
+The gradient norms told a striking story:
 
-- **LoRA gradients: effectively zero** -- the LLM's adapter weights received no learning signal
-- **Multimodal gradients: 0.247** -- only the projector updated
-
-For contrast, in a different GRPO task (ProteinLM benchmark), the pattern reversed:
-
-- **LoRA gradients: 0.826** -- the LLM adapters were actively learning
-- **Multimodal gradients: 0.0** -- the projector was completely frozen
-
-The text-only model, with its single gradient pathway, had no such problem:
-
-- **LoRA gradients: 0.476-0.493** -- healthy, consistent signal
+| Model / Task | LoRA Gradients | Multimodal Gradients |
+|---|---|---|
+| MLP, Structure GRPO | ~0 (frozen out) | 0.247 |
+| MLP, ProteinLM GRPO | 0.826 | 0.0 (frozen out) |
+| Text-only, Structure GRPO | 0.476-0.493 | N/A |
 
 ![Gradient norms showing the routing problem](/assets/img/blog/protein-llm/fig16_grpo_structure_grad_norms.png)
 
-I call this the **gradient routing problem**: in the multimodal model, gradients flow exclusively to one subsystem during GRPO, completely starving the other. The "winner" appears to depend on the reward function and task characteristics, but the result is always the same -- half the model cannot learn.
+I call this the **gradient routing problem**: in the multimodal model, gradients flow predominantly to one subsystem during GRPO, largely starving the other. In the two tasks we tested, the "winner" appeared to depend on the reward function and task characteristics, with the result that one parameter group received negligible gradient signal.
 
-This is fundamentally different from SFT. During supervised fine-tuning, the next-token prediction loss provides a dense, per-token gradient signal that flows through the entire computational graph. Both the projector and LoRA adapters receive meaningful gradients because every token prediction depends on both the protein embeddings (flowing through the projector) and the language modeling capability (captured by LoRA). The loss is computed on hundreds of tokens per example, providing rich gradient information.
+This is notably different from SFT. During supervised fine-tuning, the next-token prediction loss provides a dense, per-token gradient signal that flows through the entire computational graph. Both the projector and LoRA adapters receive meaningful gradients because every token prediction depends on both the protein embeddings (flowing through the projector) and the language modeling capability (captured by LoRA). The loss is computed on hundreds of tokens per example, providing rich gradient information. A typical SFT example computes loss on ~200 output tokens; GRPO reduces this to a single scalar reward for the entire completion.
 
 During GRPO, the signal is sparse. The reward is a single scalar computed on the *entire* completion. The policy gradient must propagate this scalar backward through the generation process, and somewhere in this chain, the signal becomes "winner-take-all." The parameter group that provides the steepest local descent captures the gradient signal, leaving the other group in a flat region of the loss landscape.
 
@@ -127,11 +109,12 @@ The results were encouraging:
 | Configuration | Mean Reward | Format Bonus | LoRA Grad | MM Grad |
 |---------------|-------------|--------------|-----------|---------|
 | Text-only (standard) | **0.832** | 0.099 | 0.476 | 0.0 |
+| MLP best run (different hyperparams) | 0.780 | — | — | — |
 | MLP frozen-MM | 0.774 | 0.095 | 0.071 | 0.0 |
 | MLP frozen-MM + focal | 0.725 | 0.095 | 0.119 | 0.0 |
-| MLP standard | 0.582 | 0.065 | ~0 | 0.247 |
+| MLP standard (gradient-starved) | 0.582 | 0.065 | ~0 | 0.247 |
 
-Freezing the projector raised MLP GRPO reward from 0.582 to **0.774** -- a 33% improvement. Format compliance jumped from 65% to 95%. This confirms that the gradient routing problem was the primary bottleneck: once LoRA can actually receive gradients, the MLP model learns effectively.
+Across all MLP configurations, the best reward was 0.780 (a run with different hyperparameters) and the frozen-MM fix reached 0.774. Both substantially outperform the gradient-starved standard run (0.582), confirming the gradient routing bottleneck. Format compliance jumped from 65% to 95%. This confirms that the gradient routing problem was the primary bottleneck: once LoRA can actually receive gradients, the MLP model learns effectively.
 
 But text-only still outperforms at 0.832. The LoRA gradients in frozen-MM MLP (0.071-0.119) are noticeably smaller than text-only (0.476). Even with the projector frozen, its presence in the forward pass creates a partial information bottleneck. The LoRA adapters must learn through a compressed 32-token protein representation, while the text-only model's LoRA can directly interact with every amino acid token in the sequence.
 
@@ -161,15 +144,15 @@ The root cause was different from structure quality but equally instructive. Her
 
 Interestingly, the gradient routing was reversed compared to structure quality: LoRA received healthy gradients (mean 0.8) while multimodal gradients were exactly zero. The task's small dataset (849 samples) and the high zero-std fraction suggest it simply does not provide enough diversity of training signal for GRPO to gain traction.
 
-## What This Means for Multimodal RL
+## What This Might Mean for Multimodal RL
 
-The gradient routing problem reveals something fundamental about the difference between supervised and reinforcement learning in multimodal architectures.
+The gradient routing problem highlights an important difference between supervised and reinforcement learning in multimodal architectures — at least in the setting we tested.
 
-In SFT, the loss landscape is smooth and well-conditioned. Every token contributes to the loss, and the chain rule distributes gradients naturally through both the projector and LoRA. The two parameter groups cooperate: the projector provides better protein representations, and LoRA learns to use them. This is classical multi-task cooperation.
+In SFT, every token contributes to the loss, and the chain rule distributes gradients through both the projector and LoRA. The two parameter groups cooperate: the projector provides better protein representations, and LoRA learns to use them.
 
-In GRPO, the optimization landscape is fundamentally different. The reward is a single scalar for an entire completion. The policy gradient amplifies differences between better and worse completions, but this sparse signal must compete for bandwidth between two parameter groups. The result is a "winner-take-all" dynamic that resembles the gradient conflicts studied in multi-task learning (Sener & Koltun, 2018; Yu et al., 2020).
+In GRPO, the reward is a single scalar for an entire completion. The policy gradient amplifies differences between better and worse completions, but this sparse signal appears to create competition between the two parameter groups. In our experiments, this produced a "winner-take-all" dynamic that resembles the gradient conflicts studied in multi-task learning (Sener & Koltun, 2018; Yu et al., 2020).
 
-This connects to broader findings in the multimodal RL literature. Vision-language models like Flamingo and LLaVA also struggle with RL fine-tuning, often requiring careful stage-wise training. The gradient routing problem may be a general phenomenon in multimodal RL, not specific to protein models.
+**Scope caveat:** We observed this pattern on two GRPO tasks (structure quality and ProteinLM benchmark) with one architecture (MLP projector). Whether this generalizes to other multimodal RL settings — different architectures (Perceiver, Flamingo), different reward functions, different encoder-LLM pairings — remains to be tested. Vision-language models like Flamingo and LLaVA have also required careful stage-wise training for RL, which is suggestive but not confirmation of the same mechanism.
 
 ## What is Next
 
@@ -181,8 +164,8 @@ Three directions follow from these findings:
 
 **3. The Perceiver pathway.** Our Perceiver Resampler SFT failed to launch and remains untested. With 29.4M parameters (comparable to MLP's 30.5M), the Perceiver uses cross-attention rather than concatenation to integrate protein information. This architectural difference may produce different gradient routing behavior during GRPO, potentially avoiding the winner-take-all dynamic.
 
-The central paradox remains: our best SFT model (MLP, eval_loss 0.361) produces our worst GRPO learner (reward 0.582), while our weaker SFT model (text-only, eval_loss 1.207) produces our best GRPO learner (reward 0.832). This SFT-RL inversion is the defining challenge for the next phase of this project, and resolving it could teach us something important about how multimodal systems learn from sparse reward signals.
+The central paradox remains: our best SFT model (MLP, eval_loss 0.361) produces our worst GRPO learner (reward 0.582), while our weaker SFT model (text-only, eval_loss 1.207) produces our best GRPO learner (reward 0.832). This SFT-RL inversion — observed so far on the structure quality task — is a key challenge for the next phase of this project. If confirmed across more tasks and architectures, it could reveal something important about how multimodal systems learn from sparse reward signals.
 
 ---
 
-*This analysis covers 4 SFT and 13 GRPO experiments run between March 6-13, 2026, on 8x H100 GPUs. All models use Qwen3-8B-Instruct-2507 with LoRA (r=8). The combined SFT dataset contains 4.89M instruction-response pairs from six protein data sources. GRPO structure quality data contains 5878 training samples with ESMFold-based rewards. All loss values reported as eval_loss unless otherwise noted; training loss uses token_avg_loss (true per-token average, not HF Trainer's running average).*
+*This analysis covers 4 SFT and 13 GRPO experiments run between March 6-13, 2026, on 8x H100 GPUs. All models use Qwen3-8B-Instruct-2507 with LoRA (r=8). The combined SFT dataset contains 4.89M instruction-response pairs from six protein data sources. GRPO structure quality data contains 5878 training samples with ESMFold-based rewards. All loss values reported as eval_loss unless otherwise noted; training loss uses token_avg_loss (true per-token average, not HF Trainer's running average). The 4.89M dataset was subsequently refined to 1.82M samples after discovering data leakage; re-evaluation on the curated dataset is planned.*
