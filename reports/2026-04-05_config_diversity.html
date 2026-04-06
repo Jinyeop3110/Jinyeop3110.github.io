@@ -63,21 +63,24 @@ Different configs produce structurally and sequentially distinct binders.
 
 <table>
 <tr><th>Protein</th><th>Top-1 Winner</th><th>Top-16 Pool Winner</th><th>Same?</th></tr>
-<tr><td>IFNAR2</td><td>D_early</td><td><span class="highlight">E_fine</span></td><td><span class="highlight">NO</span></td></tr>
 <tr><td>CD45</td><td>E_fine</td><td><span class="highlight">A_bal</span></td><td><span class="highlight">NO</span></td></tr>
 <tr><td>Claudin1</td><td>D_early</td><td><span class="highlight">E_fine</span></td><td><span class="highlight">NO</span></td></tr>
-<tr><td>BetV1</td><td>E_fine</td><td><span class="highlight">B_len</span></td><td><span class="highlight">NO</span></td></tr>
+<tr><td>DerF7</td><td>D_early*</td><td><span class="highlight">E_fine</span></td><td><span class="highlight">NO</span></td></tr>
+<tr><td>SpCas9</td><td>E_fine</td><td><span class="highlight">C_deep</span></td><td><span class="highlight">NO</span></td></tr>
 <tr><td>PD1</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
 <tr><td>PDL1</td><td>C_deep</td><td>C_deep</td><td>Yes</td></tr>
-<tr><td>CrSAS6</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
-<tr><td>DerF7</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
-<tr><td>SpCas9</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
+<tr><td>IFNAR2</td><td>D_early</td><td>D_early</td><td>Yes</td></tr>
+<tr><td>CrSAS6</td><td>E_fine*</td><td>E_fine</td><td>Yes</td></tr>
+<tr><td>BetV1</td><td>E_fine*</td><td>E_fine</td><td>Yes</td></tr>
 <tr><td>HER2_AAV</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
 </table>
 
 <div class="finding warning">
-<strong>BetV1 (hardest target):</strong> E_fine_selector finds the single best binder, but
-<strong>B_length_explorer produces the better top-16 pool</strong> — its 16 diverse lengths yield more coverage of viable solutions.
+<strong>SpCas9:</strong> E_fine_selector finds the single best binder, but
+<strong>C_deep_exploiter produces the better top-16 pool</strong> (0.192 vs 0.193) — deep per-length optimization yields a tighter candidate set.
+<br/><br/>
+<strong>*Near ties:</strong> CrSAS6, DerF7, BetV1 have &lt;0.001 difference between D_early and E_fine for top-1.
+These are effectively equivalent — the winner depends on random seed.
 </div>
 
 <h2>3. Config Sensitivity Varies by Protein</h2>
