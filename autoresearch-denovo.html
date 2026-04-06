@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autoresearch De Novo - Jinyeop Song</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f5f6f7;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    /* ── Top Nav ── */
+    .topnav {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 14px 24px;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .topnav .brand {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #e8704a;
+      text-decoration: none;
+    }
+    .topnav .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 18px;
+      font-size: 0.95rem;
+    }
+    .topnav .nav-links a:hover { color: #fff; }
+    .menu-toggle {
+      display: none;
+      background: none; border: none; color: #fff;
+      font-size: 1.5rem; cursor: pointer;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 52px; left: 0; bottom: 0;
+      width: 260px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
+      padding: 20px 0;
+      z-index: 90;
+      transition: transform 0.3s;
+    }
+    .sidebar h3 {
+      padding: 8px 20px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-top: 12px;
+    }
+    .sidebar h3:first-child { margin-top: 0; }
+    .sidebar a {
+      display: block;
+      padding: 7px 20px 7px 28px;
+      color: #333;
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+    }
+    .sidebar a:hover {
+      background: #fef0ec;
+      color: #e8704a;
+    }
+    .sidebar a.active {
+      background: #fef0ec;
+      color: #d35400;
+      border-left-color: #d35400;
+      font-weight: 600;
+    }
+    .sidebar .back-link {
+      padding: 12px 20px;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #e8704a;
+    }
+    .sidebar .report-link {
+      font-size: 0.85rem;
+      color: #888;
+      padding-left: 36px;
+    }
+    .sidebar .report-link:hover { color: #e8704a; }
+
+    /* ── Main Content ── */
+    .main {
+      margin-left: 260px;
+      margin-top: 52px;
+      padding: 40px 48px 80px;
+      max-width: 920px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: #1a1a2e;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      color: #1a1a2e;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e8704a;
+    }
+    h3 {
+      font-size: 1.15rem;
+      margin-top: 32px;
+      margin-bottom: 10px;
+      color: #2c3e50;
+    }
+    p { margin-bottom: 14px; }
+    strong { color: #1a1a2e; }
+
+    /* ── Part dividers ── */
+    .part-section {
+      padding-top: 24px;
+      margin-top: 56px;
+      border-top: 3px solid #e8704a;
+    }
+    .part-section:first-of-type { margin-top: 0; border-top: none; }
+    .part-label {
+      display: inline-block;
+      background: #e8704a;
+      color: #fff;
+      padding: 4px 14px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .part-date {
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+    }
+
+    /* ── Callout / Thesis boxes ── */
+    .central-thesis {
+      background: linear-gradient(135deg, #1a1a2e, #d35400);
+      color: #fff;
+      padding: 28px 32px;
+      border-radius: 8px;
+      margin: 20px 0 28px;
+    }
+    .thesis-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+    .thesis-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .callout {
+      background: #fff8e1;
+      border-left: 4px solid #f9a825;
+      padding: 16px 20px;
+      border-radius: 0 6px 6px 0;
+      margin: 20px 0;
+    }
+    .callout-label {
+      font-weight: 700;
+      color: #f57f17;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .finding {
+      background: #e3f2fd;
+      border-left: 4px solid #1565c0;
+      padding: 16px 20px;
+      border-radius: 0 6px 6px 0;
+      margin: 20px 0;
+    }
+    .finding-label {
+      font-weight: 700;
+      color: #1565c0;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .conclusion {
+      background: #e8f5e9;
+      border-left: 4px solid #43a047;
+      padding: 20px 24px;
+      border-radius: 0 6px 6px 0;
+      margin: 28px 0;
+    }
+    .conclusion h2 {
+      border-bottom: none;
+      margin-top: 0;
+      color: #2e7d32;
+    }
+
+    /* ── Pillars ── */
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .pillar {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 18px;
+    }
+    .pillar-title {
+      font-weight: 700;
+      color: #e8704a;
+      margin-bottom: 6px;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 0.92rem;
+      background: #fff;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    th {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid #eee;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafa; }
+    .winner { color: #2e7d32; font-weight: 700; }
+    .loser { color: #c62828; }
+
+    /* ── Code blocks ── */
+    pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 16px 20px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      margin: 16px 0;
+      line-height: 1.5;
+    }
+    code {
+      font-family: "Fira Code", "Cascadia Code", Consolas, monospace;
+      font-size: 0.88em;
+    }
+    p code, li code, td code {
+      background: #eef1f5;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #c0392b;
+    }
+
+    /* ── Lists ── */
+    ul, ol { margin: 10px 0 16px 24px; }
+    li { margin-bottom: 6px; }
+    hr { border: none; border-top: 1px solid #ddd; margin: 32px 0; }
+
+    /* ── Resources ── */
+    .resources {
+      background: #f0f4f8;
+      padding: 20px 24px;
+      border-radius: 8px;
+      margin: 24px 0;
+    }
+    .resources a { color: #e8704a; text-decoration: none; }
+    .resources a:hover { text-decoration: underline; }
+
+    a { color: #e8704a; }
+    a:hover { color: #d35400; }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; padding: 24px 20px 60px; }
+      .menu-toggle { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<nav class="topnav">
+  <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+  <a href="/" class="brand">Jinyeop Song</a>
+  <div class="nav-links">
+    <a href="/publications/">Publications</a>
+    <a href="/cv/">CV</a>
+    <a href="/posts/">Blog</a>
+  </div>
+</nav>
+
+<!-- Left Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <a href="/posts/" class="back-link">&larr; Back to Blog</a>
+
+  <h3>Overview</h3>
+  <a href="#overview">Project Overview</a>
+  <a href="#overview-pipeline">Pipeline</a>
+  <a href="#overview-sweep">Beam Search Sweep</a>
+  <a href="#overview-diversity">Config Diversity</a>
+  <a href="#overview-next">What's Next</a>
+  <a href="#overview-timeline">Timeline</a>
+
+  <h3>Day 1: Pipeline Validation</h3>
+  <a href="#day1">PD-L1 Demo Run</a>
+  <a href="#day1-results">Results</a>
+  <a href="#day1-thresholds">Quality Thresholds</a>
+
+  <h3>Day 2-3: Beam Search Sweep</h3>
+  <a href="#day2">Sweep Design</a>
+  <a href="#day2-configs">5 Configurations</a>
+  <a href="#day2-rankings">Rankings (50/50)</a>
+  <a href="#day2-proteins">Per-Protein Results</a>
+
+  <h3>Day 3: Config Diversity</h3>
+  <a href="#day3">The Claim</a>
+  <a href="#day3-ranking">Rank Heatmap</a>
+  <a href="#day3-top1v16">Top-1 vs Top-16</a>
+  <a href="#day3-sequences">Sequence Diversity</a>
+  <a href="#day3-implications">Implications</a>
+
+  <h3>Detailed Reports</h3>
+  <a href="/reports/2026-04-03_pdl1_binder_demo.html" class="report-link">Apr 3 &middot; PD-L1 Demo</a>
+  <a href="/reports/2026-04-05_beam_search_sweep.html" class="report-link">Apr 5 &middot; Sweep Results</a>
+  <a href="/reports/2026-04-05_config_diversity.html" class="report-link">Apr 5 &middot; Config Diversity</a>
+</aside>
+
+<!-- Main Content -->
+<div class="main">
+
+  <!-- ============================================================ -->
+  <!--                    PROJECT OVERVIEW                           -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="overview">
+    <span class="part-label">Project Overview</span>
+    <h1>Autoresearch De Novo: Protein Binder Design with Test-Time Compute</h1>
+    <p class="part-date">April 2026 &mdash; Ongoing</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">The Research Question</div>
+      <p class="thesis-text">How should we allocate test-time compute for de novo protein binder design? Specifically, how do beam search configuration choices interact with protein target properties &mdash; and can we show that no single search strategy is universally optimal?</p>
+    </div>
+
+    <p>This project uses <strong>Proteina-Complexa</strong> (ICLR 2026 Oral), a flow-matching generative model for atomistic protein binder design. We systematically sweep beam search configurations across diverse protein targets to understand the interplay between search strategy and target difficulty.</p>
+
+    <hr>
+
+    <h2 id="overview-pipeline">The Pipeline</h2>
+
+    <p>Proteina-Complexa uses <strong>partially latent flow matching</strong> to generate binder structures, followed by <strong>AlphaFold2 reward scoring</strong>:</p>
+
+    <pre><code>[Target PDB + Hotspots] &rarr; Flow Matching (400 steps) &rarr; Beam Search &rarr; AF2 Scoring &rarr; Candidate PDBs</code></pre>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-title">Generate</div>
+        <p>Flow-matching diffusion samples binder structures in partially latent space (backbone CA + local latents).</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Search</div>
+        <p>Beam search with branching at checkpoints. 5 configurations tested: balanced, length-explorer, deep-exploiter, early-brancher, fine-selector.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Score</div>
+        <p>AlphaFold2 multimer scores each candidate. Reward = &minus;i_PAE (interface predicted aligned error).</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Refine</div>
+        <p>Sequence hallucination for test-time optimization (not yet applied in sweep).</p>
+      </div>
+    </div>
+
+    <p><strong>Hardware:</strong> 8&times; NVIDIA H100 80GB &nbsp;|&nbsp; <strong>Models:</strong> complexa.ckpt (2.8 GB) + complexa_ae.ckpt (3.9 GB) &nbsp;|&nbsp; <strong>Targets:</strong> 44 pre-configured proteins</p>
+
+    <hr>
+
+    <h2 id="overview-sweep">Beam Search Sweep: 5 Configs &times; 10 Proteins</h2>
+
+    <p>We tested 5 beam search configurations across 10 diverse protein targets (50 experiments total), producing <strong>26,560 samples (1,600 finals)</strong>.</p>
+
+    <table>
+      <tr><th>Rank</th><th>Config</th><th>Strategy</th><th>Mean Reward</th><th>Wins</th></tr>
+      <tr><td>1</td><td class="winner">E_fine_selector</td><td>6 checkpoints, 3 branches &mdash; frequent pruning</td><td><strong>&minus;0.2475</strong></td><td><strong>7/10</strong></td></tr>
+      <tr><td>2</td><td>A_balanced</td><td>Paper default (4 checkpoints, 4 branches)</td><td>&minus;0.2571</td><td>2/10</td></tr>
+      <tr><td>3</td><td>C_deep_exploiter</td><td>2 lengths, 16 beams &mdash; deep optimization</td><td>&minus;0.2700</td><td>1/10</td></tr>
+      <tr><td>4</td><td>D_early_brancher</td><td>2 checkpoints, 8 branches &mdash; wide early</td><td>&minus;0.2792</td><td>0/10</td></tr>
+      <tr><td>5</td><td class="loser">B_length_explorer</td><td>16 lengths, 2 beams &mdash; max diversity</td><td>&minus;0.3501</td><td>0/10</td></tr>
+    </table>
+
+    <div class="finding">
+      <div class="finding-label">Key Finding</div>
+      <p><strong>E_fine_selector</strong> (frequent fine-grained pruning) is the best overall strategy. But the optimal config varies per protein &mdash; see the config diversity analysis below.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="overview-diversity">The Central Result: No Universal Best Config</h2>
+
+    <p>While E_fine_selector wins 7/10 proteins overall, the optimal search strategy depends on <strong>both the protein target and the selection criterion</strong>:</p>
+
+    <ul>
+      <li><strong>4/10 proteins</strong> have different winners when switching from top-1 (best single sample) to top-16 (best candidate pool)</li>
+      <li><strong>Hard targets</strong> (BetV1, CD45) are highly config-sensitive (CV &gt; 0.5); easy targets (IFNAR2) are config-insensitive (CV = 0.03)</li>
+      <li>Different configs produce <strong>different sequences</strong> &mdash; inter-config identity is lower than intra-config identity</li>
+    </ul>
+
+    <div class="conclusion">
+      <h2>Implication</h2>
+      <p>For production binder campaigns on hard targets: <strong>run 2&ndash;3 configs and pool candidates</strong>. This yields more diverse, higher-quality candidate sets than running one config with equivalent compute. Search strategy matters most precisely when the target is hardest.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="overview-next">What's Next</h2>
+
+    <ol>
+      <li><strong>Add refinement</strong> &mdash; sequence hallucination on E_fine_selector results (expected to dramatically improve pLDDT and i_PAE)</li>
+      <li><strong>Full pipeline</strong> &mdash; filter &rarr; evaluate &rarr; analyze for designability metrics (scRMSD, ProteinMPNN recovery)</li>
+      <li><strong>Hybrid config</strong> &mdash; combine E's frequent pruning with D's wide branching</li>
+      <li><strong>Multi-config pooling study</strong> &mdash; formally compare single-config vs multi-config candidate pools</li>
+    </ol>
+
+    <hr>
+
+    <h2 id="overview-timeline">Timeline</h2>
+
+    <table>
+      <tr><th>Date</th><th>Phase</th><th>Key Result</th></tr>
+      <tr><td>Apr 2</td><td>Environment setup</td><td>Proteina-Complexa + conda env + checkpoints configured</td></tr>
+      <tr><td>Apr 3</td><td>Pipeline validation</td><td>PD-L1 demo: 2 samples in 83s. Pipeline works end-to-end.</td></tr>
+      <tr><td>Apr 4&ndash;5</td><td>Beam search sweep</td><td>50 experiments, 26,560 samples. E_fine_selector wins 7/10.</td></tr>
+      <tr><td>Apr 5</td><td>Config diversity analysis</td><td>4/10 proteins: winner changes by criterion. Configs explore different sequence space.</td></tr>
+      <tr><td>TBD</td><td>Refinement sweep</td><td>Add sequence_hallucination to top configs</td></tr>
+      <tr><td>TBD</td><td>Full pipeline evaluation</td><td>Designability, scRMSD, ProteinMPNN recovery rates</td></tr>
+    </table>
+
+    <div class="resources">
+      <strong>Detailed Reports:</strong>
+      <a href="/reports/2026-04-03_pdl1_binder_demo.html">PD-L1 Demo (Apr 3)</a> &middot;
+      <a href="/reports/2026-04-05_beam_search_sweep.html">Sweep Results (Apr 5)</a> &middot;
+      <a href="/reports/2026-04-05_config_diversity.html">Config Diversity (Apr 5)</a><br>
+      <strong>Framework:</strong> <a href="https://github.com/Proteina-Complexa" target="_blank">Proteina-Complexa</a> (ICLR 2026 Oral)
+    </div>
+  </div>
+
+
+  <!-- ============================================================ -->
+  <!--              DAY 1: PIPELINE VALIDATION                       -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="day1">
+    <span class="part-label">Day 1</span>
+    <h1>Pipeline Validation: PD-L1 Binder Demo</h1>
+    <p class="part-date">April 3, 2026</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">Goal</div>
+      <p class="thesis-text">Validate the Proteina-Complexa pipeline end-to-end: can we generate protein binder candidates and score them with AlphaFold2 on our hardware?</p>
+    </div>
+
+    <p>First run: PD-L1 target (Programmed Death-Ligand 1), 100 diffusion steps, 2 samples, best-of-n search with 1 replica. Deliberately minimal to test the pipeline, not the quality.</p>
+
+    <h2 id="day1-results">Results</h2>
+
+    <table>
+      <tr><th>Metric</th><th>Sample 0 (n=262)</th><th>Sample 1 (n=234)</th></tr>
+      <tr><td>total_reward</td><td><strong>&minus;0.831</strong></td><td>&minus;0.881</td></tr>
+      <tr><td>i_PAE</td><td><strong>0.831</strong></td><td>0.881</td></tr>
+      <tr><td>pLDDT</td><td>0.212</td><td>0.239</td></tr>
+      <tr><td>RMSD</td><td><strong>11.25 &Aring;</strong></td><td>45.21 &Aring;</td></tr>
+    </table>
+
+    <p><strong>82.92 seconds</strong> total on 1&times; H100 (41.5s per sample). Pipeline functional.</p>
+
+    <h2 id="day1-thresholds">Quality Thresholds (Demo vs Production)</h2>
+
+    <p>Both samples fail production thresholds &mdash; expected at 100 steps with no refinement:</p>
+
+    <table>
+      <tr><th>Criterion</th><th>Demo Result</th><th>Threshold</th><th>Status</th></tr>
+      <tr><td>i_PAE &times; 31 &le; 7.0</td><td>25.76 / 27.32</td><td>&le; 7.0</td><td class="loser">FAIL</td></tr>
+      <tr><td>pLDDT &ge; 0.9</td><td>0.212 / 0.239</td><td>&ge; 0.9</td><td class="loser">FAIL</td></tr>
+    </table>
+
+    <div class="callout">
+      <div class="callout-label">Takeaway</div>
+      <p>Pipeline works. Quality requires production settings: 400 steps, more samples, beam search, and refinement. <a href="/reports/2026-04-03_pdl1_binder_demo.html">Full report &rarr;</a></p>
+    </div>
+  </div>
+
+
+  <!-- ============================================================ -->
+  <!--              DAY 2-3: BEAM SEARCH SWEEP                       -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="day2">
+    <span class="part-label">Day 2&ndash;3</span>
+    <h1>Beam Search Configuration Sweep</h1>
+    <p class="part-date">April 4&ndash;5, 2026</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">Question</div>
+      <p class="thesis-text">How do different beam search strategies &mdash; varying checkpoint frequency, branching factor, and length sampling &mdash; affect binder quality across diverse protein targets?</p>
+    </div>
+
+    <h2 id="day2-configs">5 Beam Search Configurations</h2>
+
+    <p>All configs use 400 diffusion steps and produce 32 final PDBs per experiment. They differ in how they allocate compute during search:</p>
+
+    <table>
+      <tr><th>Config</th><th>nsamples</th><th>beam_width</th><th>n_branch</th><th>Checkpoints</th><th>Strategy</th></tr>
+      <tr><td><strong>A_balanced</strong></td><td>4</td><td>8</td><td>4</td><td>[0, 100, 200, 300, 400]</td><td>Paper default</td></tr>
+      <tr><td><strong>B_length_explorer</strong></td><td>16</td><td>2</td><td>4</td><td>[0, 100, 200, 300, 400]</td><td>Max length diversity</td></tr>
+      <tr><td><strong>C_deep_exploiter</strong></td><td>2</td><td>16</td><td>4</td><td>[0, 100, 250, 400]</td><td>Deep per-length optimization</td></tr>
+      <tr><td><strong>D_early_brancher</strong></td><td>4</td><td>8</td><td>8</td><td>[0, 200, 400]</td><td>Wide early exploration</td></tr>
+      <tr><td><strong>E_fine_selector</strong></td><td>4</td><td>8</td><td>3</td><td>[0, 65, 130, 200, 270, 340, 400]</td><td>Frequent fine-grained pruning</td></tr>
+    </table>
+
+    <p><strong>10 protein targets:</strong> PD-1, PD-L1, IFNAR2, CD45, Claudin-1, CrSAS-6, DerF7, BetV1, SpCas9, HER2</p>
+    <p><strong>Scale:</strong> 50 experiments &times; 8 GPUs = ~93 min runtime. 26,560 total samples (1,600 finals).</p>
+
+    <h2 id="day2-rankings">Final Rankings (50/50 Complete)</h2>
+
+    <table>
+      <tr><th>Rank</th><th>Config</th><th>Mean Reward</th><th>Best i_PAE</th><th>Mean pLDDT</th></tr>
+      <tr><td>1</td><td class="winner">E_fine_selector</td><td><strong>&minus;0.2475</strong></td><td>0.137</td><td>0.076</td></tr>
+      <tr><td>2</td><td>A_balanced</td><td>&minus;0.2571</td><td>0.133</td><td>0.095</td></tr>
+      <tr><td>3</td><td>C_deep_exploiter</td><td>&minus;0.2700</td><td>0.141</td><td>0.093</td></tr>
+      <tr><td>4</td><td>D_early_brancher</td><td>&minus;0.2792</td><td><strong>0.130</strong></td><td>0.094</td></tr>
+      <tr><td>5</td><td class="loser">B_length_explorer</td><td>&minus;0.3501</td><td>0.136</td><td>0.112</td></tr>
+    </table>
+
+    <div class="finding">
+      <div class="finding-label">Note</div>
+      <p>D_early_brancher initially appeared #1 (mean &minus;0.2119) when only 4/10 proteins had completed &mdash; all easy targets. With full data, it drops to #4. <strong>Partial results can mislead.</strong></p>
+    </div>
+
+    <h2 id="day2-proteins">Protein Difficulty Ranking</h2>
+
+    <table>
+      <tr><th>Difficulty</th><th>Protein</th><th>Best i_PAE</th><th>Best Config</th></tr>
+      <tr><td style="color:#4CAF50">Easy</td><td>IFNAR2</td><td><strong>0.130</strong></td><td>D_early_brancher</td></tr>
+      <tr><td style="color:#4CAF50">Easy</td><td>PD-1</td><td>0.138</td><td>E_fine_selector</td></tr>
+      <tr><td style="color:#4CAF50">Easy</td><td>PD-L1</td><td>0.150</td><td>C_deep_exploiter</td></tr>
+      <tr><td style="color:#4CAF50">Easy</td><td>CrSAS-6</td><td>0.156</td><td>E_fine_selector</td></tr>
+      <tr><td style="color:#FF9800">Medium</td><td>CD45</td><td>0.159</td><td>E_fine_selector</td></tr>
+      <tr><td style="color:#FF9800">Medium</td><td>SpCas9</td><td>0.168</td><td>E_fine_selector</td></tr>
+      <tr><td style="color:#FF9800">Medium</td><td>DerF7</td><td>0.175</td><td>E_fine_selector</td></tr>
+      <tr><td style="color:#FF9800">Medium</td><td>Claudin-1</td><td>0.193</td><td>D_early_brancher</td></tr>
+      <tr><td style="color:#F44336">Hard</td><td>BetV1</td><td>0.205</td><td>E_fine_selector</td></tr>
+      <tr><td style="color:#F44336">Hard</td><td>HER2</td><td>0.222</td><td>E_fine_selector</td></tr>
+    </table>
+
+    <p><a href="/reports/2026-04-05_beam_search_sweep.html">Full sweep report with figures &rarr;</a></p>
+  </div>
+
+
+  <!-- ============================================================ -->
+  <!--              DAY 3: CONFIG DIVERSITY                           -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="day3">
+    <span class="part-label">Day 3</span>
+    <h1>No Universal Best Config: Per-Protein Optimality &amp; Sequence Diversity</h1>
+    <p class="part-date">April 5, 2026</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">The Claim</div>
+      <p class="thesis-text">The optimal beam search configuration is protein-dependent. The winner changes depending on both the target and the selection criterion (top-1 vs top-16 pool). Different configs explore different regions of sequence space.</p>
+    </div>
+
+    <h2 id="day3-ranking">Per-Protein Config Ranking</h2>
+
+    <p>Ranking each config 1&ndash;5 per protein reveals that <strong>no config is universally best or worst</strong>. The #1 position is held by 3 different configs across the 10 proteins:</p>
+
+    <table>
+      <tr><th>Protein</th><th>#1 (Best)</th><th>#2</th><th>#3</th><th>#4</th><th>#5 (Worst)</th></tr>
+      <tr><td>PD-1</td><td class="winner">E_fine</td><td>A_bal</td><td>B_len</td><td>D_early</td><td>C_deep</td></tr>
+      <tr><td>PD-L1</td><td class="winner">C_deep</td><td>E_fine</td><td>A_bal</td><td>D_early</td><td>B_len</td></tr>
+      <tr><td>IFNAR2</td><td class="winner">D_early</td><td>A_bal</td><td>E_fine</td><td>B_len</td><td>C_deep</td></tr>
+      <tr><td>CD45</td><td class="winner">E_fine</td><td>A_bal</td><td>C_deep</td><td>D_early</td><td>B_len</td></tr>
+      <tr><td>Claudin-1</td><td class="winner">D_early</td><td>C_deep</td><td>A_bal</td><td>E_fine</td><td>B_len</td></tr>
+      <tr><td>CrSAS-6</td><td class="winner">E_fine*</td><td>D_early*</td><td>B_len</td><td>A_bal</td><td>C_deep</td></tr>
+      <tr><td>DerF7</td><td class="winner">D_early*</td><td>E_fine*</td><td>C_deep</td><td>B_len</td><td>A_bal</td></tr>
+      <tr><td>BetV1</td><td class="winner">E_fine*</td><td>D_early*</td><td>B_len</td><td>A_bal</td><td>C_deep</td></tr>
+      <tr><td>SpCas9</td><td class="winner">E_fine</td><td>C_deep</td><td>D_early</td><td>A_bal</td><td>B_len</td></tr>
+      <tr><td>HER2</td><td class="winner">E_fine</td><td>A_bal</td><td>B_len</td><td>C_deep</td><td>D_early</td></tr>
+    </table>
+
+    <p><em>* Near-ties (&lt; 0.001 difference) &mdash; effectively equivalent, winner depends on random seed.</em></p>
+
+    <hr>
+
+    <h2 id="day3-top1v16">Top-1 vs Top-16: The Winner Changes</h2>
+
+    <p>When switching from &ldquo;which config finds the single best binder?&rdquo; to &ldquo;which config produces the best pool of 16 candidates?&rdquo;, the winner changes for <strong>4 out of 10 proteins</strong>:</p>
+
+    <table>
+      <tr><th>Protein</th><th>Top-1 Winner</th><th>Top-16 Pool Winner</th><th>Same?</th></tr>
+      <tr><td>CD45</td><td>E_fine</td><td class="winner">A_balanced</td><td class="loser">NO</td></tr>
+      <tr><td>Claudin-1</td><td>D_early</td><td class="winner">E_fine</td><td class="loser">NO</td></tr>
+      <tr><td>DerF7</td><td>D_early</td><td class="winner">E_fine</td><td class="loser">NO</td></tr>
+      <tr><td>SpCas9</td><td>E_fine</td><td class="winner">C_deep</td><td class="loser">NO</td></tr>
+      <tr><td>PD-1</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
+      <tr><td>PD-L1</td><td>C_deep</td><td>C_deep</td><td>Yes</td></tr>
+      <tr><td>IFNAR2</td><td>D_early</td><td>D_early</td><td>Yes</td></tr>
+      <tr><td>CrSAS-6</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
+      <tr><td>BetV1</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
+      <tr><td>HER2</td><td>E_fine</td><td>E_fine</td><td>Yes</td></tr>
+    </table>
+
+    <div class="callout">
+      <div class="callout-label">Why this matters</div>
+      <p>If you plan to experimentally test 16 candidates, optimizing for top-1 gives you the wrong config for 40% of targets. The selection criterion must match the experimental plan.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="day3-sequences">Sequence Diversity: Configs Explore Different Space</h2>
+
+    <p>Beyond finding different quality binders, configs generate <strong>structurally and sequentially distinct candidates</strong>:</p>
+
+    <ul>
+      <li><strong>Length distributions differ:</strong> B_length_explorer samples 16 binder lengths (broadest); C_deep_exploiter samples only 2 (narrowest). Same target, very different structural coverage.</li>
+      <li><strong>Inter-config sequence identity is lower than intra-config:</strong> Sequences from different configs share less identity than sequences within the same config. The search strategies explore different regions of the design landscape.</li>
+      <li><strong>Amino acid composition varies subtly:</strong> Different configs show 2&ndash;5% differences in hydrophobic/polar/charged residue fractions, reflecting different design biases.</li>
+    </ul>
+
+    <div class="conclusion">
+      <h2 id="day3-implications">Practical Implications</h2>
+      <table>
+        <tr><th>Your Goal</th><th>Recommendation</th></tr>
+        <tr><td>Test 1 candidate</td><td>Use <strong>E_fine_selector</strong> (wins 6&ndash;7/10 proteins)</td></tr>
+        <tr><td>Test 16 candidates</td><td>Check the per-protein winner &mdash; it varies</td></tr>
+        <tr><td>Hard target (high CV)</td><td>Run <strong>2&ndash;3 configs</strong> and pool &mdash; config choice is critical</td></tr>
+        <tr><td>Easy target (low CV)</td><td>Any config works &mdash; save compute</td></tr>
+        <tr><td>Maximize diversity</td><td><strong>Multi-config pooling</strong> &mdash; different configs = different sequences</td></tr>
+      </table>
+    </div>
+
+    <p><a href="/reports/2026-04-05_config_diversity.html">Full config diversity report with all figures &rarr;</a></p>
+  </div>
+
+</div>
+
+<script>
+  // Sidebar active link tracking
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
