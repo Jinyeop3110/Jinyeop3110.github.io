@@ -57,6 +57,8 @@ menu:
     url:               /posts/
   - title:             Protein LLM
     url:               /protein-llm.html
+  - title:             Autoresearch De Novo
+    url:               /autoresearch-denovo.html
 
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
