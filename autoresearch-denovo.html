@@ -35,13 +35,13 @@
       color: #e8704a;
       text-decoration: none;
     }
-    .topnav .nav-links a {
-      color: rgba(255,255,255,.75);
-      text-decoration: none;
-      margin-left: 18px;
+    .topnav .nav-title {
+      color: rgba(255,255,255,.5);
       font-size: 0.95rem;
+      margin-left: 8px;
+      padding-left: 14px;
+      border-left: 1px solid rgba(255,255,255,.2);
     }
-    .topnav .nav-links a:hover { color: #fff; }
     .menu-toggle {
       display: none;
       background: none; border: none; color: #fff;
@@ -323,11 +323,7 @@
 <nav class="topnav">
   <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
   <a href="/" class="brand">Jinyeop Song</a>
-  <div class="nav-links">
-    <a href="/publications/">Publications</a>
-    <a href="/cv/">CV</a>
-    <a href="/posts/">Blog</a>
-  </div>
+  <span class="nav-title">Autoresearch De Novo</span>
 </nav>
 
 <!-- Left Sidebar -->
