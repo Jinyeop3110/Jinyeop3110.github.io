@@ -9,14 +9,15 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: #f5f6f7;
-      color: #1a1a1a;
+      background: hsl(200.87, 5.99%, 17.5%);
+      color: #ccc;
       line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── Top Nav ── */
     .topnav {
-      background: #1a1a2e;
+      background: rgb(25, 55, 71);
       color: #fff;
       padding: 14px 24px;
       position: fixed;
@@ -25,7 +26,8 @@
       display: flex;
       align-items: center;
       gap: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      border-bottom: 1px solid hsl(200.87, 5.99%, 22.5%);
     }
     .topnav .brand {
       font-size: 1.3rem;
@@ -34,7 +36,7 @@
       text-decoration: none;
     }
     .topnav .nav-links a {
-      color: #ccc;
+      color: rgba(255,255,255,.75);
       text-decoration: none;
       margin-left: 18px;
       font-size: 0.95rem;
@@ -51,8 +53,8 @@
       position: fixed;
       top: 52px; left: 0; bottom: 0;
       width: 260px;
-      background: #fff;
-      border-right: 1px solid #ddd;
+      background: #202020;
+      border-right: 1px solid hsl(200.87, 5.99%, 22.5%);
       overflow-y: auto;
       padding: 20px 0;
       z-index: 90;
@@ -63,39 +65,39 @@
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #888;
+      color: rgba(255,255,255,.4);
       margin-top: 12px;
     }
     .sidebar h3:first-child { margin-top: 0; }
     .sidebar a {
       display: block;
       padding: 7px 20px 7px 28px;
-      color: #333;
+      color: rgba(255,255,255,.75);
       text-decoration: none;
       font-size: 0.9rem;
       border-left: 3px solid transparent;
       transition: all 0.15s;
     }
     .sidebar a:hover {
-      background: #fef0ec;
+      background: rgba(232, 112, 74, 0.1);
       color: #e8704a;
     }
     .sidebar a.active {
-      background: #fef0ec;
-      color: #d35400;
-      border-left-color: #d35400;
+      background: rgba(232, 112, 74, 0.15);
+      color: #e8704a;
+      border-left-color: #e8704a;
       font-weight: 600;
     }
     .sidebar .back-link {
       padding: 12px 20px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid hsl(200.87, 5.99%, 22.5%);
       margin-bottom: 8px;
       font-weight: 600;
       color: #e8704a;
     }
     .sidebar .report-link {
       font-size: 0.85rem;
-      color: #888;
+      color: rgba(255,255,255,.5);
       padding-left: 36px;
     }
     .sidebar .report-link:hover { color: #e8704a; }
@@ -111,13 +113,13 @@
     h1 {
       font-size: 2rem;
       margin-bottom: 8px;
-      color: #1a1a2e;
+      color: #eee;
     }
     h2 {
       font-size: 1.5rem;
       margin-top: 48px;
       margin-bottom: 16px;
-      color: #1a1a2e;
+      color: #ddd;
       padding-bottom: 6px;
       border-bottom: 2px solid #e8704a;
     }
@@ -125,10 +127,10 @@
       font-size: 1.15rem;
       margin-top: 32px;
       margin-bottom: 10px;
-      color: #2c3e50;
+      color: #bbb;
     }
     p { margin-bottom: 14px; }
-    strong { color: #1a1a2e; }
+    strong { color: #eee; }
 
     /* ── Part dividers ── */
     .part-section {
@@ -149,14 +151,14 @@
       letter-spacing: 0.5px;
     }
     .part-date {
-      color: #888;
+      color: rgba(255,255,255,.5);
       font-size: 0.9rem;
       margin-bottom: 20px;
     }
 
     /* ── Callout / Thesis boxes ── */
     .central-thesis {
-      background: linear-gradient(135deg, #1a1a2e, #d35400);
+      background: linear-gradient(135deg, rgb(25, 55, 71), #d35400);
       color: #fff;
       padding: 28px 32px;
       border-radius: 8px;
@@ -176,7 +178,7 @@
     }
 
     .callout {
-      background: #fff8e1;
+      background: rgba(249, 168, 37, 0.1);
       border-left: 4px solid #f9a825;
       padding: 16px 20px;
       border-radius: 0 6px 6px 0;
@@ -184,7 +186,7 @@
     }
     .callout-label {
       font-weight: 700;
-      color: #f57f17;
+      color: #f9a825;
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -192,15 +194,15 @@
     }
 
     .finding {
-      background: #e3f2fd;
-      border-left: 4px solid #1565c0;
+      background: rgba(21, 101, 192, 0.12);
+      border-left: 4px solid #42a5f5;
       padding: 16px 20px;
       border-radius: 0 6px 6px 0;
       margin: 20px 0;
     }
     .finding-label {
       font-weight: 700;
-      color: #1565c0;
+      color: #42a5f5;
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -208,8 +210,8 @@
     }
 
     .conclusion {
-      background: #e8f5e9;
-      border-left: 4px solid #43a047;
+      background: rgba(67, 160, 71, 0.1);
+      border-left: 4px solid #66bb6a;
       padding: 20px 24px;
       border-radius: 0 6px 6px 0;
       margin: 28px 0;
@@ -217,7 +219,7 @@
     .conclusion h2 {
       border-bottom: none;
       margin-top: 0;
-      color: #2e7d32;
+      color: #66bb6a;
     }
 
     /* ── Pillars ── */
@@ -228,8 +230,8 @@
       margin: 20px 0;
     }
     .pillar {
-      background: #fff;
-      border: 1px solid #ddd;
+      background: hsl(200.87, 5.99%, 22.5%);
+      border: 1px solid hsl(200.87, 5.99%, 28%);
       border-radius: 8px;
       padding: 18px;
     }
@@ -245,13 +247,13 @@
       border-collapse: collapse;
       margin: 16px 0 24px;
       font-size: 0.92rem;
-      background: #fff;
+      background: hsl(200.87, 5.99%, 20%);
       border-radius: 6px;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
     th {
-      background: #1a1a2e;
+      background: rgb(25, 55, 71);
       color: #fff;
       padding: 10px 14px;
       text-align: left;
@@ -259,16 +261,16 @@
     }
     td {
       padding: 9px 14px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid hsl(200.87, 5.99%, 25%);
     }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #f8fafa; }
-    .winner { color: #2e7d32; font-weight: 700; }
-    .loser { color: #c62828; }
+    tr:hover td { background: hsl(200.87, 5.99%, 23%); }
+    .winner { color: #66bb6a; font-weight: 700; }
+    .loser { color: #ef5350; }
 
     /* ── Code blocks ── */
     pre {
-      background: #1e1e2e;
+      background: hsl(200.87, 5.99%, 12%);
       color: #cdd6f4;
       padding: 16px 20px;
       border-radius: 6px;
@@ -282,20 +284,20 @@
       font-size: 0.88em;
     }
     p code, li code, td code {
-      background: #eef1f5;
+      background: rgba(255,255,255,.08);
       padding: 2px 6px;
       border-radius: 3px;
-      color: #c0392b;
+      color: #e8704a;
     }
 
     /* ── Lists ── */
     ul, ol { margin: 10px 0 16px 24px; }
     li { margin-bottom: 6px; }
-    hr { border: none; border-top: 1px solid #ddd; margin: 32px 0; }
+    hr { border: none; border-top: 1px solid hsl(200.87, 5.99%, 25%); margin: 32px 0; }
 
     /* ── Resources ── */
     .resources {
-      background: #f0f4f8;
+      background: hsl(200.87, 5.99%, 22%);
       padding: 20px 24px;
       border-radius: 8px;
       margin: 24px 0;
@@ -304,7 +306,7 @@
     .resources a:hover { text-decoration: underline; }
 
     a { color: #e8704a; }
-    a:hover { color: #d35400; }
+    a:hover { color: #f0956e; }
 
     /* ── Responsive ── */
     @media (max-width: 860px) {
