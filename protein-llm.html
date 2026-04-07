@@ -40,7 +40,7 @@
       font-size: 0.95rem;
       margin-left: 8px;
       padding-left: 14px;
-      border-left: 1px solid rgba(255,255,255,.2);
+      border-left: 1px solid rgba(255,255,255,.3);
     }
     .menu-toggle {
       display: none;
@@ -96,11 +96,12 @@
       color: #4fb1ba;
     }
     .sidebar .sidebar-divider {
-      margin-top: 24px;
-      padding-top: 12px;
-      border-top: 1px solid hsl(200.87, 5.99%, 28%);
-      color: rgba(255,255,255,.3);
+      margin-top: 28px;
+      padding-top: 14px;
+      border-top: 2px solid hsl(200.87, 5.99%, 32%);
+      color: rgba(255,255,255,.45);
       font-size: 0.7rem;
+      margin-bottom: 4px;
     }
     .sidebar a.ext-link {
       font-size: 0.85rem;
@@ -188,7 +189,7 @@
     }
 
     .callout {
-      background: rgba(249, 168, 37, 0.1);
+      background: rgba(249, 168, 37, 0.15);
       border-left: 4px solid #f9a825;
       padding: 16px 20px;
       border-radius: 0 6px 6px 0;
@@ -204,7 +205,7 @@
     }
 
     .conclusion {
-      background: rgba(67, 160, 71, 0.1);
+      background: rgba(67, 160, 71, 0.15);
       border-left: 4px solid #66bb6a;
       padding: 20px 24px;
       border-radius: 0 6px 6px 0;
@@ -213,7 +214,7 @@
     .conclusion h2 {
       border-bottom: none;
       margin-top: 0;
-      color: #66bb6a;
+      color: #81c784;
     }
 
     /* ── Pillars ── */
@@ -258,7 +259,9 @@
       border-bottom: 1px solid hsl(200.87, 5.99%, 25%);
     }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: hsl(200.87, 5.99%, 23%); }
+    tr:hover td { background: hsl(200.87, 5.99%, 26%); }
+    .winner { color: #81c784; font-weight: 700; }
+    .loser { color: #ef5350; }
 
     /* ── Code blocks ── */
     pre {
@@ -276,7 +279,7 @@
       font-size: 0.88em;
     }
     p code, li code, td code {
-      background: rgba(255,255,255,.08);
+      background: rgba(255,255,255,.12);
       padding: 2px 6px;
       border-radius: 3px;
       color: #4fb1ba;
@@ -327,7 +330,7 @@
 
     /* ── Links ── */
     a { color: #4fb1ba; }
-    a:hover { color: rgba(79, 177, 186, 0.7); }
+    a:hover { color: #7dd4dc; }
 
     /* ── Responsive ── */
     @media (max-width: 860px) {
@@ -436,10 +439,10 @@
       </defs>
 
       <!-- ═══ Column Headers ═══ -->
-      <text x="110" y="26" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2.5" text-anchor="middle" font-weight="600">ENCODER</text>
-      <text x="340" y="26" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2.5" text-anchor="middle" font-weight="600">BRIDGE</text>
-      <text x="590" y="26" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2.5" text-anchor="middle" font-weight="600">LANGUAGE MODEL</text>
-      <text x="790" y="26" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2.5" text-anchor="middle" font-weight="600">OUTPUT</text>
+      <text x="110" y="26" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2.5" text-anchor="middle" font-weight="600">ENCODER</text>
+      <text x="340" y="26" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2.5" text-anchor="middle" font-weight="600">BRIDGE</text>
+      <text x="590" y="26" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2.5" text-anchor="middle" font-weight="600">LANGUAGE MODEL</text>
+      <text x="790" y="26" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2.5" text-anchor="middle" font-weight="600">OUTPUT</text>
 
       <!-- ─── Protein Sequence ─── -->
       <rect x="25" y="48" width="170" height="50" rx="7" fill="#c0392b" />
@@ -464,7 +467,7 @@
 
       <!-- ─── Projector group border ─── -->
       <rect x="244" y="195" width="192" height="170" rx="8" fill="none" stroke="rgba(255,255,255,.1)" stroke-dasharray="4,3" />
-      <text x="340" y="212" fill="rgba(255,255,255,.25)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">projector variants</text>
+      <text x="340" y="212" fill="rgba(255,255,255,.45)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">projector variants</text>
 
       <!-- Arrow: Pooling → Projector group -->
       <line x1="340" y1="179" x2="340" y2="217" stroke="rgba(255,255,255,.35)" stroke-width="1" marker-end="url(#arr)" />
@@ -487,8 +490,8 @@
       <!-- Arrows: Projectors → LLM (horizontal) -->
       <line x1="422" y1="240" x2="498" y2="240" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
       <line x1="422" y1="288" x2="498" y2="268" stroke="rgba(255,255,255,.3)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
-      <path d="M422,336 C460,336 480,310 498,290" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
-      <text x="462" y="325" fill="rgba(255,255,255,.2)" font-size="8" font-style="italic" font-family="-apple-system,sans-serif">injects at layers</text>
+      <path d="M422,336 C460,336 480,310 498,290" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
+      <text x="462" y="325" fill="rgba(255,255,255,.5)" font-size="8" font-style="italic" font-family="-apple-system,sans-serif">injects at layers</text>
 
       <!-- ─── Text-Only Path (bypass) ─── -->
       <rect x="25" y="220" width="170" height="44" rx="7" fill="#566573" />
@@ -496,8 +499,8 @@
       <text x="110" y="255" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">tokenize sequence directly</text>
 
       <!-- Dashed arrow: Text → LLM (bypass, curves over) -->
-      <path d="M195,237 C300,210 420,215 498,250" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arr-d)" />
-      <text x="320" y="205" fill="rgba(255,255,255,.25)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif" text-anchor="middle">bypass encoder</text>
+      <path d="M195,237 C300,210 420,215 498,250" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arr-d)" />
+      <text x="320" y="205" fill="rgba(255,255,255,.55)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif" text-anchor="middle">bypass encoder</text>
 
       <!-- ─── Natural Language Input ─── -->
       <rect x="500" y="48" width="180" height="50" rx="7" fill="#2c3e50" />

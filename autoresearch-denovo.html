@@ -40,7 +40,7 @@
       font-size: 0.95rem;
       margin-left: 8px;
       padding-left: 14px;
-      border-left: 1px solid rgba(255,255,255,.2);
+      border-left: 1px solid rgba(255,255,255,.3);
     }
     .menu-toggle {
       display: none;
@@ -178,7 +178,7 @@
     }
 
     .callout {
-      background: rgba(249, 168, 37, 0.1);
+      background: rgba(249, 168, 37, 0.15);
       border-left: 4px solid #f9a825;
       padding: 16px 20px;
       border-radius: 0 6px 6px 0;
@@ -194,15 +194,15 @@
     }
 
     .finding {
-      background: rgba(21, 101, 192, 0.12);
-      border-left: 4px solid #42a5f5;
+      background: rgba(21, 101, 192, 0.15);
+      border-left: 4px solid #64b5f6;
       padding: 16px 20px;
       border-radius: 0 6px 6px 0;
       margin: 20px 0;
     }
     .finding-label {
       font-weight: 700;
-      color: #42a5f5;
+      color: #64b5f6;
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -210,7 +210,7 @@
     }
 
     .conclusion {
-      background: rgba(67, 160, 71, 0.1);
+      background: rgba(67, 160, 71, 0.15);
       border-left: 4px solid #66bb6a;
       padding: 20px 24px;
       border-radius: 0 6px 6px 0;
@@ -219,7 +219,7 @@
     .conclusion h2 {
       border-bottom: none;
       margin-top: 0;
-      color: #66bb6a;
+      color: #81c784;
     }
 
     /* ── Pillars ── */
@@ -264,7 +264,7 @@
       border-bottom: 1px solid hsl(200.87, 5.99%, 25%);
     }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: hsl(200.87, 5.99%, 23%); }
+    tr:hover td { background: hsl(200.87, 5.99%, 26%); }
     .winner { color: #66bb6a; font-weight: 700; }
     .loser { color: #ef5350; }
 
@@ -284,10 +284,27 @@
       font-size: 0.88em;
     }
     p code, li code, td code {
-      background: rgba(255,255,255,.08);
+      background: rgba(255,255,255,.12);
       padding: 2px 6px;
       border-radius: 3px;
       color: #e8704a;
+    }
+
+    /* ── Images ── */
+    .fig {
+      margin: 24px 0;
+      text-align: center;
+    }
+    .fig img {
+      max-width: 100%;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .figcaption {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,.5);
+      margin-top: 8px;
+      font-style: italic;
     }
 
     /* ── Lists ── */
@@ -407,12 +424,12 @@
 
       <!-- Arrow: Agent → Config Selection -->
       <line x1="440" y1="85" x2="440" y2="110" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
-      <text x="470" y="102" fill="rgba(255,255,255,.3)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif">selects config</text>
+      <text x="470" y="102" fill="rgba(255,255,255,.5)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif">selects config</text>
 
       <!-- ═══ Column Headers ═══ -->
-      <text x="90" y="118" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">TARGET</text>
-      <text x="440" y="118" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">GENERATION PIPELINE</text>
-      <text x="790" y="118" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">OUTPUT</text>
+      <text x="90" y="118" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">TARGET</text>
+      <text x="440" y="118" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">GENERATION PIPELINE</text>
+      <text x="790" y="118" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">OUTPUT</text>
 
       <!-- ─── Target Inputs ─── -->
       <rect x="20" y="138" width="140" height="50" rx="7" fill="#2c3e50" />
@@ -428,7 +445,7 @@
 
       <!-- ─── Pipeline group border ─── -->
       <rect x="195" y="130" width="500" height="140" rx="8" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1" />
-      <text x="445" y="144" fill="rgba(255,255,255,.2)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">Proteina-Complexa pipeline &mdash; configurable at each stage</text>
+      <text x="445" y="144" fill="rgba(255,255,255,.4)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">Proteina-Complexa pipeline &mdash; configurable at each stage</text>
 
       <!-- Generate -->
       <rect x="202" y="155" width="108" height="65" rx="6" fill="#7d3c98" />
@@ -497,7 +514,7 @@
 
       <!-- Arrow: Outputs → Evaluation -->
       <path d="M790,248 L790,290 L468,290 L468,320" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
-      <text x="650" y="286" fill="rgba(255,255,255,.25)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif">evaluate candidates</text>
+      <text x="650" y="286" fill="rgba(255,255,255,.5)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif">evaluate candidates</text>
 
       <!-- ═══ FEEDBACK LOOP (back to agent) ═══ -->
       <path d="M440,375 L440,410 L30,410 L30,52 L280,52" fill="none" stroke="#e8704a" stroke-width="1.8" stroke-dasharray="8,4" marker-end="url(#arr-fb)" />
