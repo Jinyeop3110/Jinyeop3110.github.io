@@ -21,34 +21,31 @@ These are linked from `_config.yml` under `menu:`.
 
 Follow these rules exactly:
 
-1. **Copy the template**: Use `protein-llm.html` or `autoresearch-denovo.html` as the starting point. The CSS is inline and self-contained.
+1. **Copy the template**: Use `protein-llm.html` or `autoresearch-denovo.html` as the starting point.
 
-2. **Dark theme colors** (must match main site dark mode):
-   - Body background: `hsl(200.87, 5.99%, 17.5%)`
-   - Body text: `#ccc`
-   - Sidebar background: `#202020`
-   - Sidebar borders: `hsl(200.87, 5.99%, 22.5%)`
-   - Sidebar text: `rgba(255,255,255,.75)`
-   - Top nav background: `rgb(25, 55, 71)`
-   - Table background: `hsl(200.87, 5.99%, 20%)`
-   - Table header background: `rgb(25, 55, 71)`
-   - Code block background: `hsl(200.87, 5.99%, 12%)`
-   - Inline code background: `rgba(255,255,255,.12)`
-   - Cards/pillars: `hsl(200.87, 5.99%, 22.5%)`
-   - Resources box: `hsl(200.87, 5.99%, 22%)`
-   - HR: `hsl(200.87, 5.99%, 25%)`
+2. **Shared stylesheet**: All project pages use `assets/css/project-page.css`. Link it in the `<head>`:
+   ```html
+   <link rel="stylesheet" href="/assets/css/project-page.css">
+   ```
+   The dark theme palette is defined via CSS variables in the shared stylesheet. **Do not duplicate these styles inline.**
 
-3. **Choose an accent color** for the page. Use it consistently in:
-   - `.topnav .brand`
-   - `.sidebar a:hover`, `.sidebar a.active`
-   - `.sidebar .back-link`
-   - `h2` border-bottom
-   - `.part-label` background
-   - `.part-section` border-top
-   - `.pillar-title`
-   - Inline code color
-   - Link color (`a`)
-   - `.resources a`
+3. **Choose an accent color** and override the CSS variables in a small inline `<style>` block:
+   ```html
+   <style>
+     :root {
+       --accent: #e8704a;           /* main accent */
+       --accent-hover: #f0956e;     /* hover brightened */
+       --accent-bg: rgba(232, 112, 74, 0.1);      /* sidebar hover bg */
+       --accent-bg-active: rgba(232, 112, 74, 0.15); /* sidebar active bg */
+       --thesis-gradient-end: #d35400;  /* thesis box gradient */
+     }
+   </style>
+   ```
+   The default accent (teal `#4fb1ba`) requires no overrides — just link the CSS.
+
+   Existing accents:
+   - Protein LLM: teal `#4fb1ba` (default, no override needed)
+   - Autoresearch De Novo: orange `#e8704a`
 
 4. **Top navigation**: Show project title, not Publications/CV/Blog:
    ```html
