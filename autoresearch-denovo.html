@@ -385,6 +385,153 @@
 
     <p>This motivates a new role for LLM agents: not just as chatbots, but as <strong>autonomous research assistants</strong> that design experiments, sweep hyperparameters, analyze results, and adaptively choose the next experiment &mdash; closing the loop between model and target.</p>
 
+    <!-- Agent Loop Architecture Diagram -->
+    <div style="margin:28px 0;overflow-x:auto;">
+    <svg viewBox="0 0 880 560" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:880px;border-radius:10px;background:#151520;display:block;">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6" fill="rgba(255,255,255,.5)" />
+        </marker>
+        <marker id="arr-d" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6" fill="rgba(255,255,255,.3)" />
+        </marker>
+        <marker id="arr-fb" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6" fill="#e8704a" />
+        </marker>
+      </defs>
+
+      <!-- ═══ LLM AGENT (top center, the brain) ═══ -->
+      <rect x="280" y="20" width="320" height="65" rx="8" fill="#c0392b" />
+      <text x="440" y="46" fill="#fff" font-size="16" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">LLM Agent</text>
+      <text x="440" y="66" fill="rgba(255,255,255,.6)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">design experiments &middot; select configs &middot; analyze results &middot; adapt</text>
+
+      <!-- Arrow: Agent → Config Selection -->
+      <line x1="440" y1="85" x2="440" y2="110" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <text x="470" y="102" fill="rgba(255,255,255,.3)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif">selects config</text>
+
+      <!-- ═══ Column Headers ═══ -->
+      <text x="90" y="118" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">TARGET</text>
+      <text x="440" y="118" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">GENERATION PIPELINE</text>
+      <text x="790" y="118" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">OUTPUT</text>
+
+      <!-- ─── Target Inputs ─── -->
+      <rect x="20" y="138" width="140" height="50" rx="7" fill="#2c3e50" />
+      <text x="90" y="160" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Target PDB</text>
+      <text x="90" y="177" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">3D protein structure</text>
+
+      <rect x="20" y="198" width="140" height="50" rx="7" fill="#2c3e50" />
+      <text x="90" y="220" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Hotspot Residues</text>
+      <text x="90" y="237" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">binding interface</text>
+
+      <!-- Arrow: Inputs → Generate -->
+      <line x1="160" y1="188" x2="200" y2="188" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+
+      <!-- ─── Pipeline group border ─── -->
+      <rect x="195" y="130" width="500" height="140" rx="8" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1" />
+      <text x="445" y="144" fill="rgba(255,255,255,.2)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">Proteina-Complexa pipeline &mdash; configurable at each stage</text>
+
+      <!-- Generate -->
+      <rect x="202" y="155" width="108" height="65" rx="6" fill="#7d3c98" />
+      <text x="256" y="180" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Generate</text>
+      <text x="256" y="195" fill="rgba(255,255,255,.5)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">flow matching</text>
+      <text x="256" y="207" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">400 steps</text>
+
+      <!-- Arrow -->
+      <line x1="310" y1="188" x2="325" y2="188" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+
+      <!-- Search -->
+      <rect x="327" y="155" width="108" height="65" rx="6" fill="#6c3483" />
+      <text x="381" y="180" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Beam Search</text>
+      <text x="381" y="195" fill="rgba(255,255,255,.5)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">branching &middot; pruning</text>
+      <text x="381" y="207" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">checkpoints</text>
+
+      <!-- Arrow -->
+      <line x1="435" y1="188" x2="450" y2="188" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+
+      <!-- Score -->
+      <rect x="452" y="155" width="108" height="65" rx="6" fill="#1a7a8a" />
+      <text x="506" y="180" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">AF2 Scoring</text>
+      <text x="506" y="195" fill="rgba(255,255,255,.5)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">i_PAE reward</text>
+      <text x="506" y="207" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">pLDDT, RMSD</text>
+
+      <!-- Arrow -->
+      <line x1="560" y1="188" x2="575" y2="188" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+
+      <!-- Refine -->
+      <rect x="577" y="155" width="108" height="65" rx="6" fill="#1a6b5a" />
+      <text x="631" y="180" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Refine</text>
+      <text x="631" y="195" fill="rgba(255,255,255,.5)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">seq hallucination</text>
+      <text x="631" y="207" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">test-time optim</text>
+
+      <!-- Arrow: Pipeline → Output -->
+      <line x1="685" y1="188" x2="718" y2="165" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="685" y1="188" x2="718" y2="215" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+
+      <!-- ─── Outputs ─── -->
+      <rect x="720" y="138" width="140" height="50" rx="7" fill="#b7950b" />
+      <text x="790" y="160" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Candidate Binders</text>
+      <text x="790" y="177" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">PDB structures</text>
+
+      <rect x="720" y="198" width="140" height="50" rx="7" fill="#b7950b" />
+      <text x="790" y="220" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Quality Metrics</text>
+      <text x="790" y="237" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">i_PAE, pLDDT, reward</text>
+
+      <!-- ═══ EVALUATION MODELS (bottom section) ═══ -->
+      <text x="30" y="305" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="1.5" font-weight="600">EVALUATION &amp; ANALYSIS MODELS</text>
+
+      <rect x="40" y="320" width="155" height="55" rx="7" fill="#2471a3" />
+      <text x="118" y="343" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">AlphaFold2</text>
+      <text x="118" y="362" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">structure prediction &middot; scoring</text>
+
+      <rect x="215" y="320" width="155" height="55" rx="7" fill="#1e8449" />
+      <text x="293" y="343" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">ProteinMPNN</text>
+      <text x="293" y="362" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">designability &middot; scRMSD</text>
+
+      <rect x="390" y="320" width="155" height="55" rx="7" fill="#2e7d8e" />
+      <text x="468" y="343" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">BioEmu</text>
+      <text x="468" y="362" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">conformational dynamics</text>
+
+      <rect x="565" y="320" width="155" height="55" rx="7" fill="#566573" />
+      <text x="643" y="343" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">LigandMPNN</text>
+      <text x="643" y="362" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">ligand-aware design</text>
+
+      <!-- Arrow: Outputs → Evaluation -->
+      <path d="M790,248 L790,290 L468,290 L468,320" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
+      <text x="650" y="286" fill="rgba(255,255,255,.25)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif">evaluate candidates</text>
+
+      <!-- ═══ FEEDBACK LOOP (back to agent) ═══ -->
+      <path d="M440,375 L440,410 L30,410 L30,52 L280,52" fill="none" stroke="#e8704a" stroke-width="1.8" stroke-dasharray="8,4" marker-end="url(#arr-fb)" />
+      <text x="100" y="405" fill="#e8704a" font-size="9" font-style="italic" font-family="-apple-system,sans-serif" font-weight="600">feedback &mdash; results inform next experiment</text>
+
+      <!-- ═══ AGENT STRATEGY (bottom) ═══ -->
+      <text x="30" y="450" fill="rgba(255,255,255,.3)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="1.5" font-weight="600">AGENT STRATEGY &mdash; adaptive compute allocation</text>
+
+      <rect x="40" y="468" width="235" height="52" rx="7" fill="#8b4513" />
+      <text x="158" y="489" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Scout</text>
+      <text x="158" y="507" fill="rgba(255,255,255,.55)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">cheap 100-step runs across configs</text>
+
+      <line x1="275" y1="494" x2="315" y2="494" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+
+      <rect x="317" y="468" width="235" height="52" rx="7" fill="#a0522d" />
+      <text x="435" y="489" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Invest</text>
+      <text x="435" y="507" fill="rgba(255,255,255,.55)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">full 400-step runs on winners</text>
+
+      <line x1="552" y1="494" x2="592" y2="494" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+
+      <rect x="594" y="468" width="235" height="52" rx="7" fill="#b8860b" />
+      <text x="712" y="489" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Pool &amp; Rank</text>
+      <text x="712" y="507" fill="rgba(255,255,255,.55)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">multi-config candidates &rarr; best set</text>
+
+      <!-- ─── Legend ─── -->
+      <line x1="40" y1="545" x2="70" y2="545" stroke="rgba(255,255,255,.45)" stroke-width="1.5" marker-end="url(#arr)" />
+      <text x="76" y="549" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif">Direct flow</text>
+      <line x1="180" y1="545" x2="210" y2="545" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
+      <text x="216" y="549" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif">Evaluation path</text>
+      <line x1="340" y1="545" x2="370" y2="545" stroke="#e8704a" stroke-width="1.8" stroke-dasharray="8,4" marker-end="url(#arr-fb)" />
+      <text x="376" y="549" fill="#e8704a" font-size="9" font-family="-apple-system,sans-serif">Feedback loop &mdash; agent learns from results</text>
+    </svg>
+    </div>
+
     <hr>
 
     <h2 id="overview-motivation">Motivation: Good Models Need Good Hyperparameters</h2>
