@@ -58,11 +58,18 @@
   <a href="#day3-sequences">Sequence Diversity</a>
   <a href="#day3-implications">Implications</a>
 
+  <h3>Day 4-5: Agent Loop v1</h3>
+  <a href="#day4">Agent Loop Results</a>
+  <a href="#day4-trajectories">Optimization Trajectories</a>
+  <a href="#day4-findings">Key Findings</a>
+  <a href="#day4-critique">Multi-Persona Critique</a>
+
   <h3>Detailed Reports</h3>
   <a href="/reports/2026-04-03_pdl1_binder_demo.html" class="report-link">Apr 3 &middot; PD-L1 Demo</a>
   <a href="/reports/2026-04-04_agent_session_sweep.html" class="report-link">Apr 4 &middot; Agent Session Log</a>
   <a href="/reports/2026-04-05_beam_search_sweep.html" class="report-link">Apr 5 &middot; Sweep Results</a>
   <a href="/reports/2026-04-05_config_diversity.html" class="report-link">Apr 5 &middot; Config Diversity</a>
+  <a href="/reports/2026-04-07_agent_loop_v1.html" class="report-link">Apr 6-7 &middot; Agent Loop Dashboard</a>
 </aside>
 
 <!-- Main Content -->
@@ -631,6 +638,131 @@
 
     <p><a href="/reports/2026-04-05_config_diversity.html">Full config diversity report with all figures &rarr;</a></p>
   </div>
+
+
+  <!-- ============================================================ -->
+  <!--              DAY 4-5: AGENT LOOP V1                            -->
+  <!-- ============================================================ -->
+  <div class="part-section" id="day4">
+    <span class="part-label">Day 4&ndash;5</span>
+    <h1>Agent Loop v1: Closed-Loop Optimization</h1>
+    <p class="part-date">April 6&ndash;7, 2026</p>
+
+    <div class="central-thesis">
+      <div class="thesis-label">Question</div>
+      <p class="thesis-text">Can an LLM agent autonomously improve binder quality by iteratively selecting configurations, running experiments, analyzing results, and adapting its strategy?</p>
+    </div>
+
+    <p>We deployed an LLM agent (Claude) in a closed loop: the agent chooses a configuration, launches a Proteina-Complexa run on a GPU, parses the results, records insights, and decides the next experiment. <strong>21 runs</strong> across 4 targets over 8 agent sessions, producing <strong>1,004 final binder candidates</strong>.</p>
+
+    <h2 id="day4-trajectories">Optimization Trajectories</h2>
+
+    <p>Each target shows a clear improvement trajectory. The agent achieves <strong>10&ndash;28% improvement</strong> in best i_PAE from baseline:</p>
+
+    <table>
+      <tr><th>Target</th><th>Runs</th><th>Start i_PAE</th><th>Best i_PAE</th><th>Improvement</th><th>Best Config</th></tr>
+      <tr><td style="color:#636EFA;font-weight:600;">PD-1</td><td>4</td><td>0.166</td><td><strong>0.133</strong></td><td style="color:#3fb950;">-20%</td><td>bw=8, nb=4, ns=8, fine ckpts</td></tr>
+      <tr><td style="color:#EF553B;font-weight:600;">PD-L1</td><td>8</td><td>0.158</td><td><strong>0.134</strong></td><td style="color:#3fb950;">-15%</td><td>bw=16, nb=4, ns=4, fine ckpts</td></tr>
+      <tr><td style="color:#00CC96;font-weight:600;">IFNAR2</td><td>5</td><td>0.145</td><td><strong>0.130</strong></td><td style="color:#3fb950;">-10%</td><td>bw=16, nb=8, ns=4, standard ckpts</td></tr>
+      <tr><td style="color:#AB63FA;font-weight:600;">CD45</td><td>4</td><td>0.241</td><td><strong>0.173</strong></td><td style="color:#3fb950;">-28%</td><td>bw=16, nb=4, ns=4, standard ckpts</td></tr>
+    </table>
+
+    <h3>Per-Target Trajectory Detail</h3>
+
+    <div class="pillars" style="grid-template-columns: 1fr 1fr;">
+      <div class="pillar">
+        <div class="pillar-title" style="color:#636EFA;">PD-1 (4 runs)</div>
+        <p style="font-family:monospace;font-size:12px;line-height:1.8;">
+          Run 1: bw=8,nb=4,ns=4,standard &rarr; <strong>0.166</strong><br>
+          Run 2: bw=8,nb=4,ns=4,fine &rarr; <strong>0.138</strong> (-17%)<br>
+          Run 3: bw=8,nb=4,ns=8,fine &rarr; <strong>0.133</strong> (-20%)<br>
+          Run 4: mcts,bw=8,nb=4,ns=8 &rarr; 0.138 (regressed)
+        </p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title" style="color:#EF553B;">PD-L1 (8 runs)</div>
+        <p style="font-family:monospace;font-size:12px;line-height:1.8;">
+          Run 1-3: bw=8,nb=4,ns=4 &rarr; <strong>0.158</strong> (3 duplicates)<br>
+          Run 4: bw=8,nb=4,ns=8 &rarr; 0.156<br>
+          Run 5: bw=16,nb=4,ns=4 &rarr; 0.165 (worse)<br>
+          Run 6: bw=8,nb=4,fine &rarr; 0.150<br>
+          Run 7: bw=16,nb=4,fine &rarr; <strong>0.134</strong> (-15%)<br>
+          Run 8: bw=16,nb=8,fine &rarr; OOM
+        </p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title" style="color:#00CC96;">IFNAR2 (5 runs)</div>
+        <p style="font-family:monospace;font-size:12px;line-height:1.8;">
+          Run 1: bw=8,nb=4,ns=4 &rarr; <strong>0.145</strong><br>
+          Run 2: bw=16,nb=4,ns=4 &rarr; 0.139<br>
+          Run 3: bw=16,nb=8,ns=4 &rarr; <strong>0.130</strong> (-10%)<br>
+          Run 4: mcts,bw=16,nb=8 &rarr; 0.146 (regressed)<br>
+          Run 5: bw=16,nb=8,ns=8 &rarr; 0.133
+        </p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title" style="color:#AB63FA;">CD45 (4 runs)</div>
+        <p style="font-family:monospace;font-size:12px;line-height:1.8;">
+          Run 1: bw=8,nb=4,ns=4 &rarr; <strong>0.241</strong><br>
+          Run 2: bw=8,nb=4,fine &rarr; 0.180 (-25%)<br>
+          Run 3: bw=8,nb=4,ns=8,fine &rarr; 0.180<br>
+          Run 4: bw=16,nb=4,fine &rarr; <strong>0.173</strong> (-28%)
+        </p>
+      </div>
+    </div>
+
+    <hr>
+
+    <h2 id="day4-findings">Key Findings</h2>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-title">Fine checkpoints help most</div>
+        <p>Switching from standard (5-point) to fine-grained (7-point) checkpoints produced the largest single improvement for PD-1 (-17%) and CD45 (-25%).</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">MCTS did not help</div>
+        <p>Tried on PD-1 and IFNAR2, both times regressed. Beam search with larger beam_width consistently outperformed.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Interaction effects matter</div>
+        <p>PD-L1's best config (fine ckpts + bw=16) combined two changes. The "change one variable at a time" instruction prevented discovering this earlier.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">3 duplicate runs wasted 25%</div>
+        <p>The agent launched identical PDL1 configs 3 times in one session &mdash; no deduplication, no history check. A BO method would never do this.</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <h2 id="day4-critique">Multi-Persona Critique</h2>
+
+    <p>Three expert perspectives reviewed the 21-run trajectory (<a href="/reports/2026-04-07_agent_loop_v1.html">full interactive dashboard &rarr;</a>):</p>
+
+    <div class="pillars" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="pillar" style="border-left:3px solid #636EFA;">
+        <div class="pillar-title" style="color:#636EFA;">ML Optimization</div>
+        <p>The LLM is a mediocre hill-climber: same 4 knobs in the same order for every target. Never tried fk-steering, best-of-n, or nsteps&lt;400. A GP-BO would likely match results in ~10 runs vs 21. Exploration is exploitation-heavy with no surrogate model.</p>
+      </div>
+      <div class="pillar" style="border-left:3px solid #00CC96;">
+        <div class="pillar-title" style="color:#00CC96;">Structural Biology</div>
+        <p>Best i_PAE (0.130&ndash;0.134) is marginal vs BindCraft validated threshold (&lt;0.10). pLDDT is excellent (0.94&ndash;0.96). CD45 fails due to only 1 hotspot residue. <strong>ProteinMPNN is disabled</strong> &mdash; enabling it is the single highest-impact change.</p>
+      </div>
+      <div class="pillar" style="border-left:3px solid #EF553B;">
+        <div class="pillar-title" style="color:#EF553B;">Systems Engineering</div>
+        <p>GPU utilization ~35&ndash;40%. Total cost: ~16 GPU-hours ($47). 25% wasted on duplicate runs. No auto-retry on OOM, orphaned process risk, no file locking for concurrent agents.</p>
+      </div>
+    </div>
+
+    <div class="conclusion">
+      <h2>Why This Motivates v2</h2>
+      <p>The agent loop works &mdash; it achieves meaningful improvement on every target. But the search is narrow (4 knobs out of 80+), repetitive (3 duplicate runs), and cannot compose multi-stage strategies. <strong>Autoresearch v2</strong> addresses this by exposing the full inference-time control surface, introducing InferencePrograms as evolvable artifacts, and adding population-based search with lineage tracking.</p>
+    </div>
+
+    <p><a href="/reports/2026-04-07_agent_loop_v1.html">Full interactive dashboard with per-run details, agent reasoning chains, and Plotly visualizations &rarr;</a></p>
+  </div>
+
 
 </div>
 
