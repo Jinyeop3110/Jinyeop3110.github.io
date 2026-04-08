@@ -31,7 +31,8 @@
 
   <h3>Overview</h3>
   <a href="#overview">Project Overview</a>
-  <a href="#overview-motivation">Motivation</a>
+  <a href="#overview-motivation">Motivation 1: Hyperparameters</a>
+  <a href="#overview-motivation2">Motivation 2: Control Surface</a>
   <a href="#overview-pipeline">Pipeline</a>
   <a href="#overview-evidence">Evidence</a>
   <a href="#overview-diversity">Config Diversity</a>
@@ -47,7 +48,7 @@
   <h3>Day 2-3: Beam Search Sweep</h3>
   <a href="#day2">Sweep Design</a>
   <a href="#day2-configs">5 Configurations</a>
-  <a href="#day2-rankings">Rankings (50/50)</a>
+  <a href="#day2-rankings">Rankings (50 of 50)</a>
   <a href="#day2-proteins">Per-Protein Results</a>
 
   <h3>Day 3: Config Diversity</h3>
@@ -77,12 +78,12 @@
 
     <div class="central-thesis">
       <div class="thesis-label">The Research Question</div>
-      <p class="thesis-text">Can LLM agents guide efficient and effective de novo protein design for drug discovery &mdash; on top of various protein and small-molecule generative models?</p>
+      <p class="thesis-text">Can LLM agents guide efficient and effective de novo protein design for drug discovery &mdash; across diverse protein and small-molecule generative models?</p>
     </div>
 
-    <p>Powerful protein generative models now exist &mdash; <strong>Proteina-Complexa</strong> for binder design, <strong>BioEmu</strong> for conformational ensembles, <strong>AlphaFold</strong> for structure prediction. But having a good model is not enough. These models have dozens of hyperparameters (search strategies, diffusion steps, branching factors, refinement settings) that interact with the target in complex ways. <strong>We show that no single configuration works best across all targets</strong> &mdash; and that the gap between good and bad hyperparameters can be larger than the gap between models.</p>
+    <p>State-of-the-art protein generative models exist &mdash; <strong>Proteina-Complexa</strong> for binder design, <strong>BioEmu</strong> for conformational ensembles, <strong>AlphaFold</strong> for structure prediction &mdash; but remain difficult to use effectively. These models expose dozens of configurable knobs that interact with the target in complex ways. <strong>We show that no single configuration works best across all targets</strong> &mdash; and that the gap between good and bad configurations can be larger than the gap between models.</p>
 
-    <p>This motivates a new role for LLM agents: not just as chatbots, but as <strong>autonomous research assistants</strong> that design experiments, sweep hyperparameters, analyze results, and adaptively choose the next experiment &mdash; closing the loop between model and target.</p>
+    <p>This motivates a new role for LLM agents: as <strong>autonomous research assistants</strong> that design experiments, analyze results, and adaptively choose the next experiment &mdash; closing the experiment&ndash;analysis loop for each target.</p>
 
     <!-- Agent Loop Architecture Diagram -->
     <div class="diagram-container">
@@ -233,7 +234,7 @@
 
     <hr>
 
-    <h2 id="overview-motivation">Motivation: Good Models Need Good Hyperparameters</h2>
+    <h2 id="overview-motivation">Motivation 1: Good Models Need Good Hyperparameters</h2>
 
     <p>We ran <strong>50 experiments</strong> (5 beam search configs &times; 10 protein targets) with Proteina-Complexa. The results make the case clearly:</p>
 
@@ -257,13 +258,49 @@
     </div>
 
     <div class="callout">
-      <div class="callout-label">Coming Soon: Small Molecules</div>
-      <p>The same hyperparameter sensitivity applies to <strong>small-molecule drug design</strong>. Diffusion-based molecular generators (e.g., DiffDock, TargetDiff) face analogous challenges: sampling strategies, noise schedules, and scoring functions interact with the binding pocket in target-dependent ways. We plan to extend this agent framework to ligand-based design, demonstrating that the need for adaptive hyperparameter search is a general principle across modalities.</p>
+      <div class="callout-label">In Progress: Small-Molecule Ligand Binders</div>
+      <p>The same configuration sensitivity applies to <strong>small-molecule ligand binder design</strong>. We are extending the sweep to Proteina-Complexa's ligand binder pipeline (complexa_ligand model + RF3 scoring + LigandMPNN redesign) across 4 ligand targets (7V11, 5SDV, 7BKC, 7C7M) &times; 5 configs &mdash; 20 experiments currently running on 8&times; H100.</p>
+    </div>
+
+    <hr>
+
+    <h2 id="overview-motivation2">Motivation 2: Beyond Hyperparameters &mdash; The Full Inference-Time Control Surface</h2>
+
+    <p>The challenge goes beyond tuning scalar hyperparameters. A generative pipeline like Proteina-Complexa exposes <strong>80+ inference-time parameters</strong> organized across qualitatively different layers:</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-title">Search policy</div>
+        <p>Which algorithm to use (beam search, MCTS, FK-steering, best-of-n), how to branch, when to prune, at which checkpoints.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Diffusion rollout policy</div>
+        <p>How many steps, noise schedules, guidance weights, self-conditioning, ODE integration limits &mdash; controls that shape how the generative model samples.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Reward policy</div>
+        <p>Which scoring model (AF2, RF3, Boltz2), which metrics to optimize (i_PAE, pLDDT, i_con, radius of gyration), how to weight them.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Refinement &amp; filtering policy</div>
+        <p>Whether to enable sequence hallucination, ProteinMPNN redesign, or LigandMPNN; self-consistency checks; structural filters.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Multi-stage orchestration</div>
+        <p>Composing cheap exploration &rarr; expensive refinement; conditional compute allocation; re-ranking under alternative criteria.</p>
+      </div>
+    </div>
+
+    <p>These are not parameters to grid-search &mdash; they are <strong>design decisions</strong> that require reasoning about the target, the failure mode, and the experimental goal. This is why LLM agents, rather than Bayesian optimization alone, are the right tool: they can reason about <em>which knobs to turn</em>, not just <em>how far</em>.</p>
+
+    <div class="callout">
+      <div class="callout-label">Inference Programs, Not Configs</div>
+      <p>We formalize this as <strong>inference-time scaling</strong>: the LLM agent does not change the trained model backbone or weights. Instead, it learns to compose multi-stage <strong>InferencePrograms</strong> &mdash; executable plans that specify search policy, sampling controls, reward weighting, refinement strategy, and conditional transitions between stages. The agent evolves these programs through population-based search, treating each experiment as an evolvable artifact with lineage tracking and duplicate detection.</p>
     </div>
 
     <div class="callout">
       <div class="callout-label">The Problem This Creates</div>
-      <p>A human researcher running Proteina-Complexa on a new drug target faces a combinatorial hyperparameter space: 5+ search algorithms &times; checkpoint schedules &times; branching factors &times; refinement strategies. Running all combinations for every target is wasteful. An LLM agent that understands the target&ndash;config interaction could <strong>adaptively allocate compute</strong> &mdash; running cheap scouts first, then investing in the most promising strategy.</p>
+      <p>A human researcher running Proteina-Complexa on a new drug target faces a combinatorial space: 5 search algorithms &times; checkpoint schedules &times; branching factors &times; reward compositions &times; refinement strategies &times; multi-stage sequencing. This is not a hyperparameter grid &mdash; it is a space of <strong>programs</strong>. Running all combinations for every target is infeasible. An LLM agent that understands the target&ndash;config interaction can <strong>adaptively allocate compute</strong> &mdash; scouting cheaply first, then investing in promising strategies, composing multi-stage programs, and transferring learnings across targets.</p>
     </div>
 
     <hr>
@@ -280,11 +317,11 @@
       <tr><td><strong>Refine</strong></td><td>Sequence hallucination (test-time optimization)</td><td>n_iters, loss weights, temperature</td></tr>
     </table>
 
-    <p><strong>Hardware:</strong> 8&times; NVIDIA H100 80GB &nbsp;|&nbsp; <strong>Targets:</strong> 44 pre-configured proteins &nbsp;|&nbsp; <strong>Scale:</strong> 26,560 samples from 50 experiments</p>
+    <p><strong>Hardware:</strong> 8&times; NVIDIA H100 80GB &nbsp;|&nbsp; <strong>Targets:</strong> 44 pre-configured (10 proteins + 4 ligand targets used in sweeps) &nbsp;|&nbsp; <strong>Scale:</strong> 26,560 samples from 50 protein binder experiments</p>
 
     <hr>
 
-    <h2 id="overview-evidence">Evidence: Beam Search Sweep (50/50 Complete)</h2>
+    <h2 id="overview-evidence">Evidence: Beam Search Sweep (50 of 50 Complete)</h2>
 
     <table>
       <tr><th>Rank</th><th>Config</th><th>Strategy</th><th>Mean Reward</th><th>Wins (top-1)</th></tr>
@@ -324,28 +361,29 @@
 
     <h2 id="overview-roadmap">Roadmap</h2>
 
-    <h3>Phase 1: Baseline &amp; Evidence (Current)</h3>
+    <h3>Phase 1: Baseline &amp; Evidence</h3>
     <ol>
       <li><s>Pipeline validation</s> &mdash; Proteina-Complexa end-to-end on PD-L1</li>
       <li><s>Beam search sweep</s> &mdash; 5 configs &times; 10 proteins, 50 experiments</li>
       <li><s>Config diversity analysis</s> &mdash; per-protein optimality, sequence diversity</li>
-      <li><strong>Refinement sweep</strong> &mdash; add sequence_hallucination to top configs</li>
-      <li><strong>Full pipeline evaluation</strong> &mdash; filter &rarr; evaluate &rarr; analyze (scRMSD, ProteinMPNN)</li>
+      <li><s>Agent loop v1</s> &mdash; 21 runs across 4 targets (PD1, PDL1, IFNAR2, CD45), 10&ndash;28% improvement</li>
+      <li><s>Ligand binder sweep launched</s> &mdash; 4 ligand targets &times; 5 configs, RF3 + LigandMPNN evaluation</li>
+      <li><strong>Full pipeline evaluation</strong> &mdash; ProteinMPNN redesign + scRMSD designability filter</li>
     </ol>
 
-    <h3>Phase 2: Agent-Guided Search</h3>
+    <h3>Phase 2: Agent v2 &mdash; Inference-Time Scaling</h3>
     <ol>
-      <li><strong>Scout &rarr; Invest strategy</strong> &mdash; cheap 100-step scouts across configs, then full 400-step runs on winners</li>
-      <li><strong>Target-adaptive config selection</strong> &mdash; agent learns target&ndash;config mapping from prior sweeps</li>
-      <li><strong>Multi-config pooling</strong> &mdash; agent selects 2&ndash;3 complementary configs per target for maximum diversity</li>
-      <li><strong>Closed-loop refinement</strong> &mdash; agent analyzes AF2 scores, adjusts refinement parameters, re-runs</li>
+      <li><strong>InferenceProgram abstraction</strong> &mdash; replace flat configs with multi-stage executable programs (search &rarr; reward &rarr; refinement &rarr; filter)</li>
+      <li><strong>Full control surface</strong> &mdash; expose 80+ inference-time parameters across 6 policy layers (search, sampling, reward, refinement, filtering, orchestration)</li>
+      <li><strong>Population-based program evolution</strong> &mdash; LLM evolves InferencePrograms with lineage tracking, duplicate detection, and multi-dimensional scoring (quality, diversity, cost)</li>
+      <li><strong>Conditional compute allocation</strong> &mdash; agent composes stages with conditions (e.g., &ldquo;refine only if best_i_pae &lt; 0.25&rdquo;)</li>
     </ol>
 
     <h3>Phase 3: Multi-Model Agent</h3>
     <ol>
       <li><strong>Integrate BioEmu</strong> &mdash; use conformational ensembles to assess binder robustness across target dynamics</li>
-      <li><strong>Small-molecule extension</strong> &mdash; adapt the agent framework for ligand-based drug design</li>
-      <li><strong>Cross-model orchestration</strong> &mdash; agent selects which model to use for which target/task</li>
+      <li><strong>Cross-model orchestration</strong> &mdash; agent selects which model (AF2 vs RF3 vs Boltz2) and which pipeline (protein vs ligand binder) per target</li>
+      <li><strong>Benchmark</strong> &mdash; LLM-agent vs GP-BO vs random search across the full inference-program space</li>
     </ol>
 
     <hr>
@@ -356,11 +394,12 @@
 
     <table>
       <tr><th>Model</th><th>Type</th><th>What it does</th><th>Status</th></tr>
-      <tr><td><strong>Proteina-Complexa</strong></td><td>Binder Design</td><td>Flow-matching de novo binder generation with beam search</td><td class="winner">Active &mdash; 50 experiments complete</td></tr>
-      <tr><td><strong>AlphaFold2</strong></td><td>Scoring</td><td>Structure prediction &amp; binding quality assessment (i_PAE, pLDDT)</td><td class="winner">Active &mdash; reward model in pipeline</td></tr>
-      <tr><td><strong>ProteinMPNN</strong></td><td>Inverse Folding</td><td>Sequence redesign for designability evaluation</td><td>Available &mdash; in evaluate stage</td></tr>
+      <tr><td><strong>Proteina-Complexa</strong></td><td>Binder Design</td><td>Flow-matching de novo binder generation with beam search (protein + ligand binder modes)</td><td class="winner">Active &mdash; 50 protein + 20 ligand experiments</td></tr>
+      <tr><td><strong>AlphaFold2</strong></td><td>Scoring</td><td>Structure prediction &amp; binding quality assessment (i_PAE, pLDDT) for protein targets</td><td class="winner">Active &mdash; reward model for protein binders</td></tr>
+      <tr><td><strong>RoseTTAFold3</strong></td><td>Scoring</td><td>Structure prediction for protein&ndash;ligand complexes (min_ipAE, ipTM)</td><td class="winner">Active &mdash; reward model for ligand binders</td></tr>
+      <tr><td><strong>ProteinMPNN</strong></td><td>Inverse Folding</td><td>Sequence redesign for designability evaluation (scRMSD)</td><td class="winner">Active &mdash; enabled in ligand binder evaluation</td></tr>
+      <tr><td><strong>LigandMPNN</strong></td><td>Ligand-Aware Design</td><td>Ligand-aware sequence redesign for small-molecule binders</td><td class="winner">Active &mdash; in ligand binder evaluation</td></tr>
       <tr><td><strong>BioEmu</strong></td><td>Dynamics</td><td>Protein conformational ensembles &mdash; 1000s of structures/hour/GPU. Predicts folding stability (&Delta;G), captures domain motion &amp; local unfolding</td><td>Planned &mdash; assess binder robustness to target flexibility</td></tr>
-      <tr><td><strong>LigandMPNN</strong></td><td>Ligand-Aware Design</td><td>Sequence design aware of small-molecule ligands</td><td>Available &mdash; in Complexa pipeline</td></tr>
     </table>
 
     <div class="callout">
@@ -375,12 +414,14 @@
     <table>
       <tr><th>Date</th><th>Phase</th><th>Key Result</th></tr>
       <tr><td>Apr 2</td><td>Environment setup</td><td>Proteina-Complexa + conda env + checkpoints</td></tr>
-      <tr><td>Apr 3</td><td>Pipeline validation</td><td>PD-L1 demo: 2 samples in 83s</td></tr>
-      <tr><td>Apr 4&ndash;5</td><td>Beam search sweep</td><td>50/50 experiments. E_fine_selector wins 7/10</td></tr>
-      <tr><td>Apr 5</td><td>Config diversity analysis</td><td>4/10 targets: winner changes by criterion</td></tr>
-      <tr><td>Next</td><td>Refinement sweep</td><td>sequence_hallucination on top configs</td></tr>
-      <tr><td>Next</td><td>Full pipeline evaluation</td><td>Designability (scRMSD, ProteinMPNN)</td></tr>
-      <tr><td>Future</td><td>Agent-guided search</td><td>Scout &rarr; invest, adaptive config selection</td></tr>
+      <tr><td>Apr 3</td><td>Pipeline validation</td><td>PD-L1 demo: 2 samples in 83s on 1&times; H100</td></tr>
+      <tr><td>Apr 4&ndash;5</td><td>Beam search sweep</td><td>50 experiments (5 configs &times; 10 proteins). E_fine_selector wins 7/10</td></tr>
+      <tr><td>Apr 5</td><td>Config diversity analysis</td><td>4/10 targets: winner changes by selection criterion</td></tr>
+      <tr><td>Apr 6&ndash;7</td><td>Agent loop v1</td><td>21 closed-loop runs across PD1, PDL1, IFNAR2, CD45. Best i_PAE: 0.130 (IFNAR2)</td></tr>
+      <tr><td>Apr 7</td><td>Ligand binder sweep</td><td>4 ligand targets &times; 5 configs launched. RF3 + LigandMPNN evaluation pipeline</td></tr>
+      <tr><td>Apr 7</td><td>v2 plan finalized</td><td>InferenceProgram abstraction, 80+ parameter control surface, multi-stage execution</td></tr>
+      <tr><td>Next</td><td>Full pipeline evaluation</td><td>ProteinMPNN redesign + scRMSD designability filter</td></tr>
+      <tr><td>Next</td><td>Agent v2 implementation</td><td>InferenceProgram evolution with lineage tracking</td></tr>
       <tr><td>Future</td><td>BioEmu integration</td><td>Conformational robustness testing</td></tr>
     </table>
 
@@ -470,7 +511,7 @@
     <p><strong>10 protein targets:</strong> PD-1, PD-L1, IFNAR2, CD45, Claudin-1, CrSAS-6, DerF7, BetV1, SpCas9, HER2</p>
     <p><strong>Scale:</strong> 50 experiments &times; 8 GPUs = ~93 min runtime. 26,560 total samples (1,600 finals).</p>
 
-    <h2 id="day2-rankings">Final Rankings (50/50 Complete)</h2>
+    <h2 id="day2-rankings">Final Rankings (50 of 50 Complete)</h2>
 
     <table>
       <tr><th>Rank</th><th>Config</th><th>Mean Reward</th><th>Best i_PAE</th><th>Mean pLDDT</th></tr>
