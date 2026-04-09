@@ -109,16 +109,82 @@
     <span class="part-label">Project Overview</span>
     <h1>Automated De Novo Protein Design Optimization</h1>
 
-    <p>De novo protein design has been transformed by generative models: diffusion-based structure generators (Proteina-Complexa, RFdiffusion), structure predictors (AlphaFold2, RoseTTAFold3), conformational samplers (BioEmu), and inverse folding networks (ProteinMPNN, LigandMPNN). Building these models is a major achievement. But <strong>running them for actual protein designs is a different challenge entirely</strong>: it requires searching over dozens of inference-time hyperparameters and choosing between various generation strategies, scoring models, and refinement pipelines. This search is target-dependent, high-dimensional, and cannot be solved by a single default configuration.</p>
+    <p>De novo protein design has advanced rapidly through generative models: diffusion-based structure generators (Proteina-Complexa, RFdiffusion), structure predictors (AlphaFold2, RoseTTAFold3), conformational samplers (BioEmu), and inverse folding networks (ProteinMPNN, LigandMPNN). These models are powerful. But <strong>using them to produce high-quality binders for a specific target requires searching over dozens of inference-time hyperparameters</strong>: beam search width, checkpoint schedules, branching factors, scoring model choice, refinement strategies, and more. No single default configuration works across targets. The search is high-dimensional, target-dependent, and expensive.</p>
 
-    <p>LLMs can now act as the <strong>brain</strong> that connects to and orchestrates other AI models. We build an LLM agent that autonomously designs experiments, runs protein generation pipelines, analyzes results, and adapts its strategy for each target.</p>
+    <p>We frame this as an <strong>inference-time optimization</strong> problem. The trained model weights are fixed. The agent's job is to find the best way to <em>run</em> the model for each target. LLMs can act as the brain that connects to and orchestrates protein design models, turning what was a manual trial-and-error process into a closed-loop optimization.</p>
 
     <div class="central-thesis">
       <div class="thesis-label">Research Question</div>
-      <p class="thesis-text">Can LLM agents guide efficient and effective de novo protein design optimization, searching over inference-time hyperparameters and generation strategies across diverse protein and small-molecule targets?</p>
+      <p class="thesis-text">Can an LLM agent optimize inference-time hyperparameters for protein generative models, improving binder quality iteration by iteration for each target?</p>
+    </div>
+
+    <!-- What We Measure -->
+    <h3>What We Measure</h3>
+    <table>
+      <tr><th>Metric</th><th>What it means</th><th>Good value</th></tr>
+      <tr><td><strong>i_PAE</strong></td><td>Interface predicted aligned error. Measures how confidently AlphaFold2 predicts the binder-target interface. Lower = better binding.</td><td>&lt; 0.10 (validated binders)</td></tr>
+      <tr><td><strong>pLDDT</strong></td><td>Predicted local distance difference test. Measures per-residue structural confidence. Higher = more confident fold.</td><td>&gt; 0.90</td></tr>
+      <tr><td><strong>total_reward</strong></td><td>Negated i_PAE. The objective the agent maximizes (closer to 0 = better).</td><td>&gt; &minus;0.15</td></tr>
+    </table>
+
+    <p>The agent's goal: <strong>minimize i_PAE</strong> by searching over hyperparameters. We expect i_PAE to decrease over iterations as the agent learns which configurations work for each target:</p>
+
+    <!-- Small improvement curve -->
+    <div class="diagram-container">
+    <svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;border-radius:8px;background:#151520;display:block;margin:0 auto;">
+      <!-- Axes -->
+      <line x1="60" y1="150" x2="450" y2="150" stroke="rgba(255,255,255,.3)" stroke-width="1" />
+      <line x1="60" y1="150" x2="60" y2="20" stroke="rgba(255,255,255,.3)" stroke-width="1" />
+
+      <!-- Y axis label -->
+      <text x="18" y="85" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle" transform="rotate(-90,18,85)">best i_PAE (lower = better)</text>
+
+      <!-- X axis label -->
+      <text x="255" y="172" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">agent iteration</text>
+
+      <!-- Y ticks -->
+      <text x="52" y="37" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="end">0.25</text>
+      <line x1="55" y1="34" x2="60" y2="34" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+      <text x="52" y="69" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="end">0.20</text>
+      <line x1="55" y1="66" x2="60" y2="66" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+      <text x="52" y="101" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="end">0.15</text>
+      <line x1="55" y1="98" x2="60" y2="98" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+      <text x="52" y="133" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="end">0.10</text>
+      <line x1="55" y1="130" x2="60" y2="130" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+
+      <!-- Threshold line -->
+      <line x1="60" y1="130" x2="450" y2="130" stroke="rgba(76,175,80,.3)" stroke-width="1" stroke-dasharray="4,3" />
+      <text x="455" y="133" fill="rgba(76,175,80,.6)" font-size="8" font-family="-apple-system,sans-serif">validated threshold</text>
+
+      <!-- CD45 curve (most dramatic: 0.241 → 0.173) -->
+      <polyline points="90,28 170,60 250,60 330,52" fill="none" stroke="#AB63FA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="90" cy="28" r="3.5" fill="#AB63FA" />
+      <circle cx="170" cy="60" r="3.5" fill="#AB63FA" />
+      <circle cx="250" cy="60" r="3.5" fill="#AB63FA" />
+      <circle cx="330" cy="52" r="3.5" fill="#AB63FA" />
+      <text x="340" y="48" fill="#AB63FA" font-size="9" font-weight="600" font-family="-apple-system,sans-serif">CD45 (-28%)</text>
+
+      <!-- PD-1 curve (0.166 → 0.133) -->
+      <polyline points="90,74 170,95 250,90" fill="none" stroke="#636EFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="90" cy="74" r="3.5" fill="#636EFA" />
+      <circle cx="170" cy="95" r="3.5" fill="#636EFA" />
+      <circle cx="250" cy="90" r="3.5" fill="#636EFA" />
+      <text x="260" y="86" fill="#636EFA" font-size="9" font-weight="600" font-family="-apple-system,sans-serif">PD-1 (-20%)</text>
+
+      <!-- IFNAR2 curve (0.145 → 0.130) -->
+      <polyline points="90,106 170,100 250,92" fill="none" stroke="#00CC96" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="90" cy="106" r="3.5" fill="#00CC96" />
+      <circle cx="170" cy="100" r="3.5" fill="#00CC96" />
+      <circle cx="250" cy="92" r="3.5" fill="#00CC96" />
+      <text x="260" y="96" fill="#00CC96" font-size="9" font-weight="600" font-family="-apple-system,sans-serif">IFNAR2 (-10%)</text>
+
+      <!-- Title -->
+      <text x="255" y="14" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">Agent improves i_PAE over iterations (v1 results)</text>
+    </svg>
     </div>
 
     <!-- Agent Loop Architecture Diagram -->
+    <h3>System Architecture</h3>
     <div class="diagram-container">
     <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:880px;border-radius:10px;background:#151520;display:block;">
       <defs>
