@@ -118,75 +118,9 @@
       <p class="thesis-text">Can an LLM agent optimize inference-time hyperparameters for protein generative models, improving binder quality iteration by iteration for each target?</p>
     </div>
 
-    <!-- What We Measure -->
-    <h3>What We Measure</h3>
-    <table>
-      <tr><th>Metric</th><th>What it means</th><th>Good value</th></tr>
-      <tr><td><strong>i_PAE</strong></td><td>Interface predicted aligned error. Measures how confidently AlphaFold2 predicts the binder-target interface. Lower = better binding.</td><td>&lt; 0.10 (validated binders)</td></tr>
-      <tr><td><strong>pLDDT</strong></td><td>Predicted local distance difference test. Measures per-residue structural confidence. Higher = more confident fold.</td><td>&gt; 0.90</td></tr>
-      <tr><td><strong>total_reward</strong></td><td>Negated i_PAE. The objective the agent maximizes (closer to 0 = better).</td><td>&gt; &minus;0.15</td></tr>
-    </table>
-
-    <p>The agent's goal: <strong>minimize i_PAE</strong> by searching over hyperparameters. We expect i_PAE to decrease over iterations as the agent learns which configurations work for each target:</p>
-
-    <!-- Small improvement curve -->
+    <!-- Combined Overview: Architecture + Metrics + Improvement Curve -->
     <div class="diagram-container">
-    <svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;border-radius:8px;background:#151520;display:block;margin:0 auto;">
-      <!-- Axes -->
-      <line x1="60" y1="150" x2="450" y2="150" stroke="rgba(255,255,255,.3)" stroke-width="1" />
-      <line x1="60" y1="150" x2="60" y2="20" stroke="rgba(255,255,255,.3)" stroke-width="1" />
-
-      <!-- Y axis label -->
-      <text x="18" y="85" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle" transform="rotate(-90,18,85)">best i_PAE (lower = better)</text>
-
-      <!-- X axis label -->
-      <text x="255" y="172" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">agent iteration</text>
-
-      <!-- Y ticks -->
-      <text x="52" y="37" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="end">0.25</text>
-      <line x1="55" y1="34" x2="60" y2="34" stroke="rgba(255,255,255,.2)" stroke-width="1" />
-      <text x="52" y="69" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="end">0.20</text>
-      <line x1="55" y1="66" x2="60" y2="66" stroke="rgba(255,255,255,.2)" stroke-width="1" />
-      <text x="52" y="101" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="end">0.15</text>
-      <line x1="55" y1="98" x2="60" y2="98" stroke="rgba(255,255,255,.2)" stroke-width="1" />
-      <text x="52" y="133" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="end">0.10</text>
-      <line x1="55" y1="130" x2="60" y2="130" stroke="rgba(255,255,255,.2)" stroke-width="1" />
-
-      <!-- Threshold line -->
-      <line x1="60" y1="130" x2="450" y2="130" stroke="rgba(76,175,80,.3)" stroke-width="1" stroke-dasharray="4,3" />
-      <text x="455" y="133" fill="rgba(76,175,80,.6)" font-size="8" font-family="-apple-system,sans-serif">validated threshold</text>
-
-      <!-- CD45 curve (most dramatic: 0.241 → 0.173) -->
-      <polyline points="90,28 170,60 250,60 330,52" fill="none" stroke="#AB63FA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-      <circle cx="90" cy="28" r="3.5" fill="#AB63FA" />
-      <circle cx="170" cy="60" r="3.5" fill="#AB63FA" />
-      <circle cx="250" cy="60" r="3.5" fill="#AB63FA" />
-      <circle cx="330" cy="52" r="3.5" fill="#AB63FA" />
-      <text x="340" y="48" fill="#AB63FA" font-size="9" font-weight="600" font-family="-apple-system,sans-serif">CD45 (-28%)</text>
-
-      <!-- PD-1 curve (0.166 → 0.133) -->
-      <polyline points="90,74 170,95 250,90" fill="none" stroke="#636EFA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-      <circle cx="90" cy="74" r="3.5" fill="#636EFA" />
-      <circle cx="170" cy="95" r="3.5" fill="#636EFA" />
-      <circle cx="250" cy="90" r="3.5" fill="#636EFA" />
-      <text x="260" y="86" fill="#636EFA" font-size="9" font-weight="600" font-family="-apple-system,sans-serif">PD-1 (-20%)</text>
-
-      <!-- IFNAR2 curve (0.145 → 0.130) -->
-      <polyline points="90,106 170,100 250,92" fill="none" stroke="#00CC96" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-      <circle cx="90" cy="106" r="3.5" fill="#00CC96" />
-      <circle cx="170" cy="100" r="3.5" fill="#00CC96" />
-      <circle cx="250" cy="92" r="3.5" fill="#00CC96" />
-      <text x="260" y="96" fill="#00CC96" font-size="9" font-weight="600" font-family="-apple-system,sans-serif">IFNAR2 (-10%)</text>
-
-      <!-- Title -->
-      <text x="255" y="14" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">Agent improves i_PAE over iterations (v1 results)</text>
-    </svg>
-    </div>
-
-    <!-- Agent Loop Architecture Diagram -->
-    <h3>System Architecture</h3>
-    <div class="diagram-container">
-    <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:880px;border-radius:10px;background:#151520;display:block;">
+    <svg viewBox="0 0 880 580" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:880px;border-radius:10px;background:#151520;display:block;">
       <defs>
         <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
           <path d="M0,0 L8,3 L0,6" fill="rgba(255,255,255,.5)" />
@@ -196,91 +130,174 @@
         </marker>
       </defs>
 
-      <!-- ═══ LLM AGENT (top center) ═══ -->
-      <rect x="280" y="20" width="320" height="60" rx="8" fill="#c0392b" />
-      <text x="440" y="44" fill="#fff" font-size="16" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">LLM Agent</text>
-      <text x="440" y="63" fill="rgba(255,255,255,.6)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">select config &middot; run experiment &middot; analyze &middot; adapt</text>
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!--  TOP HALF: System Architecture                         -->
+      <!-- ══════════════════════════════════════════════════════ -->
+
+      <!-- LLM AGENT -->
+      <rect x="280" y="16" width="320" height="55" rx="8" fill="#c0392b" />
+      <text x="440" y="38" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">LLM Agent (Inference-Time Optimizer)</text>
+      <text x="440" y="56" fill="rgba(255,255,255,.6)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">select config &middot; run experiment &middot; analyze &middot; adapt</text>
 
       <!-- Arrow: Agent → Pipeline -->
-      <line x1="440" y1="80" x2="440" y2="105" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
-      <text x="475" y="97" fill="rgba(255,255,255,.5)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif">selects config</text>
+      <line x1="440" y1="71" x2="440" y2="94" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
-      <!-- ═══ Column Headers ═══ -->
-      <text x="90" y="115" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">TARGET</text>
-      <text x="440" y="115" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">PROTEINA-COMPLEXA PIPELINE</text>
-      <text x="790" y="115" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">OUTPUT</text>
+      <!-- Column Headers -->
+      <text x="90" y="105" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">TARGET</text>
+      <text x="440" y="105" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">PROTEINA-COMPLEXA PIPELINE</text>
+      <text x="790" y="105" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" letter-spacing="2" text-anchor="middle" font-weight="600">OUTPUT</text>
 
-      <!-- ─── Target Inputs ─── -->
-      <rect x="20" y="130" width="140" height="44" rx="7" fill="#2c3e50" />
-      <text x="90" y="150" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Target PDB</text>
-      <text x="90" y="165" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">protein structure</text>
+      <!-- Target Inputs -->
+      <rect x="20" y="116" width="140" height="40" rx="7" fill="#2c3e50" />
+      <text x="90" y="134" fill="#fff" font-size="11" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Target PDB</text>
+      <text x="90" y="148" fill="rgba(255,255,255,.55)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">protein structure</text>
 
-      <rect x="20" y="182" width="140" height="44" rx="7" fill="#2c3e50" />
-      <text x="90" y="202" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Hotspot Residues</text>
-      <text x="90" y="217" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">binding interface</text>
+      <rect x="20" y="162" width="140" height="40" rx="7" fill="#2c3e50" />
+      <text x="90" y="180" fill="#fff" font-size="11" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Hotspot Residues</text>
+      <text x="90" y="194" fill="rgba(255,255,255,.55)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">binding interface</text>
 
-      <!-- Arrow: Inputs → Generate -->
-      <line x1="160" y1="178" x2="195" y2="178" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="160" y1="160" x2="195" y2="160" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
-      <!-- ─── Pipeline group ─── -->
-      <rect x="192" y="125" width="510" height="112" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" />
-      <text x="447" y="140" fill="rgba(255,255,255,.55)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">Configurable at each stage: 80+ inference-time parameters</text>
+      <!-- Pipeline group -->
+      <rect x="192" y="112" width="510" height="98" rx="8" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" />
+      <text x="447" y="125" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">Configurable at each stage: 80+ inference-time parameters</text>
 
       <!-- Generate -->
-      <rect x="200" y="150" width="112" height="72" rx="6" fill="#7d3c98" />
-      <text x="256" y="175" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Generate</text>
-      <text x="256" y="192" fill="rgba(255,255,255,.6)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">flow matching</text>
-      <text x="256" y="206" fill="rgba(255,255,255,.45)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">400 diffusion steps</text>
+      <rect x="200" y="134" width="108" height="62" rx="6" fill="#7d3c98" />
+      <text x="254" y="156" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Generate</text>
+      <text x="254" y="170" fill="rgba(255,255,255,.6)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">flow matching</text>
+      <text x="254" y="183" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">400 diffusion steps</text>
 
-      <!-- Arrow -->
-      <line x1="312" y1="186" x2="328" y2="186" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="308" y1="165" x2="322" y2="165" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
-      <!-- Search -->
-      <rect x="330" y="150" width="112" height="72" rx="6" fill="#6c3483" />
-      <text x="386" y="175" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Beam Search</text>
-      <text x="386" y="192" fill="rgba(255,255,255,.6)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">branch &middot; lookahead</text>
-      <text x="386" y="206" fill="rgba(255,255,255,.45)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">prune at checkpoints</text>
+      <!-- Beam Search -->
+      <rect x="324" y="134" width="108" height="62" rx="6" fill="#6c3483" />
+      <text x="378" y="156" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Beam Search</text>
+      <text x="378" y="170" fill="rgba(255,255,255,.6)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">branch &middot; lookahead</text>
+      <text x="378" y="183" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">prune at checkpoints</text>
 
-      <!-- Arrow -->
-      <line x1="442" y1="186" x2="458" y2="186" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="432" y1="165" x2="446" y2="165" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
-      <!-- Score -->
-      <rect x="460" y="150" width="112" height="72" rx="6" fill="#1a7a8a" />
-      <text x="516" y="175" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">AF2 Score</text>
-      <text x="516" y="192" fill="rgba(255,255,255,.6)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">i_PAE reward</text>
-      <text x="516" y="206" fill="rgba(255,255,255,.45)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">pLDDT, RMSD</text>
+      <!-- AF2 Score -->
+      <rect x="448" y="134" width="108" height="62" rx="6" fill="#1a7a8a" />
+      <text x="502" y="156" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">AF2 Score</text>
+      <text x="502" y="170" fill="rgba(255,255,255,.6)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">i_PAE reward</text>
+      <text x="502" y="183" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">pLDDT, RMSD</text>
 
-      <!-- Arrow -->
-      <line x1="572" y1="186" x2="588" y2="186" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="556" y1="165" x2="570" y2="165" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
       <!-- Refine -->
-      <rect x="590" y="150" width="104" height="72" rx="6" fill="#1a6b5a" />
-      <text x="642" y="175" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Refine</text>
-      <text x="642" y="192" fill="rgba(255,255,255,.6)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">seq hallucination</text>
-      <text x="642" y="206" fill="rgba(255,255,255,.45)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">test-time optim</text>
+      <rect x="572" y="134" width="108" height="62" rx="6" fill="#1a6b5a" />
+      <text x="626" y="156" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Refine</text>
+      <text x="626" y="170" fill="rgba(255,255,255,.6)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">seq hallucination</text>
+      <text x="626" y="183" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">test-time optim</text>
 
-      <!-- Arrow: Pipeline → Output -->
-      <line x1="694" y1="178" x2="718" y2="155" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
-      <line x1="694" y1="178" x2="718" y2="205" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <!-- Outputs -->
+      <line x1="680" y1="158" x2="714" y2="138" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="680" y1="168" x2="714" y2="180" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
-      <!-- ─── Outputs ─── -->
-      <rect x="720" y="130" width="140" height="44" rx="7" fill="#b7950b" />
-      <text x="790" y="150" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Binder PDBs</text>
-      <text x="790" y="165" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">32 candidates per run</text>
+      <rect x="716" y="118" width="144" height="38" rx="7" fill="#b7950b" />
+      <text x="788" y="136" fill="#fff" font-size="11" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Binder PDBs</text>
+      <text x="788" y="149" fill="rgba(255,255,255,.55)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">32 candidates per run</text>
 
-      <rect x="720" y="182" width="140" height="44" rx="7" fill="#b7950b" />
-      <text x="790" y="202" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Quality Metrics</text>
-      <text x="790" y="217" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">i_PAE, pLDDT, reward</text>
+      <rect x="716" y="162" width="144" height="38" rx="7" fill="#b7950b" />
+      <text x="788" y="180" fill="#fff" font-size="11" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Quality Metrics</text>
+      <text x="788" y="193" fill="rgba(255,255,255,.55)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">i_PAE, pLDDT, reward</text>
 
-      <!-- ═══ FEEDBACK LOOP (back to agent) ═══ -->
-      <path d="M790,226 L790,270 L30,270 L30,50 L280,50" fill="none" stroke="#e8704a" stroke-width="2" stroke-dasharray="8,4" marker-end="url(#arr-fb)" />
-      <text x="410" y="288" fill="#e8704a" font-size="10" font-family="-apple-system,sans-serif" font-weight="600" text-anchor="middle">results feed back to agent for next experiment</text>
+      <!-- Feedback Loop -->
+      <path d="M788,200 L788,232 L30,232 L30,43 L280,43" fill="none" stroke="#e8704a" stroke-width="2" stroke-dasharray="8,4" marker-end="url(#arr-fb)" />
+      <text x="410" y="248" fill="#e8704a" font-size="10" font-family="-apple-system,sans-serif" font-weight="600" text-anchor="middle">results feed back to agent for next experiment</text>
 
-      <!-- ─── Legend ─── -->
-      <line x1="40" y1="322" x2="70" y2="322" stroke="rgba(255,255,255,.45)" stroke-width="1.5" marker-end="url(#arr)" />
-      <text x="76" y="326" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif">data flow</text>
-      <line x1="180" y1="322" x2="210" y2="322" stroke="#e8704a" stroke-width="2" stroke-dasharray="8,4" marker-end="url(#arr-fb)" />
-      <text x="216" y="326" fill="#e8704a" font-size="9" font-family="-apple-system,sans-serif">feedback loop</text>
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!--  BOTTOM LEFT: What We Optimize (metrics)               -->
+      <!-- ══════════════════════════════════════════════════════ -->
+
+      <text x="30" y="285" fill="rgba(255,255,255,.4)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="1.5" font-weight="600">WHAT WE OPTIMIZE</text>
+
+      <!-- i_PAE box -->
+      <rect x="30" y="298" width="180" height="58" rx="7" fill="#2c3e50" />
+      <text x="120" y="316" fill="#e8704a" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">i_PAE</text>
+      <text x="120" y="331" fill="rgba(255,255,255,.55)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">interface predicted aligned error</text>
+      <text x="120" y="347" fill="rgba(255,255,255,.4)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">lower = better | threshold &lt; 0.10</text>
+
+      <!-- pLDDT box -->
+      <rect x="220" y="298" width="180" height="58" rx="7" fill="#2c3e50" />
+      <text x="310" y="316" fill="#636EFA" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">pLDDT</text>
+      <text x="310" y="331" fill="rgba(255,255,255,.55)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">structural confidence</text>
+      <text x="310" y="347" fill="rgba(255,255,255,.4)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">higher = better | threshold &gt; 0.90</text>
+
+      <!-- total_reward box -->
+      <rect x="410" y="298" width="180" height="58" rx="7" fill="#2c3e50" />
+      <text x="500" y="316" fill="#00CC96" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">total_reward</text>
+      <text x="500" y="331" fill="rgba(255,255,255,.55)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">= &minus;i_PAE (agent objective)</text>
+      <text x="500" y="347" fill="rgba(255,255,255,.4)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">closer to 0 = better</text>
+
+      <!-- ══════════════════════════════════════════════════════ -->
+      <!--  BOTTOM RIGHT: Improvement Curve                       -->
+      <!-- ══════════════════════════════════════════════════════ -->
+
+      <text x="630" y="285" fill="rgba(255,255,255,.4)" font-size="10" font-family="-apple-system,sans-serif" letter-spacing="1.5" font-weight="600">v1 RESULT: i_PAE OVER ITERATIONS</text>
+
+      <!-- Chart area: x=620..860, y=295..545 -->
+      <!-- Axes -->
+      <line x1="660" y1="540" x2="855" y2="540" stroke="rgba(255,255,255,.25)" stroke-width="1" />
+      <line x1="660" y1="540" x2="660" y2="300" stroke="rgba(255,255,255,.25)" stroke-width="1" />
+
+      <!-- Y axis label -->
+      <text x="628" y="420" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle" transform="rotate(-90,628,420)">i_PAE (lower = better)</text>
+
+      <!-- X axis label -->
+      <text x="757" y="558" fill="rgba(255,255,255,.4)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">iteration</text>
+
+      <!-- Y ticks: 0.25 at y=310, 0.20 at y=370, 0.15 at y=430, 0.10 at y=490 -->
+      <text x="654" y="313" fill="rgba(255,255,255,.25)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="end">0.25</text>
+      <line x1="656" y1="310" x2="660" y2="310" stroke="rgba(255,255,255,.15)" stroke-width="1" />
+      <text x="654" y="373" fill="rgba(255,255,255,.25)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="end">0.20</text>
+      <line x1="656" y1="370" x2="660" y2="370" stroke="rgba(255,255,255,.15)" stroke-width="1" />
+      <text x="654" y="433" fill="rgba(255,255,255,.25)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="end">0.15</text>
+      <line x1="656" y1="430" x2="660" y2="430" stroke="rgba(255,255,255,.15)" stroke-width="1" />
+      <text x="654" y="493" fill="rgba(255,255,255,.25)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="end">0.10</text>
+      <line x1="656" y1="490" x2="660" y2="490" stroke="rgba(255,255,255,.15)" stroke-width="1" />
+
+      <!-- Threshold line at 0.10 -->
+      <line x1="660" y1="490" x2="855" y2="490" stroke="rgba(76,175,80,.25)" stroke-width="1" stroke-dasharray="4,3" />
+      <text x="855" y="486" fill="rgba(76,175,80,.5)" font-size="7" font-family="-apple-system,sans-serif" text-anchor="end">validated</text>
+
+      <!-- Scale: y = 310 + (0.25 - value) * 1200 -->
+      <!-- CD45: 0.241→0.180→0.180→0.173 => y: 321→394→394→402 -->
+      <polyline points="685,321 730,394 775,394 820,402" fill="none" stroke="#AB63FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="685" cy="321" r="3" fill="#AB63FA" />
+      <circle cx="730" cy="394" r="3" fill="#AB63FA" />
+      <circle cx="775" cy="394" r="3" fill="#AB63FA" />
+      <circle cx="820" cy="402" r="3" fill="#AB63FA" />
+      <text x="830" y="398" fill="#AB63FA" font-size="8" font-weight="600" font-family="-apple-system,sans-serif">CD45</text>
+
+      <!-- PD-1: 0.166→0.138→0.133 => y: 411→444→450 -->
+      <polyline points="685,411 745,444 810,450" fill="none" stroke="#636EFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="685" cy="411" r="3" fill="#636EFA" />
+      <circle cx="745" cy="444" r="3" fill="#636EFA" />
+      <circle cx="810" cy="450" r="3" fill="#636EFA" />
+      <text x="820" y="446" fill="#636EFA" font-size="8" font-weight="600" font-family="-apple-system,sans-serif">PD-1</text>
+
+      <!-- IFNAR2: 0.145→0.139→0.130 => y: 436→443→454 -->
+      <polyline points="685,436 745,443 810,454" fill="none" stroke="#00CC96" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <circle cx="685" cy="436" r="3" fill="#00CC96" />
+      <circle cx="745" cy="443" r="3" fill="#00CC96" />
+      <circle cx="810" cy="454" r="3" fill="#00CC96" />
+      <text x="820" y="458" fill="#00CC96" font-size="8" font-weight="600" font-family="-apple-system,sans-serif">IFNAR2</text>
+
+      <!-- Arrow showing "better" direction -->
+      <line x1="645" y1="520" x2="645" y2="500" stroke="rgba(255,255,255,.2)" stroke-width="1" marker-end="url(#arr)" />
+      <text x="645" y="535" fill="rgba(255,255,255,.25)" font-size="7" font-family="-apple-system,sans-serif" text-anchor="middle">better</text>
+
+      <!-- ─── Bottom Legend ─── -->
+      <line x1="30" y1="568" x2="55" y2="568" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <text x="61" y="572" fill="rgba(255,255,255,.3)" font-size="8" font-family="-apple-system,sans-serif">data flow</text>
+      <line x1="140" y1="568" x2="165" y2="568" stroke="#e8704a" stroke-width="2" stroke-dasharray="8,4" marker-end="url(#arr-fb)" />
+      <text x="171" y="572" fill="#e8704a" font-size="8" font-family="-apple-system,sans-serif">feedback loop</text>
+      <circle cx="270" cy="568" r="3" fill="#AB63FA" /><text x="280" y="572" fill="#AB63FA" font-size="8" font-family="-apple-system,sans-serif">CD45 (-28%)</text>
+      <circle cx="370" cy="568" r="3" fill="#636EFA" /><text x="380" y="572" fill="#636EFA" font-size="8" font-family="-apple-system,sans-serif">PD-1 (-20%)</text>
+      <circle cx="465" cy="568" r="3" fill="#00CC96" /><text x="475" y="572" fill="#00CC96" font-size="8" font-family="-apple-system,sans-serif">IFNAR2 (-10%)</text>
     </svg>
     </div>
 
