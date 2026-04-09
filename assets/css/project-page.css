@@ -354,6 +354,47 @@ p code, li code, td code {
   font-style: italic;
 }
 
+/* ── Foldable Supplementary Figures ── */
+details.supplementary {
+  margin: 20px 0;
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  background: var(--bg-card);
+  overflow: hidden;
+}
+details.supplementary summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+details.supplementary summary::-webkit-details-marker { display: none; }
+details.supplementary summary::before {
+  content: "\25B6";
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+  color: var(--accent);
+}
+details.supplementary[open] summary::before {
+  transform: rotate(90deg);
+}
+details.supplementary summary:hover {
+  background: var(--accent-bg);
+}
+details.supplementary .supple-content {
+  padding: 4px 16px 16px;
+}
+details.supplementary .supple-content .fig {
+  margin: 12px 0;
+}
+
 /* ── Lists ── */
 ul, ol { margin: 10px 0 16px 24px; }
 li { margin-bottom: 6px; }
