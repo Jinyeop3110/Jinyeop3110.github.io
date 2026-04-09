@@ -24,11 +24,13 @@
 
   <h3>Overview</h3>
   <a href="#overview">Series Overview</a>
+  <a href="#overview-motivation">Motivation</a>
   <a href="#overview-architecture">Architecture</a>
   <a href="#overview-scaling">Scaling Data</a>
   <a href="#overview-rl">RL &amp; Gradient Routing</a>
   <a href="#overview-next">What's Next</a>
   <a href="#overview-timeline">Timeline</a>
+  <a href="#overview-references">References</a>
 
   <h3 class="sidebar-divider">Supplementary Deep Dives</h3>
 
@@ -90,9 +92,24 @@
 
     <hr>
 
+    <h2 id="overview-motivation">Motivation</h2>
+
+    <p>Protein language models and large language models have each achieved remarkable success &mdash; but in isolation. Bridging them is both timely and necessary for three reasons:</p>
+
+    <h3>1. Rich Representations Locked in Embedding Space</h3>
+    <p>Protein foundation models like ESM-3 <a href="#ref-esm3">[1]</a> learn structural geometry, evolutionary constraints, and functional signals from hundreds of millions of sequences. Yet these representations live as high-dimensional vectors &mdash; useful for downstream classifiers but inaccessible to natural-language reasoning. No amount of prompting a general LLM recovers what ESM-3 already knows about a protein's 3D fold from its sequence alone.</p>
+
+    <h3>2. LLMs Reason but Lack Biological Grounding</h3>
+    <p>General-purpose LLMs can follow complex instructions, synthesise information, and generate structured output. When given a raw amino-acid sequence, however, they treat it as an opaque string of characters &mdash; unable to infer that a conserved catalytic triad implies serine protease activity, or that a coiled-coil motif suggests dimerisation. Injecting protein embeddings as a first-class modality gives the LLM grounded biological signal to reason over, rather than relying on memorised text patterns.</p>
+
+    <h3>3. Post-Training Is Practical</h3>
+    <p>Training a protein-aware LLM from scratch would require re-learning both language and protein biology &mdash; prohibitively expensive. The multimodal bridging paradigm pioneered for vision-language models (LLaVA <a href="#ref-llava">[2]</a>, Flamingo <a href="#ref-flamingo">[3]</a>) shows a cheaper path: freeze a strong encoder, attach a learnable projector, and fine-tune the LLM with LoRA <a href="#ref-lora">[4]</a>. We apply this recipe to proteins, asking whether it transfers to a modality with fundamentally different structure than images.</p>
+
+    <hr>
+
     <h2 id="overview-architecture">The Architecture</h2>
 
-    <p>We connect two worlds: <strong>ESM-3</strong>, a protein foundation model that encodes structural and evolutionary knowledge into 1536-dimensional embeddings, and <strong>Qwen3-8B-Instruct</strong>, a general-purpose LLM. A learnable bridge (pooling + projector) translates between them. ESM-3 stays frozen; the LLM adapts via LoRA.</p>
+    <p>We connect two worlds: <strong>ESM-3</strong>, a protein foundation model that encodes structural and evolutionary knowledge into 1536-dimensional embeddings, and <strong>Qwen3-8B-Instruct</strong> <a href="#ref-qwen">[8]</a>, a general-purpose LLM. A learnable bridge (pooling + projector) translates between them. ESM-3 stays frozen; the LLM adapts via LoRA.</p>
 
     <!-- Architecture Diagram -->
     <div class="diagram-container">
@@ -103,6 +120,9 @@
         </marker>
         <marker id="arr-d" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
           <path d="M0,0 L8,3 L0,6" fill="rgba(255,255,255,.3)" />
+        </marker>
+        <marker id="arr-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6" fill="#e67e22" fill-opacity="0.7" />
         </marker>
       </defs>
 
@@ -161,14 +181,22 @@
       <path d="M422,336 C460,336 480,310 498,290" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
       <text x="462" y="325" fill="rgba(255,255,255,.5)" font-size="8" font-style="italic" font-family="-apple-system,sans-serif">injects at layers</text>
 
-      <!-- ─── Text-Only Path (bypass) ─── -->
-      <rect x="25" y="220" width="170" height="44" rx="7" fill="#566573" />
-      <text x="110" y="239" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Text-Only Path</text>
-      <text x="110" y="255" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">tokenize sequence directly</text>
+      <!-- ─── Text-Only Path (competing pathway) ─── -->
+      <rect x="25" y="220" width="170" height="55" rx="7" fill="#d35400" />
+      <text x="110" y="241" fill="#fff" font-size="13" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Text-Only Path</text>
+      <text x="110" y="258" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">tokenize sequence directly</text>
+      <text x="110" y="270" fill="rgba(255,255,255,.45)" font-size="8" font-family="-apple-system,sans-serif" text-anchor="middle">~2M params (LoRA only)</text>
 
-      <!-- Dashed arrow: Text → LLM (bypass, curves over) -->
-      <path d="M195,237 C300,210 420,215 498,250" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#arr-d)" />
-      <text x="320" y="205" fill="rgba(255,255,255,.55)" font-size="9" font-style="italic" font-family="-apple-system,sans-serif" text-anchor="middle">bypass encoder</text>
+      <!-- Arrow: Protein Sequence → Text-Only Path (routed left of ESM-3 box) -->
+      <path d="M30,98 L10,98 L10,240 L23,240" fill="none" stroke="#e67e22" stroke-width="1.5" stroke-opacity="0.6" marker-end="url(#arr-orange)" />
+
+      <!-- Arrow: Text → LLM (bypass, solid & visible) -->
+      <path d="M195,247 C310,230 430,232 498,255" fill="none" stroke="#e67e22" stroke-width="2" stroke-opacity="0.7" marker-end="url(#arr-orange)" />
+      <text x="350" y="225" fill="#e67e22" font-size="9" font-weight="600" font-family="-apple-system,sans-serif" text-anchor="middle">bypass encoder &amp; bridge</text>
+
+      <!-- ─── VS indicator ─── -->
+      <rect x="72" y="186" width="76" height="22" rx="11" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1" />
+      <text x="110" y="201" fill="rgba(255,255,255,.6)" font-size="10" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle" letter-spacing="3">VS</text>
 
       <!-- ─── Natural Language Input ─── -->
       <rect x="500" y="48" width="180" height="50" rx="7" fill="#2c3e50" />
@@ -229,9 +257,11 @@
 
       <!-- ─── Legend ─── -->
       <line x1="60" y1="505" x2="90" y2="505" stroke="rgba(255,255,255,.45)" stroke-width="1.5" marker-end="url(#arr)" />
-      <text x="96" y="509" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif">Direct flow</text>
-      <line x1="200" y1="505" x2="230" y2="505" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
-      <text x="236" y="509" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif">Alternative pathway</text>
+      <text x="96" y="509" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif">Embedding path</text>
+      <line x1="220" y1="505" x2="250" y2="505" stroke="#e67e22" stroke-width="2" stroke-opacity="0.7" marker-end="url(#arr)" />
+      <text x="256" y="509" fill="#e67e22" font-size="9" font-family="-apple-system,sans-serif" opacity="0.7">Text-only path</text>
+      <line x1="390" y1="505" x2="420" y2="505" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-d)" />
+      <text x="426" y="509" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif">Projector variant</text>
     </svg>
     </div>
 
@@ -241,7 +271,7 @@
       <tr><th>Approach</th><th>How protein enters the LLM</th><th>Trainable params</th></tr>
       <tr><td><strong>Text</strong></td><td>Raw sequence as <code>&lt;protein&gt;MKTL...&lt;/protein&gt;</code> tokens</td><td>~2M (LoRA only)</td></tr>
       <tr><td><strong>MLP</strong></td><td>ESM-3 &rarr; AttentionPooling (32 tokens) &rarr; MLP projector</td><td>~32.5M</td></tr>
-      <tr><td><strong>Perceiver</strong></td><td>ESM-3 &rarr; Perceiver Resampler (cross-attention)</td><td>~31.4M</td></tr>
+      <tr><td><strong>Perceiver</strong></td><td>ESM-3 &rarr; Perceiver Resampler <a href="#ref-perceiver">[7]</a> (cross-attention)</td><td>~31.4M</td></tr>
       <tr><td><strong>Flamingo</strong></td><td>ESM-3 &rarr; Perceiver &rarr; Gated cross-attention at LLM layers</td><td>~120-150M</td></tr>
     </table>
 
@@ -251,7 +281,7 @@
 
     <h2 id="overview-scaling">Scaling Data: 50K &rarr; 4.9 Million Samples</h2>
 
-    <p>Our first 50K-sample run proved the architecture converges. But one data source wasn't enough. We assembled <strong>4.89 million instruction pairs</strong> from six sources.</p>
+    <p>Our first 50K-sample run proved the architecture converges. But one data source wasn't enough. We assembled <strong>4.89 million instruction pairs</strong> from six sources, anchored by Mol-Instructions <a href="#ref-mol-instructions">[5]</a>.</p>
 
     <table>
       <tr><th>Metric</th><th>50K / Qwen3-4B</th><th>4.89M / Qwen3-8B</th><th>Change</th></tr>
@@ -271,7 +301,7 @@
 
     <h2 id="overview-rl">Reinforcement Learning: The Gradient Routing Problem</h2>
 
-    <p>With a strong SFT checkpoint in hand, we applied <strong>GRPO</strong> using verifiable rewards. Then came the surprise &mdash; the rankings <strong>completely inverted</strong>:</p>
+    <p>With a strong SFT checkpoint in hand, we applied <strong>GRPO</strong> <a href="#ref-grpo">[6]</a> using verifiable rewards. Then came the surprise &mdash; the rankings <strong>completely inverted</strong>:</p>
 
     <table>
       <tr><th>Model</th><th>SFT eval_loss</th><th>GRPO Reward (best)</th></tr>
@@ -286,7 +316,7 @@
     <h2 id="overview-next">What's Next</h2>
 
     <h3>SSL: Domain Pre-Training</h3>
-    <p>Continued pre-training on 50GB of biology literature using Qwen3.5-4B BASE with LoRA to inject biological domain knowledge before instruction tuning.</p>
+    <p>Continued pre-training on 50GB of biology literature using Qwen3-4B BASE with LoRA to inject biological domain knowledge before instruction tuning.</p>
 
     <h3>Perceiver &amp; Flamingo at Scale</h3>
     <p>Both architectures are implemented but untested at 4.89M scale. Cross-attention (Perceiver) may exhibit different gradient routing during GRPO.</p>
@@ -306,18 +336,89 @@
       <tr><th>Date</th><th>Phase</th><th>Key Result</th></tr>
       <tr><td>Feb 2026</td><td>Architecture &amp; first training</td><td>ESM3+MLP converges; 50K SFT eval_loss=3.64</td></tr>
       <tr><td>Mar 7</td><td>Data scaling</td><td>4.89M samples; eval_loss 0.361 (-90.1%)</td></tr>
-      <tr><td>Mar 13</td><td>GRPO reinforcement learning</td><td>Gradient routing problem; text 0.832 vs MLP 0.582</td></tr>
+      <tr><td>Mar 13</td><td>GRPO reinforcement learning</td><td>Gradient routing problem; text 0.832 vs MLP 0.780</td></tr>
       <tr><td>Mar 16</td><td>SSL pipeline &amp; curated data</td><td>50GB SSL corpus + 1.82M curated SFT dataset</td></tr>
       <tr><td>TBD</td><td>Four-way comparison</td><td>Text vs MLP vs Perceiver vs Flamingo at scale</td></tr>
       <tr><td>TBD</td><td>Gradient routing fix</td><td>Two-stage GRPO / gradient balancing</td></tr>
     </table>
 
     <div class="resources">
-      <strong>Project Repository:</strong> <a href="https://github.com/Jinyeop3110/Post_Training_Protein_LLM" target="_blank">Post_Training_Protein_LLM</a><br>
-      <strong>Key References:</strong>
-      <a href="https://github.com/facebookresearch/esm" target="_blank">ESM-3</a> &middot;
-      <a href="https://arxiv.org/abs/2306.08018" target="_blank">Mol-Instructions (ICLR 2024)</a>
+      <strong>Project Repository:</strong> <a href="https://github.com/Jinyeop3110/Post_Training_Protein_LLM" target="_blank">Post_Training_Protein_LLM</a>
     </div>
+
+    <hr>
+
+    <h2 id="overview-references">References</h2>
+
+    <ol class="references">
+      <li id="ref-esm3">Hayes, T., Rao, R., Akin, H., et al. &ldquo;Simulating 500 million years of evolution with a language model.&rdquo; <em>bioRxiv</em>, 2024. <a href="https://doi.org/10.1101/2024.07.01.600583" target="_blank">doi:10.1101/2024.07.01.600583</a></li>
+      <li id="ref-llava">Liu, H., Li, C., Wu, Q., &amp; Lee, Y. J. &ldquo;Visual Instruction Tuning.&rdquo; <em>NeurIPS</em>, 2023. <a href="https://arxiv.org/abs/2304.08485" target="_blank">arXiv:2304.08485</a></li>
+      <li id="ref-flamingo">Alayrac, J.-B., Donahue, J., Luc, P., Miech, A., Barr, I., et al. &ldquo;Flamingo: a Visual Language Model for Few-Shot Learning.&rdquo; <em>NeurIPS</em>, 2022. <a href="https://arxiv.org/abs/2204.14198" target="_blank">arXiv:2204.14198</a></li>
+      <li id="ref-lora">Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., &amp; Chen, W. &ldquo;LoRA: Low-Rank Adaptation of Large Language Models.&rdquo; <em>ICLR</em>, 2022. <a href="https://arxiv.org/abs/2106.09685" target="_blank">arXiv:2106.09685</a></li>
+      <li id="ref-mol-instructions">Fang, Y., Liang, X., Zhang, N., Liu, K., Huang, R., Chen, Z., Fan, X., &amp; Chen, H. &ldquo;Mol-Instructions: A Large-Scale Biomolecular Instruction Dataset for Large Language Models.&rdquo; <em>ICLR</em>, 2024. <a href="https://arxiv.org/abs/2306.08018" target="_blank">arXiv:2306.08018</a></li>
+      <li id="ref-grpo">Shao, Z., Wang, P., Zhu, Q., Xu, R., Song, J., et al. &ldquo;DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models.&rdquo; <em>arXiv</em>, 2024. <a href="https://arxiv.org/abs/2402.03300" target="_blank">arXiv:2402.03300</a></li>
+      <li id="ref-perceiver">Jaegle, A., Gimeno, F., Brock, A., Zisserman, A., Vinyals, O., &amp; Carreira, J. &ldquo;Perceiver: General Perception with Iterative Attention.&rdquo; <em>ICML</em>, 2021. <a href="https://arxiv.org/abs/2103.03206" target="_blank">arXiv:2103.03206</a></li>
+      <li id="ref-qwen">Qwen Team. &ldquo;Qwen3 Technical Report.&rdquo; 2025. <a href="https://qwenlm.github.io/blog/qwen3/" target="_blank">qwenlm.github.io</a></li>
+    </ol>
+
+    <h3>BibTeX</h3>
+
+    <pre><code>@article{hayes2024esm3,
+  title={Simulating 500 million years of evolution with a language model},
+  author={Hayes, Thomas and Rao, Roshan and Akin, Halil and others},
+  journal={bioRxiv},
+  year={2024},
+  doi={10.1101/2024.07.01.600583}
+}
+
+@inproceedings{liu2023llava,
+  title={Visual Instruction Tuning},
+  author={Liu, Haotian and Li, Chunyuan and Wu, Qingyang and Lee, Yong Jae},
+  booktitle={NeurIPS},
+  year={2023}
+}
+
+@inproceedings{alayrac2022flamingo,
+  title={Flamingo: a Visual Language Model for Few-Shot Learning},
+  author={Alayrac, Jean-Baptiste and Donahue, Jeff and Luc, Pauline and Miech, Antoine and Barr, Iain and others},
+  booktitle={NeurIPS},
+  year={2022}
+}
+
+@inproceedings{hu2022lora,
+  title={LoRA: Low-Rank Adaptation of Large Language Models},
+  author={Hu, Edward J and Shen, Yelong and Wallis, Phillip and Allen-Zhu, Zeyuan and Li, Yuanzhi and Wang, Shean and Wang, Lu and Chen, Weizhu},
+  booktitle={ICLR},
+  year={2022}
+}
+
+@inproceedings{fang2024mol,
+  title={Mol-Instructions: A Large-Scale Biomolecular Instruction Dataset for Large Language Models},
+  author={Fang, Yin and Liang, Xiaozhuan and Zhang, Ningyu and Liu, Kangwei and Huang, Rui and Chen, Zhuo and Fan, Xiaohui and Chen, Huajun},
+  booktitle={ICLR},
+  year={2024}
+}
+
+@article{shao2024deepseekmath,
+  title={DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models},
+  author={Shao, Zhihong and Wang, Peiyi and Zhu, Qihao and Xu, Runxin and Song, Junxiao and others},
+  journal={arXiv preprint arXiv:2402.03300},
+  year={2024}
+}
+
+@inproceedings{jaegle2021perceiver,
+  title={Perceiver: General Perception with Iterative Attention},
+  author={Jaegle, Andrew and Gimeno, Felix and Brock, Andrew and Zisserman, Andrew and Vinyals, Oriol and Carreira, Joao},
+  booktitle={ICML},
+  year={2021}
+}
+
+@misc{qwen2025qwen3,
+  title={Qwen3 Technical Report},
+  author={{Qwen Team}},
+  year={2025},
+  howpublished={\url{https://qwenlm.github.io/blog/qwen3/}}
+}</code></pre>
   </div>
 
 
@@ -495,10 +596,19 @@ SSSSSSSSSSSSSSSS...
 
     <h3>Sequence Length Distribution</h3>
 
-    <div class="fig">
-      <img src="/assets/img/projects/protein_seq_length_histogram.png" alt="Protein Sequence Length Distribution" loading="lazy">
-      <p class="figcaption">Distribution of protein sequence lengths across the combined 4.5M dataset. Median: 306 amino acids.</p>
-    </div>
+    <details class="supplementary">
+      <summary>Supplementary: Sequence length distribution &amp; data composition</summary>
+      <div class="supple-content">
+        <div class="fig">
+          <img src="/assets/img/projects/protein_seq_length_histogram.png" alt="Protein Sequence Length Distribution" loading="lazy">
+          <p class="figcaption">Distribution of protein sequence lengths across the combined 4.5M dataset. Median: 306 amino acids.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig3_data_composition.png" alt="Dataset source composition" loading="lazy">
+          <p class="figcaption">Composition of the 4.89M training dataset across six sources and task types.</p>
+        </div>
+      </div>
+    </details>
 
     <table>
       <tr><th>Statistic</th><th>Value</th></tr>
@@ -573,11 +683,6 @@ SSSSSSSSSSSSSSSS...
 
     <h3>Loss Dropped Off a Cliff</h3>
 
-    <div class="fig">
-      <img src="/assets/img/projects/mlp_combined_train_loss.png" alt="Training Loss Over Time" loading="lazy">
-      <p class="figcaption">Training loss showing continued improvement through epoch 1. The combined dataset produces dramatically lower loss than single-source training.</p>
-    </div>
-
     <table>
       <tr><th>Metric</th><th>Combined 4.9M (MLP)</th><th>Text-Only on 4.9M</th><th>Mol-Instr Only (505K)</th></tr>
       <tr><td><strong>eval_loss</strong></td><td><strong>0.361</strong></td><td>1.207</td><td>1.908</td></tr>
@@ -585,10 +690,23 @@ SSSSSSSSSSSSSSSS...
       <tr><td>MLP advantage vs text</td><td>&mdash;</td><td>70.1% lower</td><td>81.1% lower</td></tr>
     </table>
 
-    <div class="fig">
-      <img src="/assets/img/projects/mlp_combined_eval_loss.png" alt="Eval Loss Comparison" loading="lazy">
-      <p class="figcaption">Eval loss at epoch 1 checkpoint: 0.361 &mdash; dramatically lower than mol-instructions-only (1.908).</p>
-    </div>
+    <details class="supplementary">
+      <summary>Supplementary: Training &amp; eval loss curves</summary>
+      <div class="supple-content">
+        <div class="fig">
+          <img src="/assets/img/projects/mlp_combined_train_loss.png" alt="Training Loss Over Time" loading="lazy">
+          <p class="figcaption">Training loss showing continued improvement through epoch 1. The combined dataset produces dramatically lower loss than single-source training.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/projects/mlp_combined_eval_loss.png" alt="Eval Loss Comparison" loading="lazy">
+          <p class="figcaption">Eval loss at epoch 1 checkpoint: 0.361 &mdash; dramatically lower than mol-instructions-only (1.908).</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/all_sft_loss_curves.png" alt="All SFT loss curves compared" loading="lazy">
+          <p class="figcaption">All SFT training runs compared: MLP, text-only, and mol-instructions-only across training steps.</p>
+        </div>
+      </div>
+    </details>
 
     <h3>The Two Biggest Levers</h3>
 
@@ -611,18 +729,24 @@ SSSSSSSSSSSSSSSS...
 
     <p>Scores declined slightly by the final checkpoint (step 9,750: BLEU 0.255, ROUGE-L 0.481), suggesting some overfitting.</p>
 
-    <hr>
-
-    <h2 id="part2-stability">Training Stability</h2>
-
-    <h3>Gradient Norms</h3>
-
-    <div class="fig">
-      <img src="/assets/img/projects/mlp_combined_grad_norms.png" alt="Gradient Norms" loading="lazy">
-      <p class="figcaption">Gradient norm trajectories. The combined run stabilizes to a mean of 0.627 after initial spikes in the first 100 steps.</p>
-    </div>
-
-    <p>Brief instability early on (steps 10-100), then rock-solid stability. Mean gradient norm: 0.627 &mdash; lower than both mol-instructions-only (1.67) and text baseline (1.48). More diverse data actually made optimization <em>smoother</em>.</p>
+    <details class="supplementary">
+      <summary>Supplementary: Scaling effect, generation quality &amp; training stability</summary>
+      <div class="supple-content">
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig7_scaling_effect.png" alt="Scaling effect on eval loss" loading="lazy">
+          <p class="figcaption">Eval loss as a function of data scale: 50K &rarr; 505K &rarr; 4.89M. Data scaling provides the largest single improvement.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig6_generation_quality.png" alt="Generation quality metrics over training" loading="lazy">
+          <p class="figcaption">BLEU and ROUGE-L over training steps. Best quality at step 9,250; slight decline afterward suggests overfitting.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/projects/mlp_combined_grad_norms.png" alt="Gradient Norms" loading="lazy">
+          <p class="figcaption">Gradient norm trajectories. The combined run stabilizes to a mean of 0.627 after initial spikes in the first 100 steps.</p>
+        </div>
+        <p>Brief instability early on (steps 10-100), then rock-solid stability. Mean gradient norm: 0.627 &mdash; lower than both mol-instructions-only (1.67) and text baseline (1.48). More diverse data actually made optimization <em>smoother</em>.</p>
+      </div>
+    </details>
 
     <hr>
 
@@ -637,6 +761,20 @@ SSSSSSSSSSSSSSSS...
       <tr><td>Perceiver</td><td>29.4M</td><td>1.952</td><td>Not yet run</td></tr>
       <tr><td>Flamingo</td><td>~120-150M</td><td>&mdash;</td><td>Not yet run</td></tr>
     </table>
+
+    <details class="supplementary">
+      <summary>Supplementary: Embedding space analysis</summary>
+      <div class="supple-content">
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig12_embedding_umap.png" alt="UMAP embedding visualization" loading="lazy">
+          <p class="figcaption">UMAP visualization of protein embeddings: ESM-3 structural space vs LLM representation space after SFT.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/embedding_cka_heatmap.png" alt="CKA representation similarity heatmap" loading="lazy">
+          <p class="figcaption">Centered Kernel Alignment (CKA) heatmap: representation similarity across layers between ESM-3 and the fine-tuned LLM.</p>
+        </div>
+      </div>
+    </details>
 
     <hr>
 
@@ -679,10 +817,19 @@ SSSSSSSSSSSSSSSS...
 
     <p>Over the past month, I built a multimodal protein language model &mdash; ESM-3 encodes sequences into 1536-dimensional structural embeddings, passing through attention pooling (32 tokens) and an MLP projector into Qwen3-8B-Instruct. LoRA adapts the LLM; ESM-3 stays frozen. ~32.5M trainable parameters.</p>
 
-    <div class="fig">
-      <img src="/assets/img/blog/protein-llm/fig1_schematic_overview.png" alt="Four-pathway architecture schematic" loading="lazy">
-      <p class="figcaption">Schematic overview of the four-pathway architecture.</p>
-    </div>
+    <details class="supplementary">
+      <summary>Supplementary: Detailed architecture schematic</summary>
+      <div class="supple-content">
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig1_schematic_overview.png" alt="Four-pathway architecture schematic" loading="lazy">
+          <p class="figcaption">Schematic overview of the four-pathway architecture.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig10_base_vs_finetuned.png" alt="Base vs finetuned model comparison" loading="lazy">
+          <p class="figcaption">Base model vs fine-tuned: generation quality comparison showing the effect of SFT.</p>
+        </div>
+      </div>
+    </details>
 
     <hr>
 
@@ -771,19 +918,31 @@ SSSSSSSSSSSSSSSS...
 
     <h2 id="part3-reward">Reward Breakdown: Component-Level Analysis</h2>
 
-    <div class="fig">
-      <img src="/assets/img/blog/protein-llm/fig14_grpo_structure_reward_breakdown.png" alt="Reward component breakdown" loading="lazy">
-      <p class="figcaption">Reward component breakdown: text-only outperforms across all four components.</p>
-    </div>
-
     <p>Biggest gaps in numerical accuracy (text: 0.185, standard MLP: 0.086) and category match (text: 0.197, standard MLP: 0.104). Quality alignment closer (text: 0.351, standard MLP: 0.326).</p>
 
     <p><strong>pLDDT calibration</strong>: Actual mean 79.7. Text-only predicts 79.1 (remarkably close). Frozen-MM overestimates at 85.1. Standard MLP underestimates at 67.9. The projector embeddings contain strong signal but GRPO fails to calibrate it properly.</p>
 
-    <div class="fig">
-      <img src="/assets/img/blog/protein-llm/fig15_grpo_structure_format_rate.png" alt="Format compliance" loading="lazy">
-      <p class="figcaption">Format compliance: text-only reaches ~100% early. Standard MLP stuck at 74-76%. Frozen-MM recovers to ~95%.</p>
-    </div>
+    <details class="supplementary">
+      <summary>Supplementary: Reward breakdown, format compliance &amp; all GRPO runs</summary>
+      <div class="supple-content">
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig14_grpo_structure_reward_breakdown.png" alt="Reward component breakdown" loading="lazy">
+          <p class="figcaption">Reward component breakdown: text-only outperforms across all four components.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig15_grpo_structure_format_rate.png" alt="Format compliance" loading="lazy">
+          <p class="figcaption">Format compliance: text-only reaches ~100% early. Standard MLP stuck at 74-76%. Frozen-MM recovers to ~95%.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/all_grpo_reward_curves.png" alt="All GRPO reward curves" loading="lazy">
+          <p class="figcaption">All 13 GRPO experiments compared: reward trajectories across different configurations and tasks.</p>
+        </div>
+        <div class="fig">
+          <img src="/assets/img/blog/protein-llm/fig8_grpo_reward_breakdown.png" alt="ProteinLM GRPO reward breakdown" loading="lazy">
+          <p class="figcaption">ProteinLM benchmark GRPO: reward breakdown showing zero-variance groups and wasted compute.</p>
+        </div>
+      </div>
+    </details>
 
     <hr>
 
