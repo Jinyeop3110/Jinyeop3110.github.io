@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autoresearch De Novo - Jinyeop Song</title>
+  <title>Automated De Novo Protein Design Optimization - Jinyeop Song</title>
   <link rel="stylesheet" href="/assets/css/project-page.css">
   <style>
     /* Autoresearch De Novo — orange accent */
@@ -63,44 +63,40 @@
 <nav class="topnav">
   <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
   <a href="/" class="brand">Jinyeop Song</a>
-  <span class="nav-title">Autoresearch De Novo</span>
+  <span class="nav-title">Automated De Novo Protein Design Optimization</span>
 </nav>
 
 <!-- Left Sidebar -->
 <aside class="sidebar" id="sidebar">
   <a href="/posts/" class="back-link">&larr; Back to Blog</a>
 
-  <h3>Main Results</h3>
+  <h3>Overview</h3>
   <a href="#overview">Project Overview</a>
-  <a href="#overview-motivation">Motivation: Hyperparameters</a>
-  <a href="#overview-evidence">Evidence: Sweep</a>
-  <a href="#overview-diversity">Per-Protein Optimality</a>
+  <a href="#overview-motivation">Motivation</a>
 
-  <h3>Agent Loop v1</h3>
-  <a href="#day4">Agent Loop Results</a>
-  <a href="#day4-trajectories">Optimization Trajectories</a>
-  <a href="#day4-critique">Multi-Persona Critique</a>
+  <h3>Agent v1</h3>
+  <a href="#v1">v1 Results</a>
+  <a href="#v1-trajectories">Optimization Trajectories</a>
+  <a href="#v1-reflection">Reflection</a>
 
-  <h3>Extended Results</h3>
-  <a href="#extended-proteins">New Protein Targets</a>
-  <a href="#ligand">Ligand Binder Design</a>
-  <a href="#ligand-results">Ligand Results</a>
+  <h3>Agent v2</h3>
+  <a href="#v2">v2 Plan</a>
+  <a href="#v2-graphify">Graphify Experiment</a>
+  <a href="#v2-todo">TODO</a>
 
   <h3>Supplementary</h3>
   <a href="#overview-motivation2">Control Surface</a>
   <a href="#overview-pipeline">Pipeline Details</a>
-  <a href="#overview-phases">Phases &amp; Progress</a>
   <a href="#overview-models">Model Landscape</a>
-  <a href="#day1">Day 1: Validation</a>
-  <a href="#day2">Day 2-3: Sweep</a>
-  <a href="#day3">Day 3: Diversity</a>
+  <a href="#day1">Pipeline Validation</a>
+  <a href="#day2">Beam Search Sweep</a>
+  <a href="#day3">Config Diversity</a>
 
-  <h3>Detailed Reports</h3>
-  <a href="/reports/2026-04-03_pdl1_binder_demo.html" class="report-link">Apr 3 &middot; PD-L1 Demo</a>
-  <a href="/reports/2026-04-04_agent_session_sweep.html" class="report-link">Apr 4 &middot; Agent Session Log</a>
-  <a href="/reports/2026-04-05_beam_search_sweep.html" class="report-link">Apr 5 &middot; Sweep Results</a>
-  <a href="/reports/2026-04-05_config_diversity.html" class="report-link">Apr 5 &middot; Config Diversity</a>
-  <a href="/reports/2026-04-07_agent_loop_v1.html" class="report-link">Apr 6-7 &middot; Agent Loop Dashboard</a>
+  <h3>Reports</h3>
+  <a href="/reports/2026-04-03_pdl1_binder_demo.html" class="report-link">PD-L1 Demo</a>
+  <a href="/reports/2026-04-05_beam_search_sweep.html" class="report-link">Sweep Results</a>
+  <a href="/reports/2026-04-05_config_diversity.html" class="report-link">Config Diversity</a>
+  <a href="/reports/2026-04-07_agent_loop_v1.html" class="report-link">Agent Loop Dashboard</a>
 </aside>
 
 <!-- Main Content -->
@@ -111,17 +107,16 @@
   <!-- ============================================================ -->
   <div class="part-section" id="overview">
     <span class="part-label">Project Overview</span>
-    <h1>Autoresearch De Novo: LLM Agents for Protein Design</h1>
-    <p class="part-date">April 2026, Ongoing</p>
+    <h1>Automated De Novo Protein Design Optimization</h1>
+
+    <p>De novo protein design has been transformed by generative models: diffusion-based structure generators (Proteina-Complexa, RFdiffusion), structure predictors (AlphaFold2, RoseTTAFold3), conformational samplers (BioEmu), and inverse folding networks (ProteinMPNN, LigandMPNN). Building these models is a major achievement. But <strong>running them for actual protein designs is a different challenge entirely</strong>: it requires searching over dozens of inference-time hyperparameters and choosing between various generation strategies, scoring models, and refinement pipelines. This search is target-dependent, high-dimensional, and cannot be solved by a single default configuration.</p>
+
+    <p>LLMs can now act as the <strong>brain</strong> that connects to and orchestrates other AI models. We build an LLM agent that autonomously designs experiments, runs protein generation pipelines, analyzes results, and adapts its strategy for each target.</p>
 
     <div class="central-thesis">
-      <div class="thesis-label">The Research Question</div>
-      <p class="thesis-text">Can LLM agents guide efficient and effective de novo protein design for drug discovery, across diverse protein and small-molecule generative models?</p>
+      <div class="thesis-label">Research Question</div>
+      <p class="thesis-text">Can LLM agents guide efficient and effective de novo protein design optimization, searching over inference-time hyperparameters and generation strategies across diverse protein and small-molecule targets?</p>
     </div>
-
-    <p>State-of-the-art protein generative models (Proteina-Complexa, BioEmu, AlphaFold) exist but remain difficult to use effectively. They expose dozens of configurable knobs that interact with the target in complex ways. <strong>We show that no single configuration works best across all targets</strong>, and that the gap between good and bad configurations can be larger than the gap between models.</p>
-
-    <p>This motivates a new role for LLM agents: as <strong>autonomous research assistants</strong> that design experiments, analyze results, and adaptively choose the next experiment, closing the experiment&ndash;analysis loop for each target.</p>
 
     <!-- Agent Loop Architecture Diagram -->
     <div class="diagram-container">
@@ -225,7 +220,7 @@
 
     <hr>
 
-    <h2 id="overview-motivation">Motivation 1: Good Models Need Good Hyperparameters</h2>
+    <h2 id="overview-motivation">Motivation: Good Models Need Good Hyperparameters</h2>
 
     <p>We ran <strong>50 experiments</strong> (5 beam search configs &times; 10 protein targets) with Proteina-Complexa. The results make the case clearly:</p>
 
@@ -246,11 +241,6 @@
         <div class="pillar-title">Configs explore different space</div>
         <p>Different search strategies produce different sequences. Multi-config pooling beats single-config compute.</p>
       </div>
-    </div>
-
-    <div class="callout">
-      <div class="callout-label">Also Applies to Ligand Binders</div>
-      <p>The same configuration sensitivity extends to small-molecule ligand binder design. See <a href="#ligand">Ligand Binder Design</a> for early results from the RF3 + LigandMPNN pipeline.</p>
     </div>
 
     <details class="supplementary" id="overview-motivation2">
@@ -381,9 +371,11 @@ Checkpoint 200:
       </div>
     </details>
 
-    <hr>
+    <details class="supplementary" id="overview-evidence">
+      <summary>Evidence: Sweep Results and Per-Protein Optimality (50 experiments)</summary>
+      <div class="details-body">
 
-    <h2 id="overview-evidence">Evidence: Beam Search Sweep (50 of 50 Complete)</h2>
+    <h3>Beam Search Sweep Rankings</h3>
 
     <table>
       <tr><th>Rank</th><th>Config</th><th>Strategy</th><th>Mean Reward</th><th>Wins (top-1)</th></tr>
@@ -396,12 +388,10 @@ Checkpoint 200:
 
     <div class="finding">
       <div class="finding-label">Key Insight</div>
-      <p>The gap between best and worst config (<strong>0.103 mean reward</strong>) is substantial, equivalent to a ~42% relative difference. For hard targets like BetV1, the gap is even larger. Choosing the right hyperparameters matters as much as choosing the right model.</p>
+      <p>The gap between best and worst config (<strong>0.103 mean reward</strong>) is ~42% relative difference. For hard targets like BetV1, the gap is even larger. Choosing the right hyperparameters matters as much as choosing the right model.</p>
     </div>
 
-    <hr>
-
-    <h2 id="overview-diversity">Central Result: Per-Protein Optimality</h2>
+    <h3>Per-Protein Optimality</h3>
 
     <p>The optimal config depends on <strong>both the target and what you optimize for</strong>:</p>
 
@@ -414,10 +404,10 @@ Checkpoint 200:
       <tr><td colspan="4" style="color:#888; text-align:center"><em>6 other proteins: same winner for both criteria</em></td></tr>
     </table>
 
-    <div class="conclusion">
-      <h2>Implication for LLM Agents</h2>
-      <p>This is exactly the kind of problem LLM agents excel at: <strong>high-dimensional configuration spaces, target-dependent optima, and multi-objective trade-offs.</strong> An agent can run cheap scouts, learn target&ndash;config patterns from prior experiments, and adaptively allocate compute. A static pipeline cannot do.</p>
-    </div>
+    <p>This is exactly the kind of problem LLM agents can solve: <strong>high-dimensional configuration spaces, target-dependent optima, and multi-objective trade-offs.</strong></p>
+
+      </div>
+    </details>
 
     <details class="supplementary" id="overview-models">
       <summary>Model Landscape: 6 Models in the Agent Framework</summary>
@@ -443,63 +433,11 @@ Checkpoint 200:
       </div>
     </details>
 
-    <details class="supplementary" id="overview-phases">
-      <summary>Phases: Progress &amp; What&rsquo;s Next</summary>
-      <div class="details-body">
-
-    <h3>Phase 1: Baseline &amp; Evidence <span style="color:#81c784;font-size:0.85rem;margin-left:8px;">5/6 complete</span></h3>
-    <table>
-      <tr><th>Milestone</th><th>Status</th><th>Key Result</th></tr>
-      <tr><td>Pipeline validation</td><td class="winner">Done (Apr 3)</td><td>PD-L1 demo: 2 samples in 83s on 1&times; H100</td></tr>
-      <tr><td>Beam search sweep</td><td class="winner">Done (Apr 4&ndash;5)</td><td>50 experiments (5 configs &times; 10 proteins). E_fine wins 7/10</td></tr>
-      <tr><td>Config diversity analysis</td><td class="winner">Done (Apr 5)</td><td>4/10 targets: winner changes by selection criterion</td></tr>
-      <tr><td>Agent loop v1</td><td class="winner">Done (Apr 6&ndash;7)</td><td>21 runs, 4 targets, 10&ndash;28% improvement. Best i_PAE: 0.130</td></tr>
-      <tr><td>Ligand binder sweep</td><td style="color:#FF9800;">In progress</td><td>2/20 experiments complete (7V11, 5SDV &times; A_balanced). 18 remaining</td></tr>
-      <tr><td>Full pipeline evaluation</td><td style="color:#888;">Pending</td><td>ProteinMPNN redesign + scRMSD designability filter</td></tr>
-    </table>
-
-    <h3>Phase 2: Agent v2, Inference-Time Scaling <span style="color:#888;font-size:0.85rem;margin-left:8px;">planned</span></h3>
-
-    <p>Phase 1 showed that <em>how</em> you spend compute matters more than <em>how much</em>. Phase 2 asks: what if the agent could compose <strong>programs</strong> instead of picking <strong>configs</strong>?</p>
-
-    <div class="pillars" style="grid-template-columns: 1fr;">
-
-      <div class="pillar" style="border-left:3px solid #e8704a;">
-        <div class="pillar-title">1. Representation: Configs &rarr; Programs</div>
-        <p style="color:var(--text-muted);font-size:0.85rem;font-style:italic;margin-bottom:8px;">What is the right abstraction for inference-time computation in generative protein design, and can an LLM reason about it?</p>
-        <p>The agent currently picks from 5 named presets differing in 4 knobs. But the real design space is 80+ parameters across 6 qualitatively different layers (search, sampling, reward, refinement, filtering, orchestration), and the interesting choices are <em>conditional</em>: &ldquo;refine only if i_PAE &lt; 0.25&rdquo;, &ldquo;switch from AF2 to RF3 scoring if the target has a ligand&rdquo;, &ldquo;double beam width if the first 100 steps show high variance.&rdquo; These are not hyperparameters. They are <strong>programs</strong>.</p>
-      </div>
-
-      <div class="pillar" style="border-left:3px solid #636EFA;">
-        <div class="pillar-title">2. Search: Hill-Climbing &rarr; Population Evolution</div>
-        <p style="color:var(--text-muted);font-size:0.85rem;font-style:italic;margin-bottom:8px;">Can LLM-guided program evolution outperform Bayesian optimization in structured, high-dimensional spaces where the search objects are programs, not vectors?</p>
-        <p>The v1 agent is a mediocre hill-climber: same 4 knobs in the same order for every target, no memory across sessions, 3 duplicate runs. It cannot discover interaction effects (PD-L1&rsquo;s best required changing <em>two</em> variables simultaneously) or transfer knowledge across targets. A population of programs with lineage tracking, crossover, and deduplication turns the agent from a sequential optimizer into an <strong>evolutionary researcher</strong> that builds on its own history.</p>
-      </div>
-
-      <div class="pillar" style="border-left:3px solid #00CC96;">
-        <div class="pillar-title">3. Scaling Law: More Compute &rarr; Better Designs?</div>
-        <p style="color:var(--text-muted);font-size:0.85rem;font-style:italic;margin-bottom:8px;">Is there an inference-time scaling law for protein design, and can an LLM agent find it?</p>
-        <p>Phase 1 showed that E_fine_selector beats B_length_explorer by 42% with the same GPU budget. Phase 2 tests a stronger claim: that an agent composing multi-stage programs (scout &rarr; invest &rarr; pool) can turn additional compute into monotonically better designs, the way test-time compute scaling works for LLM reasoning.</p>
-      </div>
-
-    </div>
-
-    <h3>Phase 3: Multi-Model Agent <span style="color:#888;font-size:0.85rem;margin-left:8px;">future</span></h3>
-    <table>
-      <tr><th>Milestone</th><th>Status</th><th>Description</th></tr>
-      <tr><td>BioEmu integration</td><td style="color:#888;">Future</td><td>Conformational ensemble robustness testing</td></tr>
-      <tr><td>Cross-model orchestration</td><td style="color:#888;">Future</td><td>AF2 vs RF3 vs Boltz2 selection per target</td></tr>
-      <tr><td>Benchmark</td><td style="color:#888;">Future</td><td>LLM-agent vs GP-BO vs random search</td></tr>
-    </table>
-
-      </div>
-    </details>
-
     <div class="resources">
       <strong>Detailed Reports:</strong>
-      <a href="/reports/2026-04-03_pdl1_binder_demo.html">PD-L1 Demo (Apr 3)</a> &middot;
-      <a href="/reports/2026-04-05_beam_search_sweep.html">Sweep Results (Apr 5)</a> &middot;
-      <a href="/reports/2026-04-05_config_diversity.html">Config Diversity (Apr 5)</a><br>
+      <a href="/reports/2026-04-03_pdl1_binder_demo.html">PD-L1 Demo</a> &middot;
+      <a href="/reports/2026-04-05_beam_search_sweep.html">Sweep Results</a> &middot;
+      <a href="/reports/2026-04-05_config_diversity.html">Config Diversity</a><br>
       <strong>Models:</strong>
       <a href="https://github.com/Proteina-Complexa" target="_blank">Proteina-Complexa</a> &middot;
       <a href="https://www.science.org/doi/10.1126/science.adv9817" target="_blank">BioEmu (Science 2025)</a> &middot;
@@ -514,7 +452,7 @@ Checkpoint 200:
   <!--              DAY 1: PIPELINE VALIDATION                       -->
   <!-- ============================================================ -->
   <details class="supplementary" id="day1">
-    <summary>Day 1: Pipeline Validation, PD-L1 Binder Demo (Apr 3)</summary>
+    <summary>Pipeline Validation: PD-L1 Binder Demo</summary>
     <div class="details-body">
 
     <div class="central-thesis">
@@ -559,7 +497,7 @@ Checkpoint 200:
   <!--              DAY 2-3: BEAM SEARCH SWEEP (folded)               -->
   <!-- ============================================================ -->
   <details class="supplementary" id="day2">
-    <summary>Day 2&ndash;3: Beam Search Configuration Sweep (Apr 4&ndash;5)</summary>
+    <summary>Beam Search Configuration Sweep (5 configs &times; 10 proteins)</summary>
     <div class="details-body">
 
     <div class="central-thesis">
@@ -625,7 +563,7 @@ Checkpoint 200:
   <!--              DAY 3: CONFIG DIVERSITY (folded)                   -->
   <!-- ============================================================ -->
   <details class="supplementary" id="day3">
-    <summary>Day 3: Config Diversity, Per-Protein Optimality &amp; Sequence Space (Apr 5)</summary>
+    <summary>Config Diversity: Per-Protein Optimality &amp; Sequence Space</summary>
     <div class="details-body">
 
     <div class="central-thesis">
@@ -707,19 +645,84 @@ Checkpoint 200:
   <!-- ============================================================ -->
   <!--              DAY 4-5: AGENT LOOP V1                            -->
   <!-- ============================================================ -->
-  <div class="part-section" id="day4">
-    <span class="part-label">Day 4&ndash;5</span>
-    <h1>Agent Loop v1: Closed-Loop Optimization</h1>
-    <p class="part-date">April 6&ndash;7, 2026</p>
+  <div class="part-section" id="v1">
+    <span class="part-label">Agent v1</span>
+    <h1>Agent Loop v1: Closed-Loop Hyperparameter Search</h1>
 
     <div class="central-thesis">
       <div class="thesis-label">Question</div>
       <p class="thesis-text">Can an LLM agent autonomously improve binder quality by iteratively selecting configurations, running experiments, analyzing results, and adapting its strategy?</p>
     </div>
 
-    <p>We deployed an LLM agent (Claude) in a closed loop: the agent chooses a configuration, launches a Proteina-Complexa run on a GPU, parses the results, records insights, and decides the next experiment. <strong>21 runs</strong> across 4 targets over 8 agent sessions, producing <strong>1,004 final binder candidates</strong>.</p>
+    <!-- v1 Hyperparameter Search Overview -->
+    <div class="diagram-container">
+    <svg viewBox="0 0 880 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:880px;border-radius:10px;background:#151520;display:block;">
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6" fill="rgba(255,255,255,.5)" />
+        </marker>
+        <marker id="arr2-fb" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6" fill="#e8704a" />
+        </marker>
+      </defs>
 
-    <h2 id="day4-trajectories">Optimization Trajectories</h2>
+      <text x="440" y="24" fill="rgba(255,255,255,.4)" font-size="11" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600" letter-spacing="1">v1 SEARCH: LLM agent iterates over 4 hyperparameters per target</text>
+
+      <!-- Knobs -->
+      <rect x="30" y="45" width="130" height="45" rx="6" fill="#2c3e50" />
+      <text x="95" y="64" fill="#fff" font-size="11" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">beam_width</text>
+      <text x="95" y="80" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">8 or 16</text>
+
+      <rect x="175" y="45" width="130" height="45" rx="6" fill="#2c3e50" />
+      <text x="240" y="64" fill="#fff" font-size="11" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">n_branch</text>
+      <text x="240" y="80" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">4 or 8</text>
+
+      <rect x="320" y="45" width="130" height="45" rx="6" fill="#2c3e50" />
+      <text x="385" y="64" fill="#fff" font-size="11" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">nsamples</text>
+      <text x="385" y="80" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">4 or 8</text>
+
+      <rect x="465" y="45" width="130" height="45" rx="6" fill="#2c3e50" />
+      <text x="530" y="64" fill="#fff" font-size="11" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">checkpoints</text>
+      <text x="530" y="80" fill="rgba(255,255,255,.5)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">standard or fine</text>
+
+      <!-- "out of 80+" label -->
+      <rect x="620" y="45" width="240" height="45" rx="6" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1" stroke-dasharray="4,3" />
+      <text x="740" y="64" fill="rgba(255,255,255,.3)" font-size="11" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">80+ other parameters</text>
+      <text x="740" y="80" fill="rgba(255,255,255,.2)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">untouched by v1 agent</text>
+
+      <!-- Arrow down to loop -->
+      <line x1="300" y1="90" x2="300" y2="115" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr2)" />
+
+      <!-- Loop: Agent → Run → Score → Decide -->
+      <rect x="30" y="120" width="155" height="50" rx="7" fill="#c0392b" />
+      <text x="108" y="142" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">LLM picks config</text>
+      <text x="108" y="158" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">one variable at a time</text>
+
+      <line x1="185" y1="145" x2="215" y2="145" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr2)" />
+
+      <rect x="218" y="120" width="155" height="50" rx="7" fill="#7d3c98" />
+      <text x="296" y="142" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Run pipeline</text>
+      <text x="296" y="158" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">~5 min on H100</text>
+
+      <line x1="373" y1="145" x2="403" y2="145" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr2)" />
+
+      <rect x="406" y="120" width="155" height="50" rx="7" fill="#1a7a8a" />
+      <text x="484" y="142" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Score (AF2)</text>
+      <text x="484" y="158" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">i_PAE, pLDDT</text>
+
+      <line x1="561" y1="145" x2="591" y2="145" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr2)" />
+
+      <rect x="594" y="120" width="155" height="50" rx="7" fill="#b7950b" />
+      <text x="672" y="142" fill="#fff" font-size="12" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Analyze + decide</text>
+      <text x="672" y="158" fill="rgba(255,255,255,.55)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">next config</text>
+
+      <!-- Feedback arrow -->
+      <path d="M672,170 L672,195 L108,195 L108,170" fill="none" stroke="#e8704a" stroke-width="2" stroke-dasharray="8,4" marker-end="url(#arr2-fb)" />
+      <text x="390" y="210" fill="#e8704a" font-size="10" font-family="-apple-system,sans-serif" font-weight="600" text-anchor="middle">21 iterations across 4 protein targets, 1,004 binder candidates</text>
+    </svg>
+    </div>
+
+    <h2 id="v1-trajectories">Optimization Trajectories</h2>
 
     <p>Each target shows a clear improvement trajectory. The agent achieves <strong>10&ndash;28% improvement</strong> in best i_PAE from baseline:</p>
 
@@ -808,137 +811,105 @@ Checkpoint 200:
 
     <hr>
 
-    <h2 id="day4-critique">Multi-Persona Critique</h2>
+    <h2 id="v1-reflection">v1 Results and Reflection</h2>
 
-    <p>Three expert perspectives reviewed the 21-run trajectory (<a href="/reports/2026-04-07_agent_loop_v1.html">full interactive dashboard &rarr;</a>):</p>
+    <p>The agent achieves 10-28% improvement on every target, but the search strategy has clear limitations:</p>
 
     <div class="pillars" style="grid-template-columns: 1fr 1fr 1fr;">
       <div class="pillar" style="border-left:3px solid #636EFA;">
-        <div class="pillar-title" style="color:#636EFA;">ML Optimization</div>
-        <p>The LLM is a mediocre hill-climber: same 4 knobs in the same order for every target. Never tried fk-steering, best-of-n, or nsteps&lt;400. A GP-BO would likely match results in ~10 runs vs 21. Exploration is exploitation-heavy with no surrogate model.</p>
+        <div class="pillar-title" style="color:#636EFA;">Narrow search, no surrogate</div>
+        <p>Same 4 knobs in the same order for every target. Never tried fk-steering, best-of-n, or nsteps&lt;400. A GP-BO would likely match results in ~10 runs vs 21. No surrogate model, no transfer across targets.</p>
       </div>
       <div class="pillar" style="border-left:3px solid #00CC96;">
-        <div class="pillar-title" style="color:#00CC96;">Structural Biology</div>
+        <div class="pillar-title" style="color:#00CC96;">Marginal binding quality</div>
         <p>Best i_PAE (0.130&ndash;0.134) is marginal vs BindCraft validated threshold (&lt;0.10). pLDDT is excellent (0.94&ndash;0.96). CD45 fails due to only 1 hotspot residue. <strong>ProteinMPNN is disabled</strong>. Enabling it is the single highest-impact change.</p>
       </div>
       <div class="pillar" style="border-left:3px solid #EF553B;">
-        <div class="pillar-title" style="color:#EF553B;">Systems Engineering</div>
-        <p>GPU utilization ~35&ndash;40%. Total cost: ~16 GPU-hours ($47). 25% wasted on duplicate runs. No auto-retry on OOM, orphaned process risk, no file locking for concurrent agents.</p>
+        <div class="pillar-title" style="color:#EF553B;">Wasted compute</div>
+        <p>GPU utilization ~35&ndash;40%. 25% compute wasted on 3 duplicate PD-L1 runs. No auto-retry on OOM, no file locking for concurrent agents. Total cost: ~16 GPU-hours ($47).</p>
       </div>
     </div>
 
-    <div class="conclusion">
-      <h2>Why This Motivates v2</h2>
-      <p>The agent loop works. It achieves meaningful improvement on every target. But the search is narrow (4 knobs out of 80+), repetitive (3 duplicate runs), and cannot compose multi-stage strategies. <strong>Autoresearch v2</strong> addresses this by exposing the full inference-time control surface, introducing InferencePrograms as evolvable artifacts, and adding population-based search with lineage tracking.</p>
-    </div>
-
-    <p><a href="/reports/2026-04-07_agent_loop_v1.html">Full interactive dashboard with per-run details, agent reasoning chains, and Plotly visualizations &rarr;</a></p>
+    <p><a href="/reports/2026-04-07_agent_loop_v1.html">Full interactive dashboard with per-run details and Plotly visualizations &rarr;</a></p>
   </div>
 
 
   <!-- ============================================================ -->
-  <!--              EXTENDED: NEW PROTEIN TARGETS                     -->
+  <!--              AGENT V2 PLAN                                     -->
   <!-- ============================================================ -->
-  <div class="part-section" id="extended-proteins">
-    <span class="part-label">Extended Results</span>
-    <h1>New Protein Targets: Claudin-1, CrSAS-6, DerF7, BetV1</h1>
-    <p class="part-date">April 5&ndash;6, 2026</p>
+  <div class="part-section" id="v2">
+    <span class="part-label">Agent v2</span>
+    <h1>v2 Plan: From Configs to Programs</h1>
 
-    <p>Beyond the original 4 agent-loop targets, we ran <strong>D_early_brancher</strong> on 4 additional protein targets. Each experiment produced 544 samples (512 lookahead + 32 finals) scored by AlphaFold2.</p>
+    <p>v1 showed that the agent loop works and that <em>how</em> you spend compute matters more than <em>how much</em>. The question for v2: what if the agent could compose <strong>programs</strong> instead of picking <strong>configs</strong>?</p>
 
-    <table>
-      <tr><th>Target</th><th>Best i_PAE</th><th>Mean Reward (final)</th><th>Mean pLDDT (final)</th><th>Mean i_con (final)</th></tr>
-      <tr><td><strong>CrSAS-6</strong></td><td class="winner"><strong>0.171</strong></td><td>&minus;0.187</td><td>0.062</td><td>3.16</td></tr>
-      <tr><td><strong>DerF7</strong></td><td><strong>0.181</strong></td><td>&minus;0.201</td><td>0.059</td><td>1.96</td></tr>
-      <tr><td><strong>Claudin-1</strong></td><td><strong>0.193</strong></td><td>&minus;0.224</td><td>0.095</td><td>2.70</td></tr>
-      <tr><td class="loser"><strong>BetV1</strong></td><td>0.279</td><td>&minus;0.760</td><td>0.181</td><td>4.74</td></tr>
-    </table>
+    <div class="pillars" style="grid-template-columns: 1fr;">
 
-    <div class="finding">
-      <div class="finding-label">BetV1 Confirms Hardest Target</div>
-      <p>BetV1 has the worst metrics across all dimensions: best i_PAE of 0.279 (vs 0.171 for CrSAS-6), mean reward &minus;0.760 (6&times; worse than CrSAS-6), and the highest interface contact penalty (i_con 4.74). This confirms the difficulty ranking from the sweep and suggests BetV1 particularly needs agent-guided optimization or alternative pipeline strategies.</p>
-    </div>
-
-    <details class="supplementary">
-      <summary>Full Distribution: All 544 Samples per Target</summary>
-      <div class="details-body">
-
-      <table>
-        <tr><th>Target</th><th>Best Reward</th><th>Mean Reward</th><th>Stdev</th><th>Best i_PAE</th><th>Mean pLDDT</th></tr>
-        <tr><td>Claudin-1</td><td>&minus;0.190</td><td>&minus;0.503</td><td>0.260</td><td>0.190</td><td>0.169</td></tr>
-        <tr><td>CrSAS-6</td><td>&minus;0.171</td><td>&minus;0.543</td><td>0.293</td><td>0.171</td><td>0.137</td></tr>
-        <tr><td>DerF7</td><td>&minus;0.181</td><td>&minus;0.339</td><td>0.200</td><td>0.181</td><td>0.117</td></tr>
-        <tr><td>BetV1</td><td>&minus;0.279</td><td>&minus;0.848</td><td>0.087</td><td>0.279</td><td>0.199</td></tr>
-      </table>
-
-      <p>Note: BetV1 has the lowest variance (stdev 0.087): consistently bad, suggesting a fundamental difficulty rather than high-variance exploration. CrSAS-6 has the highest variance (0.293), indicating that better configs may unlock much better results.</p>
-
+      <div class="pillar" style="border-left:3px solid #e8704a;">
+        <div class="pillar-title">1. Representation: Configs &rarr; Programs</div>
+        <p style="color:var(--text-muted);font-size:0.85rem;font-style:italic;margin-bottom:8px;">What is the right abstraction for inference-time computation in generative protein design, and can an LLM reason about it?</p>
+        <p>The agent currently picks from 5 named presets differing in 4 knobs. But the real design space is 80+ parameters across 6 qualitatively different layers (search, sampling, reward, refinement, filtering, orchestration), and the interesting choices are <em>conditional</em>: "refine only if i_PAE &lt; 0.25", "switch scoring model based on target type", "double beam width if early steps show high variance." These are not hyperparameters. They are <strong>programs</strong>.</p>
       </div>
-    </details>
-  </div>
 
+      <div class="pillar" style="border-left:3px solid #636EFA;">
+        <div class="pillar-title">2. Search: Hill-Climbing &rarr; Population Evolution</div>
+        <p style="color:var(--text-muted);font-size:0.85rem;font-style:italic;margin-bottom:8px;">Can LLM-guided program evolution outperform Bayesian optimization in structured, high-dimensional spaces where the search objects are programs, not vectors?</p>
+        <p>The v1 agent uses the same 4 knobs in the same order for every target, with no memory across sessions. A population of programs with lineage tracking, crossover, and deduplication turns the agent from a sequential optimizer into an <strong>evolutionary researcher</strong> that builds on its own history.</p>
+      </div>
 
-  <!-- ============================================================ -->
-  <!--              LIGAND BINDER SWEEP                               -->
-  <!-- ============================================================ -->
-  <div class="part-section" id="ligand">
-    <span class="part-label">New Domain</span>
-    <h1>Small-Molecule Ligand Binder Design</h1>
-    <p class="part-date">April 7, 2026 (In Progress)</p>
+      <div class="pillar" style="border-left:3px solid #00CC96;">
+        <div class="pillar-title">3. Scaling Law: More Compute &rarr; Better Designs?</div>
+        <p style="color:var(--text-muted);font-size:0.85rem;font-style:italic;margin-bottom:8px;">Is there an inference-time scaling law for protein design, and can an LLM agent find it?</p>
+        <p>v1 showed that E_fine_selector beats B_length_explorer by 42% with the same GPU budget. v2 tests a stronger claim: that an agent composing multi-stage programs (scout &rarr; invest &rarr; pool) can turn additional compute into monotonically better designs, the way test-time compute scaling works for LLM reasoning.</p>
+      </div>
 
-    <div class="central-thesis">
-      <div class="thesis-label">Extension</div>
-      <p class="thesis-text">Does the configuration sensitivity we found for protein binders extend to small-molecule ligand binder design? Early results from 2 targets suggest yes, with a different scoring pipeline (RF3 + LigandMPNN) and dramatically different metric scales.</p>
     </div>
 
-    <p>The ligand binder pipeline uses <strong>Proteina-Complexa's complexa_ligand model</strong> with <strong>RoseTTAFold3</strong> (RF3) for structure prediction and scoring, replacing AlphaFold2. The key metric shifts from <code>af2_i_PAE</code> to <code>rf3_min_ipAE</code>.</p>
+    <hr>
 
-    <h2 id="ligand-results">Early Results: A_balanced Config</h2>
+    <h2 id="v2-graphify">Experiment: Graphify for Codebase Understanding</h2>
 
-    <p>First 2 of 20 planned experiments (A_balanced config only) have completed:</p>
+    <p>A key bottleneck for the agent is <strong>understanding the Proteina-Complexa codebase</strong> well enough to reason about which parameters exist, how they interact, and what new configurations are possible. The codebase has thousands of lines of Hydra configs, model definitions, and pipeline scripts. Reading these files sequentially is slow and loses structural relationships.</p>
 
-    <table>
-      <tr><th>Target</th><th>Scoring</th><th>Best min_ipAE</th><th>Mean Reward (final 32)</th><th>Mean pLDDT</th><th>Samples</th></tr>
-      <tr><td><strong>7V11</strong></td><td>RF3</td><td class="winner"><strong>0.023</strong></td><td>&minus;0.029</td><td>0.848</td><td>544</td></tr>
-      <tr><td><strong>5SDV</strong></td><td>RF3</td><td><strong>0.027</strong></td><td>&minus;0.035</td><td>0.849</td><td>544</td></tr>
-      <tr><td style="color:#888">7BKC</td><td>RF3</td><td colspan="4" style="color:#888;text-align:center"><em>Running</em></td></tr>
-      <tr><td style="color:#888">7C7M</td><td>RF3</td><td colspan="4" style="color:#888;text-align:center"><em>Running</em></td></tr>
-    </table>
-
-    <div class="finding">
-      <div class="finding-label">Different Scale, Same Story</div>
-      <p>RF3 min_ipAE values (0.02&ndash;0.03) are an order of magnitude lower than AF2 i_PAE for protein binders (0.13&ndash;0.28). pLDDT is much higher (0.85 vs 0.06&ndash;0.19). The metrics are not directly comparable, but the <strong>config sensitivity pattern</strong> is expected to replicate once all 5 configs complete. Currently only A_balanced has results; 4 configs remain to run.</p>
-    </div>
+    <p>We will test whether <strong>Graphify</strong>, a tool that converts code, documentation, and configs into a <strong>knowledge graph</strong> with clustered communities, can help. The idea:</p>
 
     <div class="pillars">
       <div class="pillar">
-        <div class="pillar-title">Pipeline Differences</div>
-        <p><strong>Scoring:</strong> RF3 (RoseTTAFold3) replaces AF2. Metrics: min_ipAE, ipTM, pLDDT.<br>
-        <strong>Redesign:</strong> LigandMPNN for ligand-aware sequence optimization.<br>
-        <strong>Filtering:</strong> RF3 confidence thresholds replace AF2 thresholds.</p>
+        <div class="pillar-title">Build the graph</div>
+        <p>Run Graphify on the Proteina-Complexa codebase: Hydra configs, model classes, pipeline scripts, scoring modules. Extract entities (parameters, functions, config groups) and relationships (parameter &rarr; affects &rarr; pipeline stage).</p>
       </div>
       <div class="pillar">
-        <div class="pillar-title">Sweep Status</div>
-        <p><strong>Completed:</strong> 2/20 experiments (7V11 &times; A_balanced, 5SDV &times; A_balanced)<br>
-        <strong>Pending:</strong> 2 targets (7BKC, 7C7M) &times; 1 config + all 4 targets &times; 4 remaining configs<br>
-        <strong>Expected:</strong> Config diversity results once B&ndash;E complete</p>
+        <div class="pillar-title">Query during search</div>
+        <p>When the agent decides which parameter to try next, it queries the knowledge graph instead of reading raw files. "What parameters affect beam search scoring?" returns a structured subgraph, not thousands of lines of code.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-title">Measure the difference</div>
+        <p>Compare agent performance with and without the graphified knowledge base: does it discover more of the 80+ parameter space? Does it avoid duplicate runs? Does it find better configs in fewer iterations?</p>
       </div>
     </div>
 
-    <details class="supplementary">
-      <summary>Full Distribution: All 544 Samples per Target</summary>
-      <div class="details-body">
+    <div class="finding">
+      <div class="finding-label">Hypothesis</div>
+      <p>The graphified knowledge base will help the agent discover parameters it currently ignores (noise schedules, guidance weights, sampling modes, refinement settings) and reason about parameter interactions that are invisible when reading configs sequentially.</p>
+    </div>
 
-      <table>
-        <tr><th>Target</th><th>Best Reward</th><th>Mean Reward (all)</th><th>Stdev</th><th>Best min_ipAE</th><th>Mean pLDDT</th></tr>
-        <tr><td>7V11</td><td>&minus;0.022</td><td>&minus;0.073</td><td>0.040</td><td>0.022</td><td>0.824</td></tr>
-        <tr><td>5SDV</td><td>&minus;0.027</td><td>&minus;0.111</td><td>0.068</td><td>0.027</td><td>0.823</td></tr>
-      </table>
+    <hr>
 
-      <p>5SDV shows higher variance (stdev 0.068 vs 0.040) and worse mean reward, suggesting it may benefit more from config optimization, paralleling the protein binder finding that harder targets need more careful tuning.</p>
+    <h2 id="v2-todo">TODO</h2>
 
-      </div>
-    </details>
+    <table>
+      <tr><th>Priority</th><th>Task</th><th>Status</th></tr>
+      <tr><td style="color:#F44336;font-weight:600;">P0</td><td><strong>Enable ProteinMPNN redesign + scRMSD filter</strong> in protein binder pipeline (identified as single highest-impact change in v1 reflection)</td><td style="color:#888;">Pending</td></tr>
+      <tr><td style="color:#F44336;font-weight:600;">P0</td><td><strong>Complete ligand binder sweep</strong>: 18/20 experiments remaining (configs B-E for all 4 ligand targets)</td><td style="color:#FF9800;">In progress</td></tr>
+      <tr><td style="color:#F44336;font-weight:600;">P0</td><td><strong>Add deduplication logic</strong> to agent loop (v1 wasted 25% compute on 3 identical PD-L1 runs)</td><td style="color:#888;">Pending</td></tr>
+      <tr><td style="color:#FF9800;font-weight:600;">P1</td><td><strong>Design InferenceProgram schema</strong>: define the JSON/Python format for multi-stage executable programs with conditional transitions</td><td style="color:#888;">Pending</td></tr>
+      <tr><td style="color:#FF9800;font-weight:600;">P1</td><td><strong>Run Graphify on Proteina-Complexa codebase</strong>: build knowledge graph, evaluate whether it improves agent parameter discovery</td><td style="color:#888;">Pending</td></tr>
+      <tr><td style="color:#FF9800;font-weight:600;">P1</td><td><strong>Expose full 80+ parameter surface</strong> to agent: sampling modes (vf, sc, vf_ss, vf_tsr), noise schedules, guidance weights, refinement settings</td><td style="color:#888;">Pending</td></tr>
+      <tr><td style="color:#4CAF50;font-weight:600;">P2</td><td><strong>Implement population-based search</strong>: maintain program population with lineage tracking, crossover, and multi-objective scoring</td><td style="color:#888;">Pending</td></tr>
+      <tr><td style="color:#4CAF50;font-weight:600;">P2</td><td><strong>Benchmark LLM agent vs GP-BO vs random search</strong> across the full inference-program space</td><td style="color:#888;">Pending</td></tr>
+      <tr><td style="color:#4CAF50;font-weight:600;">P2</td><td><strong>Integrate BioEmu</strong> for conformational ensemble robustness testing</td><td style="color:#888;">Pending</td></tr>
+      <tr><td style="color:#4CAF50;font-weight:600;">P2</td><td><strong>Cross-model orchestration</strong>: agent selects AF2 vs RF3 vs Boltz2 scoring per target</td><td style="color:#888;">Pending</td></tr>
+    </table>
   </div>
 
 
