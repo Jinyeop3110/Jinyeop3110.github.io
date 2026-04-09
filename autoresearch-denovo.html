@@ -120,69 +120,92 @@
 
     <!-- Figure 1: Agent Loop Architecture -->
     <div class="diagram-container">
-    <svg viewBox="0 0 820 310" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:820px;border-radius:10px;background:#151520;display:block;">
+    <svg viewBox="0 0 820 410" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:820px;border-radius:10px;background:#151520;display:block;">
       <defs>
         <marker id="arr" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="rgba(255,255,255,.5)" /></marker>
         <marker id="arr-fb" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#e8704a" /></marker>
       </defs>
 
-      <!-- LLM Agent -->
-      <rect x="240" y="14" width="340" height="58" rx="10" fill="#c0392b" />
-      <text x="410" y="38" fill="#fff" font-size="17" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">LLM Agent</text>
-      <text x="410" y="58" fill="rgba(255,255,255,.6)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">inference-time optimizer: picks config, analyzes results, adapts</text>
+      <!-- ═══ ROW 1: LLM Agent ═══ -->
+      <rect x="220" y="14" width="380" height="52" rx="10" fill="#c0392b" />
+      <text x="410" y="36" fill="#fff" font-size="17" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">LLM Agent</text>
+      <text x="410" y="54" fill="rgba(255,255,255,.6)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">analyzes results, decides what to change next</text>
 
-      <!-- Arrow down -->
-      <line x1="410" y1="72" x2="410" y2="98" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <!-- Arrow: Agent → Action -->
+      <line x1="410" y1="66" x2="410" y2="88" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
-      <!-- Pipeline: large boxes with tunable params listed -->
-      <rect x="22" y="100" width="776" height="120" rx="10" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" />
-      <text x="410" y="117" fill="rgba(255,255,255,.55)" font-size="11" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">Proteina-Complexa Pipeline</text>
+      <!-- ═══ ROW 2: What the agent changes (v1 vs v2) ═══ -->
+      <rect x="22" y="90" width="776" height="82" rx="10" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.15)" stroke-width="1.5" />
+      <text x="410" y="106" fill="rgba(255,255,255,.5)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle" letter-spacing="1.5" font-weight="600">WHAT THE AGENT CHANGES</text>
+
+      <!-- v1 box -->
+      <rect x="40" y="114" width="350" height="46" rx="7" fill="#2c3e50" stroke="rgba(255,255,255,.1)" stroke-width="1" />
+      <text x="55" y="133" fill="#e8704a" font-size="12" font-weight="700" font-family="-apple-system,sans-serif">v1</text>
+      <text x="80" y="133" fill="rgba(255,255,255,.7)" font-size="11" font-family="-apple-system,sans-serif">Tune 4 hyperparameters per run</text>
+      <text x="55" y="152" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" font-style="italic">beam_width, n_branch, nsamples, checkpoint schedule</text>
+
+      <!-- v2 box -->
+      <rect x="410" y="114" width="370" height="46" rx="7" fill="#2c3e50" stroke="rgba(232,112,74,.3)" stroke-width="1.5" />
+      <text x="425" y="133" fill="#e8704a" font-size="12" font-weight="700" font-family="-apple-system,sans-serif">v2</text>
+      <text x="450" y="133" fill="rgba(255,255,255,.7)" font-size="11" font-family="-apple-system,sans-serif">Write multi-stage inference programs</text>
+      <text x="425" y="152" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" font-style="italic">80+ params, conditional logic, scoring model choice, full pipeline control</text>
+
+      <!-- Arrow: Action → Pipeline -->
+      <line x1="410" y1="172" x2="410" y2="198" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+
+      <!-- ═══ ROW 3: Proteina-Complexa Pipeline ═══ -->
+      <rect x="22" y="200" width="776" height="120" rx="10" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.12)" stroke-width="1.5" />
+      <text x="410" y="217" fill="rgba(255,255,255,.55)" font-size="11" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">Proteina-Complexa Pipeline (model weights frozen)</text>
 
       <!-- Generate -->
-      <rect x="35" y="126" width="170" height="82" rx="8" fill="#7d3c98" />
-      <text x="120" y="148" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Generate</text>
-      <text x="120" y="165" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">flow-matching diffusion</text>
-      <text x="120" y="180" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">nsteps, noise schedule,</text>
-      <text x="120" y="192" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">guidance_w, self_cond</text>
+      <rect x="35" y="226" width="170" height="82" rx="8" fill="#7d3c98" />
+      <text x="120" y="248" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Generate</text>
+      <text x="120" y="265" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">flow-matching diffusion</text>
+      <text x="120" y="280" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">nsteps, noise schedule,</text>
+      <text x="120" y="292" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">guidance_w, self_cond</text>
 
-      <line x1="205" y1="167" x2="225" y2="167" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="205" y1="267" x2="225" y2="267" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
       <!-- Beam Search -->
-      <rect x="228" y="126" width="170" height="82" rx="8" fill="#6c3483" />
-      <text x="313" y="148" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Beam Search</text>
-      <text x="313" y="165" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">branch, score, prune</text>
-      <text x="313" y="180" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">beam_width, n_branch,</text>
-      <text x="313" y="192" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">checkpoints, nsamples</text>
+      <rect x="228" y="226" width="170" height="82" rx="8" fill="#6c3483" />
+      <text x="313" y="248" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Beam Search</text>
+      <text x="313" y="265" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">branch, score, prune</text>
+      <text x="313" y="280" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">beam_width, n_branch,</text>
+      <text x="313" y="292" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">checkpoints, nsamples</text>
 
-      <line x1="398" y1="167" x2="418" y2="167" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="398" y1="267" x2="418" y2="267" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
       <!-- AF2 Score -->
-      <rect x="421" y="126" width="170" height="82" rx="8" fill="#1a7a8a" />
-      <text x="506" y="148" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">AF2 Score</text>
-      <text x="506" y="165" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">AlphaFold2 evaluation</text>
-      <text x="506" y="180" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">num_recycles,</text>
-      <text x="506" y="192" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">reward_weights</text>
+      <rect x="421" y="226" width="170" height="82" rx="8" fill="#1a7a8a" />
+      <text x="506" y="248" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">AF2 Score</text>
+      <text x="506" y="265" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">AlphaFold2 evaluation</text>
+      <text x="506" y="280" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">num_recycles,</text>
+      <text x="506" y="292" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">reward_weights</text>
 
-      <line x1="591" y1="167" x2="611" y2="167" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
+      <line x1="591" y1="267" x2="611" y2="267" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)" />
 
       <!-- Refine -->
-      <rect x="614" y="126" width="170" height="82" rx="8" fill="#1a6b5a" />
-      <text x="699" y="148" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Refine</text>
-      <text x="699" y="165" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">sequence hallucination</text>
-      <text x="699" y="180" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">n_iters, temperature,</text>
-      <text x="699" y="192" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">loss_weights</text>
+      <rect x="614" y="226" width="170" height="82" rx="8" fill="#1a6b5a" />
+      <text x="699" y="248" fill="#fff" font-size="15" font-weight="700" font-family="-apple-system,sans-serif" text-anchor="middle">Refine</text>
+      <text x="699" y="265" fill="rgba(255,255,255,.65)" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle">sequence hallucination</text>
+      <text x="699" y="280" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">n_iters, temperature,</text>
+      <text x="699" y="292" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle" font-style="italic">loss_weights</text>
 
-      <!-- Feedback loop: clean path from bottom of pipeline back to agent -->
-      <path d="M410,220 L410,260 L16,260 L16,43 L240,43" fill="none" stroke="#e8704a" stroke-width="2.5" stroke-dasharray="10,5" marker-end="url(#arr-fb)" />
+      <!-- ═══ Feedback loop ═══ -->
+      <path d="M410,320 L410,360 L16,360 L16,40 L220,40" fill="none" stroke="#e8704a" stroke-width="2.5" stroke-dasharray="10,5" marker-end="url(#arr-fb)" />
 
-      <!-- Output labels on feedback path -->
-      <rect x="460" y="233" width="200" height="24" rx="5" fill="rgba(232,112,74,.12)" />
-      <text x="560" y="249" fill="#e8704a" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">i_PAE &darr; pLDDT &uarr; &rarr; next config</text>
+      <!-- Output label on feedback path -->
+      <rect x="450" y="338" width="230" height="24" rx="5" fill="rgba(232,112,74,.12)" />
+      <text x="565" y="354" fill="#e8704a" font-size="10" font-family="-apple-system,sans-serif" text-anchor="middle" font-weight="600">i_PAE &darr;  pLDDT &uarr;  &rarr; next iteration</text>
 
-      <!-- Legend -->
-      <text x="100" y="295" fill="rgba(255,255,255,.3)" font-size="9" font-family="-apple-system,sans-serif" text-anchor="middle">Each box lists the <tspan font-weight="600" fill="rgba(255,255,255,.45)">tunable parameters</tspan> the agent can change per iteration</text>
-      <line x1="320" y1="291" x2="345" y2="291" stroke="#e8704a" stroke-width="2.5" stroke-dasharray="10,5" marker-end="url(#arr-fb)" />
-      <text x="352" y="295" fill="#e8704a" font-size="9" font-family="-apple-system,sans-serif">closed-loop feedback</text>
+      <!-- ═══ Legend ═══ -->
+      <line x1="40" y1="396" x2="65" y2="396" stroke="#e8704a" stroke-width="2.5" stroke-dasharray="10,5" marker-end="url(#arr-fb)" />
+      <text x="72" y="400" fill="#e8704a" font-size="9" font-family="-apple-system,sans-serif">closed-loop feedback</text>
+      <rect x="230" y="389" width="10" height="10" rx="2" fill="#2c3e50" stroke="rgba(255,255,255,.1)" stroke-width="1" />
+      <text x="246" y="399" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif">v1 scope (4 params)</text>
+      <rect x="380" y="389" width="10" height="10" rx="2" fill="#2c3e50" stroke="rgba(232,112,74,.3)" stroke-width="1.5" />
+      <text x="396" y="399" fill="rgba(255,255,255,.35)" font-size="9" font-family="-apple-system,sans-serif">v2 scope (full pipeline control)</text>
+      <text x="600" y="399" fill="rgba(255,255,255,.25)" font-size="9" font-family="-apple-system,sans-serif" font-style="italic">model weights are never changed</text>
     </svg>
     </div>
 
