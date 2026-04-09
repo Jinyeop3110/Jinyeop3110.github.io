@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Protein LLM Series - Jinyeop Song</title>
+  <title>Adapting Open-Source LLMs to Protein Modality via Post-Training - Jinyeop Song</title>
   <link rel="stylesheet" href="/assets/css/project-page.css">
   <style>
     /* Protein LLM uses default teal accent — no overrides needed */
@@ -15,61 +15,31 @@
 <nav class="topnav">
   <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
   <a href="/" class="brand">Jinyeop Song</a>
-  <span class="nav-title">Protein LLM Series</span>
+  <span class="nav-title">Protein LLM</span>
 </nav>
 
 <!-- Left Sidebar -->
 <aside class="sidebar" id="sidebar">
   <a href="/posts/" class="back-link">&larr; Back to Blog</a>
 
-  <h3>Overview</h3>
-  <a href="#overview">Series Overview</a>
-  <a href="#overview-motivation">Motivation</a>
-  <a href="#overview-architecture">Architecture</a>
+  <h3>Main</h3>
+  <a href="#overview">Overview</a>
+  <a href="#overview-architecture">Approach Overview</a>
   <a href="#overview-scaling">Scaling Data</a>
   <a href="#overview-rl">RL &amp; Gradient Routing</a>
   <a href="#overview-next">What's Next</a>
   <a href="#overview-timeline">Timeline</a>
   <a href="#overview-references">References</a>
 
-  <h3 class="sidebar-divider">Supplementary Deep Dives</h3>
-
-  <h3>Part 1: Building the LLM</h3>
-  <a href="#part1">Introduction</a>
-  <a href="#part1-architecture">Architecture Decisions</a>
-  <a href="#part1-first-run">First Training Run</a>
-  <a href="#part1-eval">Evaluation Reality Check</a>
-  <a href="#part1-instruct">Instruct Model Disaster</a>
-  <a href="#part1-boundary">Boundary Tokens</a>
-  <a href="#part1-scaling-data">Scaling Up Data</a>
-  <a href="#part1-rl-path">RL Path Forward</a>
-  <a href="#part1-lessons">Lessons Learned</a>
-
-  <h3>Part 2: Scaling to 4.9M</h3>
-  <a href="#part2">Introduction</a>
-  <a href="#part2-experiment">Scaling Experiment</a>
-  <a href="#part2-results">Results</a>
-  <a href="#part2-stability">Training Stability</a>
-  <a href="#part2-comparison">Architectural Comparison</a>
-  <a href="#part2-meaning">What This Means</a>
-  <a href="#part2-takeaway">Takeaway</a>
-
-  <h3>Part 3: GRPO &amp; Gradients</h3>
-  <a href="#part3">Introduction</a>
-  <a href="#part3-sft">SFT Results</a>
-  <a href="#part3-grpo">Enter GRPO</a>
-  <a href="#part3-reversal">The Reversal</a>
-  <a href="#part3-diagnosis">Gradient Diagnosis</a>
-  <a href="#part3-fix">Freeze &amp; Focus Fix</a>
-  <a href="#part3-reward">Reward Breakdown</a>
-  <a href="#part3-proteinlm">ProteinLM Benchmark</a>
-  <a href="#part3-implications">Implications</a>
+  <h3 class="sidebar-divider">Deep Dives</h3>
+  <a href="#part1">Part 1: Building the LLM</a>
+  <a href="#part2">Part 2: Scaling to 4.9M</a>
+  <a href="#part3">Part 3: GRPO &amp; Gradients</a>
 
   <h3>Blog Posts</h3>
   <a href="/research/2026-02-25-protein-llm-journey/" class="ext-link">Part 1 Blog Post &#8599;</a>
   <a href="/research/2026-03-07-protein-llm-scaling/" class="ext-link">Part 2 Blog Post &#8599;</a>
   <a href="/research/2026-03-13-protein-llm-grpo-gradient-routing/" class="ext-link">Part 3 Blog Post &#8599;</a>
-  <a href="/research/2026-03-20-protein-llm-series-overview/" class="ext-link">Overview Blog Post &#8599;</a>
 </aside>
 
 <!-- Main Content -->
@@ -79,37 +49,26 @@
   <!--                    SERIES OVERVIEW                            -->
   <!-- ============================================================ -->
   <div class="part-section" id="overview">
-    <span class="part-label">Series Overview</span>
-    <h1>Protein LLM: Teaching Language Models to Understand Proteins</h1>
+    <span class="part-label">Overview</span>
+    <h1>Adapting Open-Source LLMs to Protein Modality via Post-Training</h1>
     <p class="part-date">March 20, 2026</p>
 
+    <p>Protein language models &mdash; ESM-2 <a href="#ref-esm3">[1]</a>, ESM-3, ProtTrans, and others &mdash; have demonstrated that self-supervised pre-training on amino acid sequences can capture rich structural and functional signals. However, these models predominantly operate on <strong>raw amino acid sequences as their sole input representation</strong>. While effective for per-residue classification and embedding-based retrieval, this sequence-only paradigm has important caveats: (1) the learned representations remain locked in high-dimensional embedding space, inaccessible to natural-language reasoning; (2) downstream tasks require task-specific heads, limiting generalization; and (3) the models cannot articulate <em>why</em> a protein has certain properties &mdash; they predict but do not explain.</p>
+
+    <p>Meanwhile, general-purpose LLMs excel at instruction-following, multi-step reasoning, and structured output generation, but treat protein sequences as opaque character strings with no biological grounding. Recent work on multimodal LLMs (LLaVA <a href="#ref-llava">[2]</a>, Flamingo <a href="#ref-flamingo">[3]</a>) has shown that frozen encoders from one modality can be bridged into LLMs via learnable projectors &mdash; but this recipe has been explored primarily for vision, not for biological sequences.</p>
+
     <div class="central-thesis">
-      <div class="thesis-label">The Project</div>
-      <p class="thesis-text">Can we teach a language model to effectively leverage protein structural embeddings &mdash; going beyond raw amino acid sequences to reason about structure, function, and evolutionary relationships &mdash; by bridging a protein encoder with an LLM?</p>
+      <div class="thesis-label">Research Question</div>
+      <p class="thesis-text">Can we adapt an open-source LLM to effectively leverage protein structural embeddings &mdash; going beyond raw amino acid sequences to reason about structure, function, and evolutionary relationships &mdash; by bridging a protein encoder with an LLM via post-training?</p>
     </div>
 
-    <p>This is a living summary of the Protein LLM project. Each section captures a phase of the work and links to the detailed deep dive below.</p>
-
     <hr>
 
-    <h2 id="overview-motivation">Motivation</h2>
+    <h2 id="overview-architecture">Approach Overview</h2>
 
-    <p>Protein language models and large language models have each achieved remarkable success &mdash; but in isolation. Bridging them is both timely and necessary for three reasons:</p>
+    <p>We connect two worlds: <strong>ESM-3</strong>, a protein foundation model that encodes structural and evolutionary knowledge into 1536-dimensional embeddings, and <strong>Qwen3-8B-Instruct</strong> <a href="#ref-qwen">[8]</a>, a general-purpose LLM. A learnable bridge (attention pooling + projector) translates between them. ESM-3 stays frozen; the LLM adapts via LoRA <a href="#ref-lora">[4]</a>.</p>
 
-    <h3>1. Rich Representations Locked in Embedding Space</h3>
-    <p>Protein foundation models like ESM-3 <a href="#ref-esm3">[1]</a> learn structural geometry, evolutionary constraints, and functional signals from hundreds of millions of sequences. Yet these representations live as high-dimensional vectors &mdash; useful for downstream classifiers but inaccessible to natural-language reasoning. No amount of prompting a general LLM recovers what ESM-3 already knows about a protein's 3D fold from its sequence alone.</p>
-
-    <h3>2. LLMs Reason but Lack Biological Grounding</h3>
-    <p>General-purpose LLMs can follow complex instructions, synthesise information, and generate structured output. When given a raw amino-acid sequence, however, they treat it as an opaque string of characters &mdash; unable to infer that a conserved catalytic triad implies serine protease activity, or that a coiled-coil motif suggests dimerisation. Injecting protein embeddings as a first-class modality gives the LLM grounded biological signal to reason over, rather than relying on memorised text patterns.</p>
-
-    <h3>3. Post-Training Is Practical</h3>
-    <p>Training a protein-aware LLM from scratch would require re-learning both language and protein biology &mdash; prohibitively expensive. The multimodal bridging paradigm pioneered for vision-language models (LLaVA <a href="#ref-llava">[2]</a>, Flamingo <a href="#ref-flamingo">[3]</a>) shows a cheaper path: freeze a strong encoder, attach a learnable projector, and fine-tune the LLM with LoRA <a href="#ref-lora">[4]</a>. We apply this recipe to proteins, asking whether it transfers to a modality with fundamentally different structure than images.</p>
-
-    <hr>
-
-    <h2 id="overview-architecture">The Architecture</h2>
-
-    <p>We connect two worlds: <strong>ESM-3</strong>, a protein foundation model that encodes structural and evolutionary knowledge into 1536-dimensional embeddings, and <strong>Qwen3-8B-Instruct</strong> <a href="#ref-qwen">[8]</a>, a general-purpose LLM. A learnable bridge (pooling + projector) translates between them. ESM-3 stays frozen; the LLM adapts via LoRA.</p>
+    <p>Our <strong>core comparison</strong> is between two pathways: <strong>Text-only</strong>, where the raw amino acid sequence is fed directly as tokens, and <strong>ESM-3 + MLP</strong>, where ESM-3 embeddings are projected into the LLM's input space. The MLP projector serves as a simple, interpretable bridge &mdash; it can be replaced with more expressive alternatives like the Perceiver Resampler <a href="#ref-perceiver">[7]</a> (cross-attention) or Flamingo-style <a href="#ref-flamingo">[3]</a> gated cross-attention, which we have implemented but not yet evaluated at scale.</p>
 
     <!-- Architecture Diagram -->
     <div class="diagram-container">
@@ -265,17 +224,15 @@
     </svg>
     </div>
 
-    <p>To isolate what each component contributes, we designed a <strong>four-way comparison</strong>:</p>
-
     <table>
-      <tr><th>Approach</th><th>How protein enters the LLM</th><th>Trainable params</th></tr>
-      <tr><td><strong>Text</strong></td><td>Raw sequence as <code>&lt;protein&gt;MKTL...&lt;/protein&gt;</code> tokens</td><td>~2M (LoRA only)</td></tr>
-      <tr><td><strong>MLP</strong></td><td>ESM-3 &rarr; AttentionPooling (32 tokens) &rarr; MLP projector</td><td>~32.5M</td></tr>
-      <tr><td><strong>Perceiver</strong></td><td>ESM-3 &rarr; Perceiver Resampler <a href="#ref-perceiver">[7]</a> (cross-attention)</td><td>~31.4M</td></tr>
-      <tr><td><strong>Flamingo</strong></td><td>ESM-3 &rarr; Perceiver &rarr; Gated cross-attention at LLM layers</td><td>~120-150M</td></tr>
+      <tr><th>Approach</th><th>How protein enters the LLM</th><th>Trainable params</th><th>Status</th></tr>
+      <tr><td><strong>Text-only</strong></td><td>Raw sequence as <code>&lt;protein&gt;MKTL...&lt;/protein&gt;</code> tokens</td><td>~2M (LoRA only)</td><td>Core comparison</td></tr>
+      <tr><td><strong>ESM-3 + MLP</strong></td><td>ESM-3 &rarr; AttentionPooling (32 tokens) &rarr; MLP projector</td><td>~32.5M</td><td>Core comparison</td></tr>
+      <tr><td>ESM-3 + Perceiver</td><td>ESM-3 &rarr; Perceiver Resampler (cross-attention)</td><td>~31.4M</td><td>Implemented, not yet at scale</td></tr>
+      <tr><td>ESM-3 + Flamingo</td><td>ESM-3 &rarr; Perceiver &rarr; Gated cross-attention at LLM layers</td><td>~120-150M</td><td>Implemented, not yet at scale</td></tr>
     </table>
 
-    <p>We also explored the full training pipeline: <strong>SSL</strong> (continued pre-training on biology literature) &rarr; <strong>SFT</strong> (instruction fine-tuning on protein tasks) &rarr; <strong>GRPO</strong> (reinforcement learning with verifiable rewards).</p>
+    <p>The training pipeline proceeds in three stages: <strong>SSL</strong> (continued pre-training on biology literature) &rarr; <strong>SFT</strong> (instruction fine-tuning on protein tasks) &rarr; <strong>GRPO</strong> (reinforcement learning with verifiable rewards).</p>
 
     <hr>
 
@@ -291,6 +248,11 @@
     </table>
 
     <p><em>*This comparison spans both a model change (4B&rarr;8B) and data change (50K&rarr;4.89M). On the same 8B model, data scaling alone gave an 81% reduction (1.91&rarr;0.361).</em></p>
+
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig5_sft_loss_curves.png" alt="SFT eval loss curves" loading="lazy">
+      <p class="figcaption">SFT eval loss: ESM-3+MLP (0.361) dramatically outperforms text-only (1.207), demonstrating the value of structural embeddings for supervised learning.</p>
+    </div>
 
     <div class="callout">
       <div class="callout-label">Important Update</div>
@@ -309,7 +271,17 @@
       <tr><td>Text-only</td><td>1.207 (worse)</td><td><strong>0.832</strong> (better)</td></tr>
     </table>
 
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig13_grpo_structure_reward_curves.png" alt="GRPO reward curves showing text-only outperforming MLP" loading="lazy">
+      <p class="figcaption">GRPO reward curves: text-only (0.832) outperforms ESM-3+MLP (0.582-0.780), completely inverting the SFT ranking.</p>
+    </div>
+
     <p><strong>The gradient routing problem:</strong> During GRPO, gradients flow predominantly to either the projector OR the LoRA adapters &mdash; not both effectively. SFT's dense per-token loss flows naturally through the entire graph; GRPO's sparse scalar reward creates competition.</p>
+
+    <div class="fig">
+      <img src="/assets/img/blog/protein-llm/fig16_grpo_structure_grad_norms.png" alt="Gradient norms revealing the routing problem" loading="lazy">
+      <p class="figcaption">Gradient norms reveal the routing problem: one subsystem captures the RL signal, starving the other &mdash; a winner-take-all dynamic.</p>
+    </div>
 
     <hr>
 
@@ -425,15 +397,9 @@
   <!-- ============================================================ -->
   <!--              PART 1: BUILDING THE LLM                        -->
   <!-- ============================================================ -->
-  <div class="part-section" id="part1">
-    <span class="part-label">Part 1</span>
-    <h1>Building a Protein-Understanding LLM: Trials, Errors, and Breakthroughs</h1>
-    <p class="part-date">February 25, 2026</p>
-
-    <div class="central-thesis">
-      <div class="thesis-label">The Question</div>
-      <p class="thesis-text">What happens when you bridge protein language models with large language models? Can we make an LLM that leverages structural protein embeddings, not just parses their sequences?</p>
-    </div>
+  <details class="supplementary" id="part1">
+    <summary>Part 1: Building a Protein-Understanding LLM &mdash; Trials, Errors, and Breakthroughs (Feb 25, 2026)</summary>
+    <div class="details-body">
 
     <h2>The Beginning: Why This Project?</h2>
 
@@ -642,28 +608,16 @@ SSSSSSSSSSSSSSSS...
         <li><strong>Proteins are hard.</strong> Longer than typical text, different statistical properties, domain-specific evaluation.</li>
       </ol>
     </div>
-  </div>
+    </div>
+  </details>
 
 
   <!-- ============================================================ -->
   <!--              PART 2: SCALING TO 4.9M                         -->
   <!-- ============================================================ -->
-  <div class="part-section" id="part2">
-    <span class="part-label">Part 2</span>
-    <h1>Scaling to 4.9 Million Samples</h1>
-    <p class="part-date">March 7, 2026</p>
-
-    <div class="central-thesis">
-      <div class="thesis-label">The Big Picture</div>
-      <p class="thesis-text">We scaled our protein-LLM training from 50K samples on Qwen3-4B to 4.9 million samples on Qwen3-8B across six sources. Combined, these changes reduced eval_loss from 3.64 to 0.361.</p>
-    </div>
-
-    <div class="callout">
-      <div class="callout-label">Important Update (March 2026)</div>
-      <p>The 4.89M combined dataset was later refined to <strong>1.82M samples</strong> after discovering significant protein overlap between train and evaluation splits. <strong>All results below reflect the original 4.89M training and may not hold on the curated dataset.</strong></p>
-    </div>
-
-    <hr>
+  <details class="supplementary" id="part2">
+    <summary>Part 2: Scaling to 4.9 Million Samples (Mar 7, 2026)</summary>
+    <div class="details-body">
 
     <h2 id="part2-experiment">The Scaling Experiment</h2>
 
@@ -799,39 +753,16 @@ SSSSSSSSSSSSSSSS...
         <li>33.7% through training (headroom remains)</li>
       </ul>
     </div>
-  </div>
+    </div>
+  </details>
 
 
   <!-- ============================================================ -->
   <!--              PART 3: GRPO & GRADIENT ROUTING                 -->
   <!-- ============================================================ -->
-  <div class="part-section" id="part3">
-    <span class="part-label">Part 3</span>
-    <h1>Teaching a Protein LLM with RL: The Gradient Routing Problem</h1>
-    <p class="part-date">March 13, 2026</p>
-
-    <div class="central-thesis">
-      <div class="thesis-label">The Question</div>
-      <p class="thesis-text">When a multimodal protein LLM achieves strong supervised fine-tuning loss, why does it struggle with reinforcement learning &mdash; and what does gradient flow tell us about the answer?</p>
-    </div>
-
-    <p>Over the past month, I built a multimodal protein language model &mdash; ESM-3 encodes sequences into 1536-dimensional structural embeddings, passing through attention pooling (32 tokens) and an MLP projector into Qwen3-8B-Instruct. LoRA adapts the LLM; ESM-3 stays frozen. ~32.5M trainable parameters.</p>
-
-    <details class="supplementary">
-      <summary>Supplementary: Detailed architecture schematic</summary>
-      <div class="supple-content">
-        <div class="fig">
-          <img src="/assets/img/blog/protein-llm/fig1_schematic_overview.png" alt="Four-pathway architecture schematic" loading="lazy">
-          <p class="figcaption">Schematic overview of the four-pathway architecture.</p>
-        </div>
-        <div class="fig">
-          <img src="/assets/img/blog/protein-llm/fig10_base_vs_finetuned.png" alt="Base vs finetuned model comparison" loading="lazy">
-          <p class="figcaption">Base model vs fine-tuned: generation quality comparison showing the effect of SFT.</p>
-        </div>
-      </div>
-    </details>
-
-    <hr>
+  <details class="supplementary" id="part3">
+    <summary>Part 3: Teaching a Protein LLM with RL &mdash; The Gradient Routing Problem (Mar 13, 2026)</summary>
+    <div class="details-body">
 
     <h2 id="part3-sft">SFT Results: The MLP Advantage</h2>
 
@@ -980,7 +911,8 @@ SSSSSSSSSSSSSSSS...
       <br><br>
       <em>This analysis covers 4 SFT and 13 GRPO experiments run between March 6-13, 2026, on 8x H100 GPUs. All models use Qwen3-8B-Instruct-2507 with LoRA (r=8). The combined SFT dataset contains 4.89M instruction-response pairs from six protein data sources.</em>
     </div>
-  </div>
+    </div>
+  </details>
 
 </div><!-- end .main -->
 
