@@ -21,7 +21,7 @@ permalink: /
   <img class="profile-photo" src="/assets/img/profile.jpg" alt="Jinyeop Song">
 </div>
 
-I am a final-year PhD student in the [MIT Physics Department](https://physics.mit.edu/), advised by [Prof. Jeff Gore](https://www.gorelab.org/). I am a former [MATS](https://www.matsprogram.org/) scholar and [MIT-IBM Watson AI Lab](https://mitibmwatsonailab.mit.edu/) research intern. This summer, I will be joining [Xaira Therapeutics](https://www.xaira.com/) as a full-time AI Researcher in San Francisco.
+I am a final-year PhD student in the [MIT Physics Department](https://physics.mit.edu/), advised by [Prof. Jeff Gore](https://www.gorelab.org/). I am a former [MATS](https://www.matsprogram.org/) scholar and [MIT-IBM Watson AI Lab](https://mitibmwatsonailab.mit.edu/) research intern.
 
 I work on the Science of AI and AI for Science. My recent work studies neural scaling laws, in-context learning, and LLM agents, while also building foundation-model and agentic systems for biology.
 
