@@ -1,10 +1,12 @@
 ---
-layout: page
+layout: minimal
 title: Publications
 description: >
   Academic publications and preprints.
 hide_description: true
 ---
+
+# Publications
 
 ## AI Research
 
