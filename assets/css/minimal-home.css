@@ -56,6 +56,23 @@ h1 {
   line-height: 1.2;
 }
 
+.intro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 18px;
+}
+
+.profile-photo {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 42%;
+  flex: 0 0 auto;
+}
+
 h2 {
   margin: 34px 0 12px;
   font-size: 19px;
@@ -96,11 +113,16 @@ a:hover {
 }
 
 .pub-title {
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .pub-meta {
   color: var(--muted);
+}
+
+.pub-meta strong {
+  color: var(--text);
+  font-weight: 600;
 }
 
 .note {
@@ -132,5 +154,24 @@ hr {
 
   h1 {
     font-size: 27px;
+  }
+
+  .intro {
+    gap: 18px;
+  }
+
+  .profile-photo {
+    width: 88px;
+    height: 88px;
+  }
+}
+
+@media (max-width: 430px) {
+  .intro {
+    display: block;
+  }
+
+  .profile-photo {
+    margin-top: 8px;
   }
 }
