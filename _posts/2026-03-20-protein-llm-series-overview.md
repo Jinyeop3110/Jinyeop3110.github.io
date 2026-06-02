@@ -68,7 +68,7 @@ Then came the surprise. The rankings **completely inverted**:
 
 | Model | SFT eval_loss | GRPO Reward (best) |
 |-------|--------------|-------------|
-| ESM3+MLP | **0.361** (better) | 0.780 (worse) |
+| ESM-3+MLP | **0.361** (better) | 0.780 (worse) |
 | Text-only | 1.207 (worse) | **0.832** (better) |
 
 The model with lower SFT loss learned *worse* from RL. Why?
@@ -88,7 +88,7 @@ This SFT→RL inversion is the central open question of the project.
 These are the active and planned directions. New posts will be added here as they're written.
 
 ### SSL: Domain Pre-Training
-Continued pre-training on 50GB of biology literature (PMC papers, PubMed abstracts, protein sequences in context) using Qwen3.5-4B BASE with LoRA. The goal: inject biological domain knowledge *before* instruction tuning, creating a stronger foundation for both SFT and GRPO.
+Continued pre-training on 50GB of biology literature (PMC papers, PubMed abstracts, protein sequences in context) using Qwen3-4B BASE with LoRA. The goal: inject biological domain knowledge *before* instruction tuning, creating a stronger foundation for both SFT and GRPO.
 
 ### Perceiver & Flamingo at Scale
 Both architectures are implemented and validated on small data but untested at 4.89M scale. The Perceiver uses cross-attention instead of concatenation — it may exhibit different gradient routing during GRPO. Flamingo inserts protein information via gated cross-attention at every 4th LLM layer, a fundamentally different integration strategy.
@@ -108,11 +108,11 @@ GO term prediction (F1), protein stability prediction (MAE), structure quality a
 
 | Date | Phase | Key Result |
 |------|-------|------------|
-| Feb 2026 | Architecture & first training | ESM3+MLP converges; 50K SFT eval_loss=3.64 |
+| Feb 2026 | Architecture & first training | ESM-3+MLP converges; 50K SFT eval_loss=3.64 |
 | Mar 7 | Data scaling | 4.89M samples; eval_loss **0.361** (-90.1%) |
 | Mar 13 | GRPO reinforcement learning | Gradient routing problem discovered; text 0.832 vs MLP 0.582 |
 | Mar 16 | SSL pipeline & curated data | 50GB SSL corpus + 1.82M curated SFT dataset prepared |
-| TBD | SSL pre-training | Qwen3.5-4B continued pre-training on biology literature |
+| TBD | SSL pre-training | Qwen3-4B continued pre-training on biology literature |
 | TBD | Four-way comparison | Text vs MLP vs Perceiver vs Flamingo at scale |
 | TBD | Gradient routing fix | Two-stage GRPO / gradient balancing |
 

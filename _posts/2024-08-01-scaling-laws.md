@@ -16,7 +16,7 @@ tags: [scaling-laws, llm, theory]
 
 The Neural Scaling Law (NSL) refers to how language models scale with respect to key factors: model size, training data size, and computational resources. This scaling law is important to analyze since it enables predicting how much "performance gain" we can expect by scaling up AI models and data.
 
-However, Kaplan et al. and Hoffmann et al. (Chinchilla) have empirically measured different scaling coefficients for large language models. In our TMLR paper ["Reconciling Kaplan and Chinchilla Scaling Laws"](https://arxiv.org/abs/2406.12907), we aim to identify the origin of such discrepancy through analytic methods and small language model training.
+However, Kaplan et al. and Hoffmann et al. (Chinchilla) have empirically measured different scaling coefficients for large language models. In our TMLR paper ["Reconciling Kaplan and Chinchilla Scaling Laws"](https://arxiv.org/abs/2406.12907), we aim to identify the origin of this discrepancy through analytic methods and small language model training.
 
 ## Origin of Neural Scaling Laws: The Resource Model
 

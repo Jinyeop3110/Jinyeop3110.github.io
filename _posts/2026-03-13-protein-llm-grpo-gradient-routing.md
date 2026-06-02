@@ -38,7 +38,7 @@ We trained on 4.89M instruction pairs from six protein data sources covering fun
 
 The SFT results established a clear hierarchy (full analysis in [Part 2](/research/2026-03-07-protein-llm-scaling/)):
 
-| Metric | ESM3+MLP | Text-Only | MLP Advantage |
+| Metric | ESM-3+MLP | Text-Only | MLP Advantage |
 |--------|----------|-----------|---------------|
 | Best eval_loss | **0.361** | 1.207 | 70.1% lower |
 | Gradient norm (mean) | 0.627 | 2.365 | 3.8x lower |

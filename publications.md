@@ -45,8 +45,8 @@ hide_description: true
     <img src="/assets/img/publication_preview/concept_encoding.png" alt="Concept Encoding">
   </div>
   <div class="pub-details">
-    <div class="pub-title"><a href="/research/2024-06-01-concept-encoding/">Context to Concept: Concept Encoding in In-context Learning</a></div>
-    <div class="pub-authors"><u>Jinyeop Song</u>, Seungwook Han, Jeff Gore, Pulkit Agrawal</div>
+    <div class="pub-title"><a href="/research/2024-06-01-concept-encoding/">Emergence and Effectiveness of Task Vectors in In-Context Learning: An Encoder Decoder Perspective</a></div>
+    <div class="pub-authors">Seungwook Han, <u>Jinyeop Song</u>, Jeff Gore, Pulkit Agrawal</div>
     <div class="pub-venue"><span class="venue-badge spotlight">ICML 2025 Spotlight (Top 2.5%)</span></div>
     <div class="pub-abstract">We study how LLMs encode abstract concepts during in-context learning, uncovering structured internal representations that emerge with model scale and context length.</div>
     <div class="pub-links">
@@ -84,7 +84,7 @@ hide_description: true
     <img src="/assets/img/publication_preview/empowerment.png" alt="Empowerment">
   </div>
   <div class="pub-details">
-    <div class="pub-title"><a href="/research/2025-01-01-eelma/">Estimating Empowerment of Language Model Agents</a></div>
+    <div class="pub-title"><a href="/news/2025-01-01-eelma/">Estimating the Empowerment of Language Model Agents</a></div>
     <div class="pub-authors"><u>Jinyeop Song</u>, Jeff Gore, Max Kleiman-Weiner</div>
     <div class="pub-venue"><span class="venue-badge published">ICML 2026</span></div>
     <div class="pub-abstract">We introduce a framework to estimate the empowerment of LLM agents—their capacity to influence the environment—as a step toward safer AI deployment.</div>
@@ -114,9 +114,9 @@ hide_description: true
     <img src="/assets/img/publication_preview/methylgpt.png" alt="MethylGPT">
   </div>
   <div class="pub-details">
-    <div class="pub-title">MethylGPT: Foundational GPT-like Model for Human Methylation Data</div>
-    <div class="pub-authors">Alex Ying, <u>Jinyeop Song</u>, Haoran Cui, et al.</div>
-    <div class="pub-venue"><span class="venue-badge preprint">Under review in Nature Methods (2024)</span></div>
+    <div class="pub-title">MethylGPT: a foundation model for the DNA methylome</div>
+    <div class="pub-authors">Kejun Ying, <u>Jinyeop Song</u>, Haotian Cui, et al.</div>
+    <div class="pub-venue"><span class="venue-badge preprint">bioRxiv preprint (2024)</span></div>
     <div class="pub-abstract">We develop a GPT-style foundation model pretrained on large-scale human DNA methylation data, enabling zero-shot biological age prediction and disease classification.</div>
     <div class="pub-links">
       <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2" class="pub-btn">bioRxiv</a>
@@ -208,12 +208,12 @@ hide_description: true
     <img src="/assets/img/publication_preview/protein_id.png" alt="Bacterial Pathogen ID">
   </div>
   <div class="pub-details">
-    <div class="pub-title">Rapid and Label-Free Identification of Individual Bacterial Pathogens Exploiting Three-Dimensional Quantitative Phase Imaging and Deep Learning</div>
-    <div class="pub-authors">Geon Kim, Daewoong Ahn, Minhee Kang, Y. Jo, Donghun Ryu, Hyeonjung Kim, <u>Jinyeop Song</u>, et al.</div>
+    <div class="pub-title">Rapid species identification of pathogenic bacteria from a minute quantity exploiting three-dimensional quantitative phase imaging and artificial neural network</div>
+    <div class="pub-authors">Geon Kim, Daewoong Ahn, Minhee Kang, Jinho Park, DongHun Ryu, YoungJu Jo, <u>Jinyeop Song</u>, et al.</div>
     <div class="pub-venue"><span class="venue-badge published">Light: Science &amp; Applications 2022</span></div>
     <div class="pub-abstract">We combine 3D quantitative phase imaging with deep learning to achieve rapid, label-free identification of individual bacterial pathogens at the single-cell level.</div>
     <div class="pub-links">
-      <a href="https://doi.org/10.1038/s41377-022-00894-5" class="pub-btn">DOI</a>
+      <a href="https://doi.org/10.1038/s41377-022-00881-x" class="pub-btn">DOI</a>
     </div>
   </div>
 </div>

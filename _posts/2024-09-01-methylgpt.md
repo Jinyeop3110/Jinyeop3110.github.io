@@ -42,8 +42,8 @@ Currently under review at **Nature Methods**.
 
 ```bibtex
 @article{ying2024methylgpt,
-  title={MethylGPT: Foundational GPT-like Model for Human Methylation Data},
-  author={Ying, Alex and Song, Jinyeop and Cui, Haoran and others},
+  title={MethylGPT: a foundation model for the DNA methylome},
+  author={Ying, Kejun and Song, Jinyeop and Cui, Haotian and others},
   journal={bioRxiv},
   year={2024}
 }
