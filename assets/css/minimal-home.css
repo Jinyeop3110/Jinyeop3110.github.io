@@ -1,9 +1,17 @@
+@font-face {
+  font-family: "Newsreader";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/assets/fonts/Newsreader.woff2") format("woff2");
+}
+
 :root {
   --text: #111;
   --muted: #555;
   --faint: #777;
   --rule: #ddd;
-  --link: #0645ad;
+  --link: #8b0000;
 }
 
 * {
@@ -14,22 +22,23 @@ body {
   margin: 0;
   background: #fff;
   color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 15px;
-  line-height: 1.55;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.6;
 }
 
 .page {
-  width: min(760px, calc(100% - 36px));
-  margin: 28px auto 56px;
+  width: min(740px, calc(100% - 40px));
+  margin: 20px auto 56px;
 }
 
 .site-nav {
   display: flex;
   align-items: baseline;
   justify-content: flex-end;
-  margin-bottom: 36px;
-  font-size: 14px;
+  margin-bottom: 34px;
+  font-size: 18px;
 }
 
 .site-nav nav {
@@ -51,9 +60,9 @@ body {
 
 h1 {
   margin: 0 0 4px;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 .intro {
@@ -74,9 +83,10 @@ h1 {
 }
 
 h2 {
-  margin: 34px 0 12px;
-  font-size: 19px;
+  margin: 32px 0 10px;
+  font-size: 28px;
   font-weight: 600;
+  line-height: 1.2;
 }
 
 p {
@@ -95,6 +105,7 @@ a:hover {
 .contact-line {
   margin: 0 0 22px;
   color: var(--muted);
+  font-size: 18px;
 }
 
 .contact-line a {
@@ -104,7 +115,7 @@ a:hover {
 .pub-list,
 .plain-list {
   margin: 0;
-  padding-left: 20px;
+  padding-left: 24px;
 }
 
 .pub-list li,
@@ -127,7 +138,7 @@ a:hover {
 
 .note {
   color: var(--faint);
-  font-size: 14px;
+  font-size: 18px;
 }
 
 hr {
@@ -153,7 +164,11 @@ hr {
   }
 
   h1 {
-    font-size: 27px;
+    font-size: 30px;
+  }
+
+  h2 {
+    font-size: 25px;
   }
 
   .intro {
