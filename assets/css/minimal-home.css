@@ -89,6 +89,13 @@ h2 {
   line-height: 1.2;
 }
 
+h3 {
+  margin: 24px 0 8px;
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
 p {
   margin: 0 0 13px;
 }
@@ -113,13 +120,17 @@ a:hover {
 }
 
 .pub-list,
-.plain-list {
+.plain-list,
+.post-list,
+.project-list {
   margin: 0;
   padding-left: 24px;
 }
 
 .pub-list li,
-.plain-list li {
+.plain-list li,
+.post-list li,
+.project-list li {
   margin-bottom: 13px;
 }
 
@@ -134,6 +145,84 @@ a:hover {
 .pub-meta strong {
   color: var(--text);
   font-weight: 600;
+}
+
+.pub-entry {
+  display: flex;
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.pub-entry:last-child {
+  border-bottom: 0;
+}
+
+.pub-thumb {
+  flex: 0 0 105px;
+}
+
+.pub-thumb img {
+  width: 105px;
+  height: 78px;
+  object-fit: cover;
+  display: block;
+  border-radius: 3px;
+}
+
+.pub-entry .pub-title {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.pub-authors,
+.pub-venue,
+.pub-abstract,
+.pub-links {
+  font-size: 18px;
+}
+
+.pub-authors,
+.pub-abstract {
+  color: var(--muted);
+}
+
+.pub-abstract {
+  font-style: italic;
+}
+
+.venue-badge {
+  color: var(--muted);
+}
+
+.pub-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.project-list a,
+.post-list a {
+  font-weight: 600;
+}
+
+.project-list span,
+.post-list span {
+  color: var(--muted);
+}
+
+.project-list span {
+  display: block;
+}
+
+.post-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.post-list span {
+  flex: 0 0 auto;
 }
 
 .note {
@@ -171,6 +260,10 @@ hr {
     font-size: 25px;
   }
 
+  h3 {
+    font-size: 22px;
+  }
+
   .intro {
     gap: 18px;
   }
@@ -178,6 +271,18 @@ hr {
   .profile-photo {
     width: 88px;
     height: 88px;
+  }
+
+  .pub-entry {
+    display: block;
+  }
+
+  .pub-thumb {
+    margin-bottom: 8px;
+  }
+
+  .post-list li {
+    display: block;
   }
 }
 
