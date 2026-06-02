@@ -268,7 +268,7 @@
 
     <table>
       <tr><th>Model</th><th>SFT eval_loss</th><th>GRPO Reward (best)</th></tr>
-      <tr><td>ESM3+MLP</td><td><strong>0.361</strong> (better)</td><td>0.780 (worse)</td></tr>
+      <tr><td>ESM-3+MLP</td><td><strong>0.361</strong> (better)</td><td>0.780 (worse)</td></tr>
       <tr><td>Text-only</td><td>1.207 (worse)</td><td><strong>0.832</strong> (better)</td></tr>
     </table>
 
@@ -307,7 +307,7 @@
 
     <table>
       <tr><th>Date</th><th>Phase</th><th>Key Result</th></tr>
-      <tr><td>Feb 2026</td><td>Architecture &amp; first training</td><td>ESM3+MLP converges; 50K SFT eval_loss=3.64</td></tr>
+      <tr><td>Feb 2026</td><td>Architecture &amp; first training</td><td>ESM-3+MLP converges; 50K SFT eval_loss=3.64</td></tr>
       <tr><td>Mar 7</td><td>Data scaling</td><td>4.89M samples; eval_loss 0.361 (-90.1%)</td></tr>
       <tr><td>Mar 13</td><td>GRPO reinforcement learning</td><td>Gradient routing problem; text 0.832 vs MLP 0.780</td></tr>
       <tr><td>Mar 16</td><td>SSL pipeline &amp; curated data</td><td>50GB SSL corpus + 1.82M curated SFT dataset</td></tr>
@@ -768,7 +768,7 @@ SSSSSSSSSSSSSSSS...
     <h2 id="part3-sft">SFT Results: The MLP Advantage</h2>
 
     <table>
-      <tr><th>Metric</th><th>ESM3+MLP</th><th>Text-Only</th><th>MLP Advantage</th></tr>
+      <tr><th>Metric</th><th>ESM-3+MLP</th><th>Text-Only</th><th>MLP Advantage</th></tr>
       <tr><td>Best eval_loss</td><td><strong>0.361</strong></td><td>1.207</td><td>70.1% lower</td></tr>
       <tr><td>Gradient norm (mean)</td><td>0.627</td><td>2.365</td><td>3.8x lower</td></tr>
     </table>
