@@ -6,20 +6,20 @@
   <title>Automated De Novo Protein Design Optimization - Jinyeop Song</title>
   <link rel="stylesheet" href="/assets/css/project-page.css">
   <style>
-    /* Autoresearch De Novo — orange accent */
+    /* Autoresearch De Novo uses the shared minimal project-page theme. */
     :root {
-      --accent: #e8704a;
-      --accent-hover: #f0956e;
-      --accent-bg: rgba(232, 112, 74, 0.1);
-      --accent-bg-active: rgba(232, 112, 74, 0.15);
-      --thesis-gradient-end: #d35400;
+      --accent: #8b0000;
+      --accent-hover: #5f0000;
+      --accent-bg: rgba(139, 0, 0, 0.06);
+      --accent-bg-active: rgba(139, 0, 0, 0.1);
+      --thesis-gradient-end: #8b0000;
     }
 
     /* Foldable supplementary sections */
     details.supplementary {
       background: var(--bg-card);
       border: 1px solid var(--border-card);
-      border-radius: 8px;
+      border-radius: 0;
       margin: 20px 0;
       overflow: hidden;
     }
@@ -63,6 +63,7 @@
 <nav class="topnav">
   <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
   <a href="/" class="brand">Jinyeop Song</a>
+  <a href="/" class="home-link">Home</a>
   <span class="nav-title">Automated De Novo Protein Design Optimization</span>
 </nav>
 
@@ -79,12 +80,12 @@
   <a href="#v1-trajectories">Optimization Trajectories</a>
   <a href="#v1-reflection">Reflection</a>
 
-  <h3>Agent v2 <span style="color:rgba(255,255,255,.3);font-size:0.75rem;">(superseded)</span></h3>
+  <h3>Agent v2 <span style="color:var(--text-sidebar-heading);font-size:0.75rem;">(superseded)</span></h3>
   <a href="#v2">v2 Plan</a>
   <a href="#v2-graphify">Graphify Experiment</a>
   <a href="#v2-todo">Orthogonal Backlog</a>
 
-  <h3>Agent v3 <span style="color:#e8704a;font-size:0.75rem;">(active)</span></h3>
+  <h3>Agent v3 <span style="color:var(--accent);font-size:0.75rem;">(active)</span></h3>
   <a href="#v3">v3: SCORE-style Rewrite</a>
   <a href="#v3-primitives">The Six Primitives</a>
   <a href="#v3-ideas">Research Ideas as First-Class</a>
