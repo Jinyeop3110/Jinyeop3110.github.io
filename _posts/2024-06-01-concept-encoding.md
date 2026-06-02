@@ -12,7 +12,7 @@ tags: [icl, llm, mechanistic-interpretability]
 
 ![Concept Encoding Overview](/assets/img/projects/concept_encoding.png){:.lead width="800" loading="lazy"}
 
-Overview of Concept Encoding phenomena and Concept Decodability (CD)
+Overview of Concept Encoding phenomenon and Concept Decodability (CD)
 {:.figcaption}
 
 ## Summary
@@ -23,7 +23,7 @@ Why does in-context learning (ICL) succeed or fail depending on the task? We exp
 
 ## Concept Encoding Phenomena
 
-We introduced the concept of **Concept Encoding** phenomena, which posits that representations are effectively distinguished by latent concepts. Our findings demonstrate that concept encoding occurs in the LLAMA3 8B model, as evidenced by realistic latent concepts such as verbs and nouns in part-of-speech tagging, as well as logical operators like AND and OR in bitwise operations.
+We introduced the concept of **Concept Encoding** phenomenon, which posits that representations are effectively distinguished by latent concepts. Our findings demonstrate that concept encoding occurs in the Llama 3 8B model, as evidenced by realistic latent concepts such as verbs and nouns in part-of-speech tagging, as well as logical operators like AND and OR in bitwise operations.
 
 ## Key Findings
 
@@ -31,7 +31,7 @@ We conjecture that concept decodability—specifically, how well a given concept
 
 ### Causal Analysis
 
-We performed various interventions and causal relation experiments supporting that concept encoding phenomena is indeed causally related with the ICL performance:
+We performed various interventions and causal relation experiments supporting that concept encoding is indeed causally related to ICL performance:
 
 - **Perturbation Analysis**: Perturbing concept representations affects ICL accuracy
 - **Fine-tuning Experiments**: Fine-tuning improves both concept decodability and ICL performance
@@ -42,7 +42,7 @@ We performed various interventions and causal relation experiments supporting th
 ```bibtex
 @article{song2024context,
   title={Context to Concept: Concept Encoding in In-context Learning},
-  author={Song, Jinyeop and Han, Sumin and Argawal, P. and Gore, Jeffrey},
+  author={Song, Jinyeop and Han, Seungwook and Gore, Jeffrey and Agrawal, Pulkit},
   journal={ICML 2025 (Spotlight)},
   year={2024}
 }
