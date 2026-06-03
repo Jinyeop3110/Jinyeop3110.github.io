@@ -59,8 +59,9 @@ I work on the Science of AI and AI for Science. My recent work studies neural sc
 <ul class="plain-list">
   <li>Machine Learning and Theory Scholarship (MATS), 2025</li>
   <li>Mokam Research Scholarship, 2023</li>
+  <li>Asan Graduate Research Scholarship, 2021-2025</li>
   <li>KAIST Presidential Fellowship, 2016</li>
-  <li>KPS Best Oral Presentation Award, 2020</li>
+  <li>KPS Best Oral Presentation Award, 2023</li>
   <li>Excellent Graduate of KAIST, 2020</li>
   <li>Korea Presidential Science Scholarship, 2014-2020</li>
 </ul>
