@@ -100,8 +100,8 @@ Project pages (standalone HTML) can be previewed directly in a browser or with `
 
 ## Publication Authorship
 
-When adding or editing publication authorship:
+When adding or editing publication authorship, use the CV in `Resume_Jinyeop_v2` as the source of truth:
 
-- Denote first authors with a superscript plus marker, e.g. `Song, J.<sup>+</sup>` or `Doe, A.<sup>+</sup>`.
-- Keep equal-contribution notation separate if needed, using `*`.
-- Add or preserve a short legend near the publication list when markers appear, e.g. `<sup>+</sup>` first author; `*` equal contribution.
+- Denote only co-first authors with a superscript dagger marker, e.g. `Song, J.<sup>†</sup>` or `Doe, A.<sup>†</sup>`.
+- Do not add a marker when there is a single first author.
+- Add or preserve a short legend near the publication list when markers appear, e.g. `<sup>†</sup> denotes co-first authors.`
