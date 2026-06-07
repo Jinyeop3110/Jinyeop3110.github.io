@@ -8,6 +8,8 @@ hide_description: true
 
 # Publications
 
+<p class="note"><sup>+</sup> first author.</p>
+
 ## AI Research
 
 <div class="pub-entry">
@@ -16,7 +18,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">The Blessing of Dimensionality in LLM Fine-tuning: A Variance-Curvature Perspective</div>
-    <div class="pub-authors">Qiyao Liang, <u>Jinyeop Song</u>, Yizhou Liu, Jeff Gore, Ila R. Fiete, Risto Miikkulainen, Xin Qiu</div>
+    <div class="pub-authors">Qiyao Liang<sup>+</sup>, <u>Jinyeop Song</u>, Yizhou Liu, Jeff Gore, Ila R. Fiete, Risto Miikkulainen, Xin Qiu</div>
     <div class="pub-venue"><span class="venue-badge preprint">Submitted (2026)</span></div>
     <div class="pub-abstract">We analyze why overparameterized LLMs fine-tune so well, revealing that high dimensionality reduces variance and smooths the loss landscape, creating a blessing rather than a curse.</div>
     <div class="pub-links">
@@ -31,7 +33,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">Efficient and Transferable Agentic Knowledge Graph RAG via Reinforcement Learning</div>
-    <div class="pub-authors"><u>Jinyeop Song</u>, Song Wang, Julian Shun, Yada Zhu</div>
+    <div class="pub-authors"><u>Jinyeop Song</u><sup>+</sup>, Song Wang, Julian Shun, Yada Zhu</div>
     <div class="pub-venue"><span class="venue-badge preprint">Under Review (2025)</span></div>
     <div class="pub-abstract">We propose an RL-trained agent that efficiently navigates knowledge graphs for retrieval-augmented generation, achieving strong transfer across diverse KG structures.</div>
     <div class="pub-links">
@@ -46,7 +48,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title"><a href="/research/2024-06-01-concept-encoding/">Emergence and Effectiveness of Task Vectors in In-Context Learning: An Encoder Decoder Perspective</a></div>
-    <div class="pub-authors">Seungwook Han, <u>Jinyeop Song</u>, Jeff Gore, Pulkit Agrawal</div>
+    <div class="pub-authors">Seungwook Han<sup>+</sup>, <u>Jinyeop Song</u>, Jeff Gore, Pulkit Agrawal</div>
     <div class="pub-venue"><span class="venue-badge spotlight">ICML 2025 Spotlight (Top 2.5%)</span></div>
     <div class="pub-abstract">We study how LLMs encode abstract concepts during in-context learning, uncovering structured internal representations that emerge with model scale and context length.</div>
     <div class="pub-links">
@@ -61,7 +63,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">When Do LLMs Improve Bayesian Optimization? A Systematic Comparison Across Molecular and Protein Design</div>
-    <div class="pub-authors">Mattias Akke, Soojung Yang, Jurģis Ruža, <u>Jinyeop Song</u>, Elton Pan, Rafael Gómez-Bombarelli</div>
+    <div class="pub-authors">Mattias Akke<sup>+</sup>, Soojung Yang, Jurģis Ruža, <u>Jinyeop Song</u>, Elton Pan, Rafael Gómez-Bombarelli</div>
     <div class="pub-venue"><span class="venue-badge published">NeurIPS 2025 AI4Science Workshop</span></div>
     <div class="pub-abstract">We systematically benchmark when LLM-guided Bayesian optimization outperforms classical methods across molecular and protein design tasks.</div>
   </div>
@@ -73,7 +75,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">Probing the Embedding Space of Protein Foundation Models through Intrinsic Dimension Analysis</div>
-    <div class="pub-authors">Soojung Yang, Juno Nam, Tynan Perez, <u>Jinyeop Song</u>, Xiaochen Du, Rafael Gómez-Bombarelli</div>
+    <div class="pub-authors">Soojung Yang<sup>+</sup>, Juno Nam, Tynan Perez, <u>Jinyeop Song</u>, Xiaochen Du, Rafael Gómez-Bombarelli</div>
     <div class="pub-venue"><span class="venue-badge published">NeurIPS 2025 AIDrugX Workshop</span></div>
     <div class="pub-abstract">We probe protein foundation model embeddings via intrinsic dimension analysis, revealing how representation geometry relates to downstream task performance.</div>
   </div>
@@ -85,7 +87,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title"><a href="/news/2025-01-01-eelma/">Estimating the Empowerment of Language Model Agents</a></div>
-    <div class="pub-authors"><u>Jinyeop Song</u>, Jeff Gore, Max Kleiman-Weiner</div>
+    <div class="pub-authors"><u>Jinyeop Song</u><sup>+</sup>, Jeff Gore, Max Kleiman-Weiner</div>
     <div class="pub-venue"><span class="venue-badge published">ICML 2026</span></div>
     <div class="pub-abstract">We introduce a framework to estimate the empowerment of LLM agents—their capacity to influence the environment—as a step toward safer AI deployment.</div>
     <div class="pub-links">
@@ -100,7 +102,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">When AI Co-Scientists Fail: SPOT — Benchmark for Automated Verification of Scientific Research</div>
-    <div class="pub-authors">G. Son, J. Hong, H. Fan, H. Nam, H. Ko, S. Lim, <u>Jinyeop Song</u>, et al.</div>
+    <div class="pub-authors">G. Son<sup>+</sup>, J. Hong, H. Fan, H. Nam, H. Ko, S. Lim, <u>Jinyeop Song</u>, et al.</div>
     <div class="pub-venue"><span class="venue-badge preprint">arXiv preprint (2025)</span></div>
     <div class="pub-abstract">We present SPOT, a benchmark for evaluating whether AI co-scientist systems can reliably verify claims in scientific papers across multiple domains.</div>
     <div class="pub-links">
@@ -115,7 +117,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">MethylGPT: a foundation model for the DNA methylome</div>
-    <div class="pub-authors">Kejun Ying, <u>Jinyeop Song</u>, Haotian Cui, et al.</div>
+    <div class="pub-authors">Kejun Ying<sup>+</sup>, <u>Jinyeop Song</u>, Haotian Cui, et al.</div>
     <div class="pub-venue"><span class="venue-badge preprint">bioRxiv preprint (2024)</span></div>
     <div class="pub-abstract">We develop a GPT-style foundation model pretrained on large-scale human DNA methylation data, enabling zero-shot biological age prediction and disease classification.</div>
     <div class="pub-links">
@@ -130,7 +132,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title"><a href="/research/2024-08-01-scaling-laws/">Reconciling Kaplan and Chinchilla Scaling Laws</a></div>
-    <div class="pub-authors">Tim Pearce, <u>Jinyeop Song</u></div>
+    <div class="pub-authors">Tim Pearce<sup>+</sup>, <u>Jinyeop Song</u></div>
     <div class="pub-venue"><span class="venue-badge published">TMLR 2024</span></div>
     <div class="pub-abstract">We resolve the apparent contradiction between Kaplan and Chinchilla neural scaling laws by identifying key methodological differences and proposing a unified framework.</div>
     <div class="pub-links">
@@ -145,7 +147,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">A Resource Model for Neural Scaling Law</div>
-    <div class="pub-authors"><u>Jinyeop Song</u>, Ziming Liu, Max Tegmark, Jeff Gore</div>
+    <div class="pub-authors"><u>Jinyeop Song</u><sup>+</sup>, Ziming Liu, Max Tegmark, Jeff Gore</div>
     <div class="pub-venue"><span class="venue-badge published">ICLR 2024 BGPT Workshop</span></div>
     <div class="pub-abstract">We draw an analogy between neural scaling and ecological resource competition, offering a mechanistic model that predicts power-law scaling behavior in neural networks.</div>
     <div class="pub-links">
@@ -164,7 +166,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">Interspecies Interactions Drive Community-level Selection in Microbial Coalescence</div>
-    <div class="pub-authors"><u>Jinyeop Song</u>, Jiliang Hu, Jeff Gore</div>
+    <div class="pub-authors"><u>Jinyeop Song</u><sup>+</sup>, Jiliang Hu, Jeff Gore</div>
     <div class="pub-venue"><span class="venue-badge preprint">bioRxiv (2026)</span></div>
     <div class="pub-abstract">We show that interspecies interactions, rather than individual species fitness, are the primary driver of community-level outcomes when microbial communities merge.</div>
     <div class="pub-links">
@@ -179,7 +181,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">Transition from Global Stability to Multiple Attractors in Microcosms</div>
-    <div class="pub-authors">Jeff Gore, Jiliang Hu, You He, Matthieu Barbier, <u>Jinyeop Song</u>, Guy Bunin</div>
+    <div class="pub-authors">Jeff Gore<sup>+</sup>, Jiliang Hu, You He, Matthieu Barbier, <u>Jinyeop Song</u>, Guy Bunin</div>
     <div class="pub-venue"><span class="venue-badge preprint">Under Review at Nature Portfolio (2025)</span></div>
     <div class="pub-abstract">We experimentally demonstrate how microbial ecosystems transition from a single global equilibrium to multiple stable states as community complexity increases.</div>
     <div class="pub-links">
@@ -194,7 +196,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">Noncovalent Antibody Catenation on a Target Surface Greatly Increases the Antigen-Binding Avidity</div>
-    <div class="pub-authors"><u>Jinyeop Song</u>, Bo-Seong Jeong, Seong-Woo Kim, et al.</div>
+    <div class="pub-authors"><u>Jinyeop Song</u><sup>+</sup>, Bo-Seong Jeong, Seong-Woo Kim, et al.</div>
     <div class="pub-venue"><span class="venue-badge published">eLife 2023</span></div>
     <div class="pub-abstract">We discover that antibodies can form noncovalent chain-like structures on antigen surfaces, dramatically enhancing binding avidity through cooperative multivalent interactions.</div>
     <div class="pub-links">
@@ -209,7 +211,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">Rapid species identification of pathogenic bacteria from a minute quantity exploiting three-dimensional quantitative phase imaging and artificial neural network</div>
-    <div class="pub-authors">Geon Kim, Daewoong Ahn, Minhee Kang, Jinho Park, DongHun Ryu, YoungJu Jo, <u>Jinyeop Song</u>, et al.</div>
+    <div class="pub-authors">Geon Kim<sup>+</sup>, Daewoong Ahn, Minhee Kang, Jinho Park, DongHun Ryu, YoungJu Jo, <u>Jinyeop Song</u>, et al.</div>
     <div class="pub-venue"><span class="venue-badge published">Light: Science &amp; Applications 2022</span></div>
     <div class="pub-abstract">We combine 3D quantitative phase imaging with deep learning to achieve rapid, label-free identification of individual bacterial pathogens at the single-cell level.</div>
     <div class="pub-links">
@@ -224,7 +226,7 @@ hide_description: true
   </div>
   <div class="pub-details">
     <div class="pub-title">Deep-Learning Based Three-Dimensional Label-Free Tracking and Analysis of Immunological Synapses of CAR-T Cells</div>
-    <div class="pub-authors">Moosung Lee, Young-Ho Lee, <u>Jinyeop Song</u>, Geon Kim, YoungJu Jo, HyunSeok Min, Chan Hyuk Kim, YongKeun Park</div>
+    <div class="pub-authors">Moosung Lee<sup>+</sup>, Young-Ho Lee, <u>Jinyeop Song</u>, Geon Kim, YoungJu Jo, HyunSeok Min, Chan Hyuk Kim, YongKeun Park</div>
     <div class="pub-venue"><span class="venue-badge published">eLife 2020</span></div>
     <div class="pub-abstract">We develop a deep-learning framework for 3D label-free tracking and quantitative analysis of immunological synapses formed by CAR-T cells in real time.</div>
     <div class="pub-links">

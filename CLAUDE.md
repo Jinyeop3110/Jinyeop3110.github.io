@@ -97,3 +97,11 @@ bundle exec jekyll serve    # http://localhost:4000
 ```
 
 Project pages (standalone HTML) can be previewed directly in a browser or with `python3 -m http.server`.
+
+## Publication Authorship
+
+When adding or editing publication authorship:
+
+- Denote first authors with a superscript plus marker, e.g. `Song, J.<sup>+</sup>` or `Doe, A.<sup>+</sup>`.
+- Keep equal-contribution notation separate if needed, using `*`.
+- Add or preserve a short legend near the publication list when markers appear, e.g. `<sup>+</sup>` first author; `*` equal contribution.
