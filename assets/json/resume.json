@@ -1,12 +1,12 @@
 {
   "basics": {
     "name": "Jinyeop Song",
-    "label": "PhD Student in Physics",
+    "label": "PhD Candidate in Physics and Statistics",
     "image": "",
-    "email": "sjinyeop@gmail.com",
+    "email": "yeopjin@mit.edu",
     "phone": "617-949-1042",
     "url": "https://Jinyeop3110.github.io",
-    "summary": "5th-year PhD student in the MIT Physics Department focusing on the Science of AI, particularly on large language models (LLMs), Neural Scaling Laws, and In-Context Learning.",
+    "summary": "PhD candidate in Physics and Statistics at MIT researching the Science of AI and AI for Science, including neural scaling laws, in-context learning, LLM agents, and biological foundation models.",
     "location": {
       "address": "",
       "postalCode": "02142",
@@ -34,17 +34,81 @@
   },
   "work": [
     {
-      "name": "MIT Physics Department",
+      "name": "MIT-IBM Watson AI Lab",
+      "position": "Research Intern",
+      "url": "https://mitibmwatsonailab.mit.edu/",
+      "startDate": "2025-01-01",
+      "endDate": "2025-12-31",
+      "summary": "Developed a knowledge-graph-augmented RAG framework for LLMs using multi-turn reinforcement learning.",
+      "highlights": [
+        "Knowledge-graph RAG",
+        "Multi-turn reinforcement learning",
+        "LLM agent reasoning"
+      ]
+    },
+    {
+      "name": "Machine Learning Alignment and Theory Scholars",
+      "position": "Research Fellow",
+      "url": "https://www.matsprogram.org/",
+      "startDate": "2025-01-01",
+      "endDate": "2025-12-31",
+      "summary": "Proposed a goal-agnostic evaluation framework for LLM agents using information-theoretic empowerment.",
+      "highlights": [
+        "LLM agent evaluation",
+        "Information-theoretic empowerment",
+        "AI alignment"
+      ]
+    },
+    {
+      "name": "MIT",
       "position": "Graduate Research Assistant",
       "url": "https://physics.mit.edu",
-      "startDate": "2020-01-01",
+      "startDate": "2021-02-01",
       "endDate": "",
-      "summary": "Research on Neural Scaling Laws and In-Context Learning (ICL). Developing AI for Science applications in multiomics and proteins. Building scalable foundational models for biological data.",
+      "summary": "Research on neural scaling laws, in-context learning, biological foundation models, and microbial community dynamics.",
       "highlights": [
-        "Neural Scaling Laws research",
-        "In-Context Learning mechanisms",
-        "AI for Science applications",
-        "Multiomics and protein modeling"
+        "Neural scaling laws",
+        "In-context learning mechanisms",
+        "MethylGPT foundation model",
+        "Microbial community coalescence"
+      ]
+    },
+    {
+      "name": "Samsung Electronics Research",
+      "position": "Research Intern",
+      "url": "",
+      "startDate": "2020-01-01",
+      "endDate": "2020-12-31",
+      "summary": "Investigated post-quantum cryptography methods for DRAM products.",
+      "highlights": [
+        "Post-quantum cryptography",
+        "Lattice-based encryption"
+      ]
+    },
+    {
+      "name": "Harvard-MIT Health Sciences and Technology",
+      "position": "Research Intern",
+      "url": "",
+      "startDate": "2019-01-01",
+      "endDate": "2019-12-31",
+      "summary": "Developed a neural connectome reconstruction algorithm that maps brain images into 3D space.",
+      "highlights": [
+        "Connectome reconstruction",
+        "3D image mapping"
+      ]
+    },
+    {
+      "name": "KAIST",
+      "position": "Undergraduate Research Assistant",
+      "url": "https://www.kaist.ac.kr/",
+      "startDate": "2014-07-01",
+      "endDate": "2020-08-31",
+      "summary": "Worked on biomedical optics, chromatin/protein engineering, and quantum nanophotonics projects.",
+      "highlights": [
+        "3D label-free CAR-T tracking",
+        "Rapid pathogen identification",
+        "Thermodynamic simulation for multivalent antibody binding",
+        "Exciton-polariton coupling"
       ]
     }
   ],
@@ -53,78 +117,160 @@
       "institution": "Massachusetts Institute of Technology",
       "location": "Cambridge, MA",
       "url": "https://mit.edu",
-      "area": "Physics",
-      "studyType": "PhD",
-      "startDate": "2020-01-01",
-      "endDate": "",
-      "score": "",
-      "courses": ["Science of AI", "Large Language Models", "Statistical Physics", "Computational Biology"]
+      "area": "Physics and Statistics",
+      "studyType": "PhD Candidate",
+      "startDate": "2020-08-01",
+      "endDate": "2026-06-30",
+      "score": "GPA: 4.8/5.0",
+      "courses": []
+    },
+    {
+      "institution": "Korea Advanced Institute of Science and Technology",
+      "location": "Daejeon, Korea",
+      "url": "https://www.kaist.ac.kr/",
+      "area": "Physics major, Mathematics minor",
+      "studyType": "BS",
+      "startDate": "2014-03-01",
+      "endDate": "2020-06-30",
+      "score": "GPA: 4.16/4.3, Summa Cum Laude",
+      "courses": []
     }
   ],
   "awards": [
     {
-      "title": "ICML 2025 Spotlight Paper",
+      "title": "MATS Scholarship",
       "date": "2025-01-01",
-      "awarder": "International Conference on Machine Learning",
+      "awarder": "Machine Learning Alignment and Theory Scholars",
       "url": "",
-      "summary": "Spotlight paper acceptance for 'Context to Concept: Concept Encoding in In-context Learning'"
+      "summary": ""
     },
     {
-      "title": "MATS Program Participant",
-      "date": "2024-01-01",
-      "awarder": "Machine Learning Alignment & Theory Scholars",
+      "title": "Mokam Research Scholarship",
+      "date": "2023-01-01",
+      "awarder": "",
       "url": "",
-      "summary": "Winter 2024-25 Cohort - Scaling Empowerment Estimation of Language Model Agents"
+      "summary": ""
+    },
+    {
+      "title": "KPS Best Oral Presentation Award",
+      "date": "2023-01-01",
+      "awarder": "Korean Physical Society",
+      "url": "",
+      "summary": ""
+    },
+    {
+      "title": "Asan Foundation Biomedical Science Scholarship",
+      "date": "2021-01-01",
+      "awarder": "Asan Foundation",
+      "url": "",
+      "summary": "2021-2025"
+    },
+    {
+      "title": "Excellent Graduate of KAIST",
+      "date": "2020-01-01",
+      "awarder": "KAIST",
+      "url": "",
+      "summary": ""
+    },
+    {
+      "title": "KAIST Presidential Fellowship",
+      "date": "2016-01-01",
+      "awarder": "KAIST",
+      "url": "",
+      "summary": ""
+    },
+    {
+      "title": "Korea Presidential Science Scholarship",
+      "date": "2014-01-01",
+      "awarder": "",
+      "url": "",
+      "summary": "2014-2020"
     }
   ],
   "publications": [
     {
-      "name": "Context to Concept: Concept Encoding in In-context Learning",
-      "publisher": "ICML 2025 (Spotlight)",
-      "releaseDate": "2024-01-01",
-      "url": "",
-      "summary": "First author publication on mechanistic understanding of ICL success/failure modes through concept encoding phenomena in intermediate representations."
+      "name": "The Blessing of Dimensionality in LLM Fine-tuning: A Variance-Curvature Perspective",
+      "publisher": "arXiv preprint",
+      "releaseDate": "2026-01-01",
+      "url": "https://arxiv.org/abs/2602.00170",
+      "summary": ""
     },
     {
-      "name": "MethylGPT: Foundational GPT-like Model for Human Methylation Data",
-      "publisher": "Under review in Nature Methods",
+      "name": "Efficient and Transferable Agentic Knowledge Graph RAG via Reinforcement Learning",
+      "publisher": "Under Review",
+      "releaseDate": "2026-01-01",
+      "url": "https://jinyeop3110.github.io/assets/pdf/KG_R1_2026.pdf",
+      "summary": ""
+    },
+    {
+      "name": "Estimating Empowerment of Language Model Agent",
+      "publisher": "ICML 2026",
+      "releaseDate": "2026-01-01",
+      "url": "https://arxiv.org/pdf/2509.22504",
+      "summary": ""
+    },
+    {
+      "name": "When Do LLMs Improve Bayesian Optimization? A Systematic Comparison Across Molecular and Protein Design",
+      "publisher": "NeurIPS 2025 AI4Science Workshop",
+      "releaseDate": "2025-01-01",
+      "url": "https://openreview.net/forum?id=x3Y2TwVXwE#discussion",
+      "summary": ""
+    },
+    {
+      "name": "When AI Co-Scientists Fail: SPOT - Benchmark for Automated Verification of Scientific Research",
+      "publisher": "arXiv preprint",
+      "releaseDate": "2025-01-01",
+      "url": "https://arxiv.org/pdf/2505.11855",
+      "summary": ""
+    },
+    {
+      "name": "Emergence and Effectiveness of Task Vectors in In-Context Learning: An Encoder Decoder Perspective",
+      "publisher": "ICML 2025 Spotlight",
+      "releaseDate": "2025-01-01",
+      "url": "https://arxiv.org/pdf/2412.12276",
+      "summary": ""
+    },
+    {
+      "name": "Probing the Embedding Space of Protein Foundation Models through Intrinsic Dimension Analysis",
+      "publisher": "NeurIPS 2025 AIDrugX Workshop",
+      "releaseDate": "2025-01-01",
+      "url": "https://openreview.net/forum?id=r9OUQpwhVo",
+      "summary": ""
+    },
+    {
+      "name": "MethylGPT - Foundational GPT-like model for human methylation data",
+      "publisher": "Under Review at Nature Methods",
       "releaseDate": "2024-01-01",
-      "url": "",
-      "summary": "Co-author on foundational model for methylation data analysis and interpretation."
+      "url": "https://www.biorxiv.org/content/10.1101/2024.10.30.621013v1",
+      "summary": ""
     },
     {
       "name": "Reconciling Kaplan and Chinchilla Scaling Laws",
       "publisher": "TMLR",
       "releaseDate": "2024-01-01",
       "url": "https://arxiv.org/abs/2406.12907",
-      "summary": "Co-author work reconciling different neural scaling law formulations."
+      "summary": ""
     },
     {
-      "name": "A resource model for neural scaling law",
-      "publisher": "ICLR BGPT workshop",
+      "name": "A Resource Model for Neural Scaling Law",
+      "publisher": "ICLR 2024 BGPT Workshop",
       "releaseDate": "2024-01-01",
       "url": "https://arxiv.org/abs/2402.05164",
-      "summary": "First author publication on resource-based models for understanding neural scaling laws."
+      "summary": ""
     }
   ],
   "skills": [
     {
-      "name": "Machine Learning",
-      "level": "Expert",
-      "icon": "fa-solid fa-brain",
-      "keywords": ["Large Language Models", "Neural Scaling Laws", "In-Context Learning", "Deep Learning", "PyTorch", "TensorFlow", "JAX"]
-    },
-    {
       "name": "Programming",
-      "level": "Expert",
+      "level": "",
       "icon": "fa-solid fa-code",
-      "keywords": ["Python", "R", "MATLAB", "Git", "Linux", "High-Performance Computing"]
+      "keywords": ["Python", "Matlab", "R", "GitHub", "Torch", "CUDA"]
     },
     {
-      "name": "Computational Biology",
-      "level": "Advanced",
-      "icon": "fa-solid fa-dna",
-      "keywords": ["Multiomics analysis", "Protein foundation models", "Genomics", "Biological data preprocessing", "Statistical modeling"]
+      "name": "Research Areas",
+      "level": "",
+      "icon": "fa-solid fa-brain",
+      "keywords": ["Neural Scaling Laws", "In-Context Learning", "LLM Agents", "AI for Science", "Biological Foundation Models"]
     }
   ],
   "languages": [
@@ -135,7 +281,12 @@
     },
     {
       "language": "Korean",
-      "fluency": "Native speaker",
+      "fluency": "Native",
+      "icon": ""
+    },
+    {
+      "language": "Chinese",
+      "fluency": "Elementary",
       "icon": ""
     }
   ],
@@ -143,30 +294,30 @@
     {
       "name": "Science of AI",
       "icon": "fa-solid fa-robot",
-      "keywords": ["Neural Scaling Laws", "In-Context Learning", "Large Language Model interpretability", "Foundational model development"]
+      "keywords": ["Neural Scaling Laws", "In-Context Learning", "LLM Agent Foundations", "Tool-augmented Reasoning"]
     },
     {
       "name": "AI for Science",
       "icon": "fa-solid fa-microscope",
-      "keywords": ["Multiomics data analysis", "Protein foundation models", "Scientific discovery through ML", "Scalable biological data modeling"]
+      "keywords": ["LLM Agents for Science", "Biological Foundation Models", "Protein and Genomic Models", "Scientific Benchmarks"]
     }
   ],
   "projects": [
     {
-      "name": "Concept Encoding in In-Context Learning",
-      "summary": "Research on mechanistic understanding of ICL success/failure modes through concept encoding phenomena in intermediate representations of LLMs.",
-      "highlights": ["ICML 2025 Spotlight", "Concept Decodability framework", "LLaMA3 analysis"],
-      "startDate": "2023-01-01",
-      "endDate": "2024-01-01",
-      "url": ""
-    },
-    {
-      "name": "EELMA: Scaling Empowerment Estimation",
-      "summary": "Developing scalable methods for quantifying empowerment of Language Model agents for AI safety research.",
-      "highlights": ["MATS Program project", "AI safety and alignment", "Information theory application"],
+      "name": "Task Vectors in In-Context Learning",
+      "summary": "Encoder-decoder analysis showing transformers form compact task vectors that causally drive in-context predictions.",
+      "highlights": ["ICML 2025 Spotlight", "In-context learning", "Task-vector analysis"],
       "startDate": "2024-01-01",
       "endDate": "2025-01-01",
-      "url": ""
+      "url": "https://arxiv.org/pdf/2412.12276"
+    },
+    {
+      "name": "EELMA: Estimating the Empowerment of Language Model Agents",
+      "summary": "Goal-agnostic LLM-agent evaluation framework grounded in information-theoretic empowerment.",
+      "highlights": ["ICML 2026", "MATS", "Information theory"],
+      "startDate": "2025-01-01",
+      "endDate": "2026-01-01",
+      "url": "https://arxiv.org/pdf/2509.22504"
     }
   ]
 }

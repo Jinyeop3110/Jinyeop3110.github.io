@@ -13,13 +13,11 @@ hide_description: true
 ## AI Research
 
 <div class="pub-entry">
-  <div class="pub-thumb">
-    <img src="/assets/img/publication_preview/bayesian_llm.png" alt="Blessing of Dimensionality">
-  </div>
+  <div class="pub-thumb pub-thumb-label">LLM Fine-tuning</div>
   <div class="pub-details">
     <div class="pub-title">The Blessing of Dimensionality in LLM Fine-tuning: A Variance-Curvature Perspective</div>
     <div class="pub-authors">Qiyao Liang, <u>Jinyeop Song</u>, Yizhou Liu, Jeff Gore, Ila R. Fiete, Risto Miikkulainen, Xin Qiu</div>
-    <div class="pub-venue"><span class="venue-badge preprint">Submitted (2026)</span></div>
+    <div class="pub-venue"><span class="venue-badge preprint">arXiv preprint (2026)</span></div>
     <div class="pub-abstract">We analyze why overparameterized LLMs fine-tune so well, revealing that high dimensionality reduces variance and smooths the loss landscape, creating a blessing rather than a curse.</div>
     <div class="pub-links">
       <a href="https://arxiv.org/abs/2602.00170" class="pub-btn">arXiv</a>
@@ -34,7 +32,7 @@ hide_description: true
   <div class="pub-details">
     <div class="pub-title">Efficient and Transferable Agentic Knowledge Graph RAG via Reinforcement Learning</div>
     <div class="pub-authors"><u>Jinyeop Song</u>, Song Wang, Julian Shun, Yada Zhu</div>
-    <div class="pub-venue"><span class="venue-badge preprint">Under Review (2025)</span></div>
+    <div class="pub-venue"><span class="venue-badge preprint">Under Review (2026)</span></div>
     <div class="pub-abstract">We propose an RL-trained agent that efficiently navigates knowledge graphs for retrieval-augmented generation, achieving strong transfer across diverse KG structures.</div>
     <div class="pub-links">
       <a href="https://jinyeop3110.github.io/assets/pdf/KG_R1_2026.pdf" class="pub-btn">PDF</a>
@@ -43,14 +41,12 @@ hide_description: true
 </div>
 
 <div class="pub-entry">
-  <div class="pub-thumb">
-    <img src="/assets/img/publication_preview/concept_encoding.png" alt="Concept Encoding">
-  </div>
+  <div class="pub-thumb pub-thumb-label">Task Vectors</div>
   <div class="pub-details">
     <div class="pub-title"><a href="/research/2024-06-01-concept-encoding/">Emergence and Effectiveness of Task Vectors in In-Context Learning: An Encoder Decoder Perspective</a></div>
     <div class="pub-authors"><u>Jinyeop Song</u><sup>†</sup>, Seungwook Han<sup>†</sup>, Pulkit Agrawal, Jeff Gore</div>
-    <div class="pub-venue"><span class="venue-badge spotlight">ICML 2025 Spotlight (Top 2.5%)</span></div>
-    <div class="pub-abstract">We study how LLMs encode abstract concepts during in-context learning, uncovering structured internal representations that emerge with model scale and context length.</div>
+    <div class="pub-venue"><span class="venue-badge spotlight">ICML 2025 Spotlight</span></div>
+    <div class="pub-abstract">We study task-vector formation in in-context learning through an encoder-decoder perspective, linking compact internal representations to in-context predictions.</div>
     <div class="pub-links">
       <a href="https://arxiv.org/abs/2412.12276" class="pub-btn">arXiv</a>
     </div>
@@ -70,9 +66,7 @@ hide_description: true
 </div>
 
 <div class="pub-entry">
-  <div class="pub-thumb">
-    <img src="/assets/img/publication_preview/protein_id.png" alt="Protein Foundation Models">
-  </div>
+  <div class="pub-thumb pub-thumb-label">Protein Embeddings</div>
   <div class="pub-details">
     <div class="pub-title">Probing the Embedding Space of Protein Foundation Models through Intrinsic Dimension Analysis</div>
     <div class="pub-authors">Soojung Yang, Juno Nam, Tynan Perez, <u>Jinyeop Song</u>, Xiaochen Du, Rafael Gómez-Bombarelli</div>
@@ -118,7 +112,7 @@ hide_description: true
   <div class="pub-details">
     <div class="pub-title">MethylGPT: a foundation model for the DNA methylome</div>
     <div class="pub-authors">Kejun Ying<sup>†</sup>, <u>Jinyeop Song</u><sup>†</sup>, Haotian Cui<sup>†</sup>, et al.</div>
-    <div class="pub-venue"><span class="venue-badge preprint">bioRxiv preprint (2024)</span></div>
+    <div class="pub-venue"><span class="venue-badge preprint">Under Review at Nature Methods (2024)</span></div>
     <div class="pub-abstract">We develop a GPT-style foundation model pretrained on large-scale human DNA methylation data, enabling zero-shot biological age prediction and disease classification.</div>
     <div class="pub-links">
       <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2" class="pub-btn">bioRxiv</a>
@@ -167,7 +161,7 @@ hide_description: true
   <div class="pub-details">
     <div class="pub-title">Interspecies Interactions Drive Community-level Selection in Microbial Coalescence</div>
     <div class="pub-authors"><u>Jinyeop Song</u>, Jiliang Hu, Jeff Gore</div>
-    <div class="pub-venue"><span class="venue-badge preprint">bioRxiv (2026)</span></div>
+    <div class="pub-venue"><span class="venue-badge published">Nature Ecology &amp; Evolution (2026)</span></div>
     <div class="pub-abstract">We show that interspecies interactions, rather than individual species fitness, are the primary driver of community-level outcomes when microbial communities merge.</div>
     <div class="pub-links">
       <a href="https://www.biorxiv.org/content/10.64898/2026.02.11.704923v1" class="pub-btn">bioRxiv</a>

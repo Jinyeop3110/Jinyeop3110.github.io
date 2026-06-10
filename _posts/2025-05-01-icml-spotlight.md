@@ -6,4 +6,4 @@ date: 2025-05-01
 categories: [news]
 ---
 
-Our paper was accepted to ICML (Spotlight, Top 2.5%)! [arXiv:2412.12276](https://arxiv.org/abs/2412.12276)
+Our paper was accepted to ICML as a Spotlight presentation. [arXiv:2412.12276](https://arxiv.org/abs/2412.12276)

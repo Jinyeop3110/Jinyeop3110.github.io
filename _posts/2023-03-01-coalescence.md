@@ -3,7 +3,7 @@ layout: post
 title: Microbial Community Coalescence
 description: >
   Research on how microbial communities interact when they merge - additivity and asymmetricity in coalescence.
-date: 2023-03-01
+date: 2026-02-11
 image:
   path: /assets/img/projects/coalescence.jpg
 categories: [research]
@@ -15,11 +15,11 @@ sitemap: false
 
 ## Summary
 
-Study on additivity and asymmetricity in microbial community coalescence.
+Study on how interspecies interactions drive community-level selection in microbial coalescence.
 
 ## Status
 
-*In review*
+*Nature Ecology & Evolution, 2026.*
 
 ## Papers
 

@@ -2,7 +2,7 @@
 layout: post
 title: MethylGPT
 description: >
-  A foundation model approach to understanding human methylation patterns - under review at Nature Methods.
+  A foundation model approach to understanding human methylation patterns.
 date: 2024-09-01
 image:
   path: /assets/img/projects/methylgpt.png
@@ -36,7 +36,7 @@ MethylGPT applies the foundation model paradigm—successful in natural language
 
 ## Status
 
-Currently under review at **Nature Methods**.
+Under review at **Nature Methods**.
 
 ## Citation
 
