@@ -170,6 +170,22 @@ a:hover {
   border-radius: 3px;
 }
 
+.pub-thumb-label {
+  width: 105px;
+  height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.15;
+  text-align: center;
+  background: #fafafa;
+}
+
 .pub-entry .pub-title {
   font-weight: 600;
   line-height: 1.25;
