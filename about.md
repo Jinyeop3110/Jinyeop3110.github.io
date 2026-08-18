@@ -2,7 +2,7 @@
 layout: minimal
 title: Jinyeop Song
 description: >
-  Final-year PhD student at MIT Physics working on the Science of AI and AI for Science.
+  AI Researcher at Xaira Therapeutics. MIT Physics PhD working on the Science of AI and AI for Science.
 hide_description: true
 permalink: /
 ---
@@ -21,7 +21,7 @@ permalink: /
   <img class="profile-photo" src="/assets/img/profile.jpg" alt="Jinyeop Song">
 </div>
 
-I am a final-year PhD student in the [MIT Physics Department](https://physics.mit.edu/), advised by [Prof. Jeff Gore](https://www.gorelab.org/). I am a former [MATS](https://www.matsprogram.org/) scholar and [MIT-IBM Watson AI Lab](https://mitibmwatsonailab.mit.edu/) research intern.
+I am an AI Researcher at [Xaira Therapeutics](https://xaira.com/), working in [Bo Wang](https://wanglab.ai/)'s team on AI scientists (X-scientists) and virtual cell modeling. I received my PhD from the [MIT Physics Department](https://physics.mit.edu/), advised by [Prof. Jeff Gore](https://www.gorelab.org/) (successfully defended in August 2026). I am a former [MATS](https://www.matsprogram.org/) scholar and [MIT-IBM Watson AI Lab](https://mitibmwatsonailab.mit.edu/) research intern.
 
 I work on the Science of AI and AI for Science. My recent work studies neural scaling laws, in-context learning, and LLM agents, while also building foundation-model and agentic systems for biology.
 
@@ -54,6 +54,26 @@ I work on the Science of AI and AI for Science. My recent work studies neural sc
     <span class="pub-title">MethylGPT: a foundation model for the DNA methylome.</span>
     <span class="pub-meta">Kejun Ying<sup>†</sup>, <strong>Jinyeop Song</strong><sup>†</sup>, Haotian Cui<sup>†</sup>, et al. bioRxiv 2024 / <a href="https://www.biorxiv.org/content/10.1101/2024.10.30.621013v2">Paper</a></span>
   </li>
+</ul>
+
+## Experience
+
+<ul class="plain-list">
+  <li><strong>AI Researcher</strong>, Xaira Therapeutics — South San Francisco, CA (Aug 2026 – Present)</li>
+  <li><strong>Research Intern</strong>, IBM Research – Watson AI Lab — Cambridge, MA (2025)</li>
+  <li><strong>Research Fellow</strong>, Machine Learning Alignment and Theory Scholars (MATS) — Berkeley, CA (2025)</li>
+  <li><strong>Graduate Research Assistant</strong>, MIT (PI: Prof. Jeff Gore) — Cambridge, MA (2021 – 2026)</li>
+  <li><strong>Research Intern</strong>, Samsung Electronics Research — Suwon, Korea (2020)</li>
+  <li><strong>Research Intern</strong>, Harvard–MIT Health Sciences and Technology — Boston, MA (2019)</li>
+  <li><strong>Undergraduate Research Assistant</strong>, KAIST — Daejeon, Korea (2014 – 2020)</li>
+</ul>
+
+## Teaching and service
+
+<ul class="plain-list">
+  <li>Organizer, AI Journal Club, MIT (2024 – 2025)</li>
+  <li>Teaching Assistant, "Complex Systems Biology", MIT (2023)</li>
+  <li>Freshmen Tutoring Program, KAIST (2015 – 2018)</li>
 </ul>
 
 ## Awards and honors

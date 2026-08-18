@@ -8,6 +8,14 @@ hide_description: true
 
 # CV
 
+## Full CV
+
+*Complete academic CV: education, experience, all publications, awards, and teaching.*
+
+[Download Full CV (PDF)](/assets/pdf/Resume_full.pdf)
+
+---
+
 ## Core AI Research
 
 *Focus: Multi-LLM Agent RL, LLM Agent Foundations, Tool-augmented Reasoning*
